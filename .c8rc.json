@@ -1,0 +1,19 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "statements": 95,
+  "branches": 80,
+  "functions": 100,
+  "lines": 95,
+  "include": [
+    "src/**/*.js",
+    "src/**/*.cjs"
+  ],
+  "exclude": [
+    "src/index.js"
+  ],
+  "reporter": [
+    "text",
+    "lcov"
+  ]
+}
