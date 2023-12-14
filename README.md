@@ -1,4 +1,4 @@
-# @brightspace/test-reporting
+# d2l-test-reporting
 
 > [!WARNING]
 > This is still a work in progress. Any usage of this package is subject to

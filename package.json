@@ -1,5 +1,5 @@
 {
-  "name": "@brightspace/test-reporting",
+  "name": "d2l-test-reporting",
   "version": "0.0.0",
   "description": "Node helper package for the test reporting framework",
   "author": "D2L Corporation",
