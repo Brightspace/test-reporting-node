@@ -10,12 +10,13 @@ env:
   FORCE_COLOR: 3
 permissions:
   contents: read
-  id-token: write
 jobs:
   release:
     name: Release
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout
         uses: Brightspace/third-party-actions@actions/checkout
