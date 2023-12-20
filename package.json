@@ -29,7 +29,6 @@
     "/src"
   ],
   "dependencies": {
-    "chalk": "^4",
     "mocha": "^10",
     "uuid": "^9"
   },

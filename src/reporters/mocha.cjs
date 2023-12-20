@@ -1,13 +1,12 @@
 const { relative, sep: platformSeparator, resolve } = require('path');
-const chalk = require('chalk');
 const { join } = require('path/posix');
-const { reporters: { Spec } } = require('mocha');
+const { reporters: { Base, Spec } } = require('mocha');
 const { Runner: { constants } } = require('mocha');
 const { type } = require('os');
 const { v4: uuid } = require('uuid');
 const { writeFileSync } = require('fs');
 
-const { red, blue } = chalk;
+const { consoleLog: log, color } = Base;
 
 const {
 	EVENT_RUN_BEGIN,
@@ -44,6 +43,10 @@ const makeLocation = (filePath) => {
 
 const convertEndState = (state) => {
 	return state === 'pending' ? 'skipped' : state;
+};
+
+const indent = (message) => {
+	return `  ${message}`;
 };
 
 class TestReportingMochaReporter extends Spec {
@@ -86,18 +89,23 @@ class TestReportingMochaReporter extends Spec {
 			countSkipped: stats.pending,
 			countFlaky: this._testsFlaky.size
 		};
-		this._report.details = [...this._tests]
-			.map(([name, values]) => ({ name, ...values }));
+		this._report.details = [...this._tests].map(test => {
+			const [name, values] = test;
+
+			return { name, ...values };
+		});
 
 		try {
 			const reportOutput = JSON.stringify(this._report);
-			const filePath = './d2l-test-report.json';
+			const filePath = resolve('./d2l-test-report.json');
 
 			writeFileSync(filePath, reportOutput, 'utf8');
 
-			console.info(`  D2L test report available at: ${blue(resolve(filePath))}\n`);
+			const filePathMessage = color('pending', filePath);
+
+			log(indent(`D2L test report available at: ${filePathMessage}\n`));
 		} catch {
-			console.error(red('  Failed to generate D2L test report\n'));
+			log(indent(color('fail', 'Failed to generate D2L test report\n')));
 		}
 	}
 
