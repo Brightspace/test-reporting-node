@@ -7,6 +7,7 @@
   "repository": "https://github.com/Brightspace/test-reporting-node.git",
   "type": "module",
   "exports": {
+    "./helpers/github.js": "./src/helpers/github.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs"
   },
   "publishConfig": {
@@ -34,8 +35,10 @@
   },
   "devDependencies": {
     "c8": "^8",
+    "chai": "^4",
     "d2l-license-checker": "^4",
     "eslint": "^8",
-    "eslint-config-brightspace": "^1"
+    "eslint-config-brightspace": "^1",
+    "sinon": "^17"
   }
 }
