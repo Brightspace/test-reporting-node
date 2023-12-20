@@ -10,7 +10,8 @@
     "./reporters/mocha.js": "./src/reporters/mocha.cjs"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "license-check": "d2l-license-checker -p",
