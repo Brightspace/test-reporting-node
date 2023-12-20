@@ -31,6 +31,6 @@
   "devDependencies": {
     "c8": "^8",
     "eslint": "^8",
-    "eslint-config-brightspace": "^0.25"
+    "eslint-config-brightspace": "^1"
   }
 }
