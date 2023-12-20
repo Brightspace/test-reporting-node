@@ -33,16 +33,19 @@ describe('github', () => {
 			gitBranch: 'test/branch',
 			gitSha: '0000000000000000000000000000000000000000'
 		};
+		const commonEnvironment = {
+			'GITHUB_ACTIONS': '1',
+			'GITHUB_REPOSITORY': 'TestOrganization/test-repository',
+			'GITHUB_WORKFLOW_REF': 'TestOrganization/test-repository/.github/workflows/test-workflow.yml@refs/heads/test/branch',
+			'GITHUB_RUN_ID': '12345',
+			'GITHUB_RUN_ATTEMPT': '1',
+			'GITHUB_SHA': '0000000000000000000000000000000000000000'
+		};
 
 		it('pull request', () => {
 			sandbox.stub(process, 'env').value({
-				'GITHUB_ACTIONS': '1',
-				'GITHUB_REPOSITORY': 'TestOrganization/test-repository',
-				'GITHUB_WORKFLOW_REF': 'TestOrganization/test-repository/.github/workflows/test-workflow.yml@refs/heads/test/branch',
-				'GITHUB_RUN_ID': '12345',
-				'GITHUB_RUN_ATTEMPT': '1',
-				'GITHUB_HEAD_REF': 'test/branch',
-				'GITHUB_SHA': '0000000000000000000000000000000000000000'
+				...commonEnvironment,
+				'GITHUB_HEAD_REF': 'test/branch'
 			});
 
 			const context = getContext();
@@ -52,13 +55,8 @@ describe('github', () => {
 
 		it('branch', () => {
 			sandbox.stub(process, 'env').value({
-				'GITHUB_ACTIONS': '1',
-				'GITHUB_REPOSITORY': 'TestOrganization/test-repository',
-				'GITHUB_WORKFLOW_REF': 'TestOrganization/test-repository/.github/workflows/test-workflow.yml@refs/heads/test/branch',
-				'GITHUB_RUN_ID': '12345',
-				'GITHUB_RUN_ATTEMPT': '1',
-				'GITHUB_REF': 'test/branch',
-				'GITHUB_SHA': '0000000000000000000000000000000000000000'
+				...commonEnvironment,
+				'GITHUB_REF': 'test/branch'
 			});
 
 			const context = getContext();
