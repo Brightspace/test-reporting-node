@@ -9,9 +9,6 @@
     "src/**/*.js",
     "src/**/*.cjs"
   ],
-  "exclude": [
-    "src/index.js"
-  ],
   "reporter": [
     "text",
     "lcov"
