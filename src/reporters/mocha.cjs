@@ -1,7 +1,7 @@
 
 const { reporters: { Base, Spec } } = require('mocha');
 const { hasContext, getContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, makeLocation } = require('./helpers.cjs');
+const { getOperatingSystem, makeLocation, generateReportOutput } = require('./helpers.cjs');
 const { resolve } = require('path');
 const { Runner: { constants } } = require('mocha');
 const { v4: uuid } = require('uuid');
@@ -128,7 +128,7 @@ class TestReportingMochaReporter extends Spec {
 		);
 
 		try {
-			const reportOutput = JSON.stringify(this._report);
+			const reportOutput = generateReportOutput(this._report);
 			const filePath = resolve(this._reportPath);
 
 			writeFileSync(filePath, reportOutput, 'utf8');

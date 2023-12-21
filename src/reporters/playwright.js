@@ -1,7 +1,7 @@
+import { generateReportOutput, getOperatingSystem, makeLocation } from './helpers.cjs';
+import { getContext, hasContext } from '../helpers/github.cjs';
 import { colors } from 'playwright-core/lib/utilsBundle';
 import { v4 as uuid } from 'uuid';
-import { getOperatingSystem, makeLocation } from './helpers.cjs';
-import { getContext, hasContext } from '../helpers/github.cjs';
 import { resolve } from 'path';
 import { writeFile } from 'fs/promises';
 
@@ -123,7 +123,7 @@ export default class Reporter {
 		}
 
 		try {
-			const reportOutput = JSON.stringify(this._report);
+			const reportOutput = generateReportOutput(this._report);
 			const filePath = resolve(this._reportPath);
 
 			await writeFile(filePath, reportOutput, 'utf8');
