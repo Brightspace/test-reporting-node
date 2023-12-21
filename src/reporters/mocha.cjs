@@ -1,9 +1,9 @@
-const { hasContext, getContext } = require('../helpers/github.cjs');
-const { relative, sep: platformSeparator, resolve } = require('path');
-const { join } = require('path/posix');
+
 const { reporters: { Base, Spec } } = require('mocha');
+const { hasContext, getContext } = require('../helpers/github.cjs');
+const { getOperatingSystem, makeLocation } = require('./helpers.cjs');
+const { resolve } = require('path');
 const { Runner: { constants } } = require('mocha');
-const { type } = require('os');
 const { v4: uuid } = require('uuid');
 const { writeFileSync } = require('fs');
 
@@ -18,28 +18,8 @@ const {
 	EVENT_TEST_RETRY
 } = constants;
 
-const getOperatingSystem = () => {
-	switch (type()) {
-		case 'Linux':
-			return 'linux';
-		case 'Darwin':
-			return 'macos';
-		case 'Windows_NT':
-			return 'windows';
-		default:
-			throw new Error('Unknown operating system');
-	}
-};
-
 const makeTestName = (test) => {
 	return test.titlePath().join(' > ');
-};
-
-const makeLocation = (filePath) => {
-	const path = relative(process.cwd(), filePath);
-	const pathParts = path.split(platformSeparator);
-
-	return join(...pathParts);
 };
 
 const convertEndState = (state) => {
@@ -55,7 +35,9 @@ class TestReportingMochaReporter extends Spec {
 		super(runner, options);
 
 		const { stats } = runner;
+		const { reporterOptions: { reportPath } } = options;
 
+		this._reportPath = reportPath ?? './d2l-test-report.json';
 		this._report = {
 			reportId: uuid(),
 			reportVersion: 1,
@@ -64,19 +46,7 @@ class TestReportingMochaReporter extends Spec {
 				framework: 'mocha'
 			}
 		};
-		this._tests = new Map();
-		this._testsFlaky = new Set();
 
-		runner
-			.once(EVENT_RUN_BEGIN, () => this._onRunBegin(stats))
-			.once(EVENT_RUN_END, () => this._onRunEnd(stats))
-			.on(EVENT_TEST_PENDING, test => this._onTestPending(test))
-			.on(EVENT_TEST_BEGIN, test => this._onTestBegin(test))
-			.on(EVENT_TEST_END, test => this._onTestEnd(test))
-			.on(EVENT_TEST_RETRY, test => this._onTestRetry(test));
-	}
-
-	_onRunBegin(stats) {
 		if (hasContext()) {
 			const githubContext = getContext();
 
@@ -93,37 +63,20 @@ class TestReportingMochaReporter extends Spec {
 			log(indent(message));
 		}
 
-		this._report.summary.started = stats.start.toISOString();
+		this._tests = new Map();
+		this._testsFlaky = new Set();
+
+		runner
+			.once(EVENT_RUN_BEGIN, () => this._onRunBegin(stats))
+			.on(EVENT_TEST_PENDING, test => this._onTestPending(test))
+			.on(EVENT_TEST_BEGIN, test => this._onTestBegin(test))
+			.on(EVENT_TEST_END, test => this._onTestEnd(test))
+			.on(EVENT_TEST_RETRY, test => this._onTestRetry(test))
+			.once(EVENT_RUN_END, () => this._onRunEnd(stats));
 	}
 
-	_onRunEnd(stats) {
-		this._report.summary = {
-			...this._report.summary,
-			totalDuration: stats.duration,
-			status: stats.failures !== 0 ? 'failed' : 'passed',
-			countPassed: stats.passes,
-			countFailed: stats.failures,
-			countSkipped: stats.pending,
-			countFlaky: this._testsFlaky.size
-		};
-		this._report.details = [...this._tests].map(test => {
-			const [name, values] = test;
-
-			return { name, ...values };
-		});
-
-		try {
-			const reportOutput = JSON.stringify(this._report);
-			const filePath = resolve('./d2l-test-report.json');
-
-			writeFileSync(filePath, reportOutput, 'utf8');
-
-			const filePathMessage = color('pending', filePath);
-
-			log(indent(`D2L test report available at: ${filePathMessage}\n`));
-		} catch {
-			log(indent(color('fail', 'Failed to generate D2L test report\n')));
-		}
+	_onRunBegin(stats) {
+		this._report.summary.started = stats.start.toISOString();
 	}
 
 	_onTestPending(test) {
@@ -161,6 +114,31 @@ class TestReportingMochaReporter extends Spec {
 		values.totalDuration += values.duration;
 
 		this._tests.set(name, values);
+	}
+
+	_onRunEnd(stats) {
+		this._report.summary.totalDuration = stats.duration;
+		this._report.summary.status = stats.failures !== 0 ? 'failed' : 'passed';
+		this._report.summary.countPassed = stats.passes;
+		this._report.summary.countFailed = stats.failures;
+		this._report.summary.countSkipped = stats.pending;
+		this._report.summary.countFlaky = this._testsFlaky.size;
+		this._report.details = [...this._tests].map(
+			([name, values]) => ({ name, ...values })
+		);
+
+		try {
+			const reportOutput = JSON.stringify(this._report);
+			const filePath = resolve(this._reportPath);
+
+			writeFileSync(filePath, reportOutput, 'utf8');
+
+			const filePathMessage = color('pending', filePath);
+
+			log(indent(`D2L test report available at: ${filePathMessage}\n`));
+		} catch {
+			log(indent(color('fail', 'Failed to generate D2L test report\n')));
+		}
 	}
 }
 
