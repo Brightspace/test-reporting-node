@@ -25,7 +25,7 @@
     "test:all": "c8 run-s test:unit test:integration",
     "test:unit": "mocha test/unit/**/*.test.js",
     "test:integration": "run-s test:integration:mocha test:integration:playwright",
-    "test:integration:mocha": "mocha --config test/integration/configs/mocha.json",
+    "test:integration:mocha": "mocha --config test/integration/configs/mocha.cjs",
     "test:integration:playwright": "playwright test --config test/integration/configs/playwright.js"
   },
   "engines": {
@@ -36,8 +36,7 @@
   ],
   "dependencies": {
     "mocha": "^10",
-    "playwright-core": "^1",
-    "uuid": "^9"
+    "playwright-core": "^1"
   },
   "devDependencies": {
     "@playwright/test": "^1",
