@@ -1,3 +1,4 @@
+const { hasContext, getContext } = require('../helpers/github.cjs');
 const { relative, sep: platformSeparator, resolve } = require('path');
 const { join } = require('path/posix');
 const { reporters: { Base, Spec } } = require('mocha');
@@ -76,6 +77,22 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onRunBegin(stats) {
+		if (hasContext()) {
+			const githubContext = getContext();
+
+			this._report.summary = {
+				...this._report.summary,
+				...githubContext
+			};
+		} else {
+			const message = color(
+				'bright yellow',
+				'D2L test report will not contain GitHub context details'
+			);
+
+			log(indent(message));
+		}
+
 		this._report.summary.started = stats.start.toISOString();
 	}
 
