@@ -35,7 +35,7 @@ class TestReportingMochaReporter extends Spec {
 		super(runner, options);
 
 		const { stats } = runner;
-		const { reporterOptions: { reportPath } } = options;
+		const { reporterOptions: { reportPath } = {} } = options;
 
 		this._reportPath = reportPath ?? './d2l-test-report.json';
 		this._report = {
