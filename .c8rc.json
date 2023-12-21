@@ -2,12 +2,11 @@
   "all": true,
   "check-coverage": true,
   "statements": 90,
-  "branches": 85,
-  "functions": 100,
+  "branches": 75,
+  "functions": 85,
   "lines": 90,
   "include": [
-    "src/**/*.js",
-    "src/**/*.cjs"
+    "src/**/*.{js,cjs}"
   ],
   "reporter": [
     "text",

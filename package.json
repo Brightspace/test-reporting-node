@@ -8,7 +8,8 @@
   "type": "module",
   "exports": {
     "./helpers/github.js": "./src/helpers/github.cjs",
-    "./reporters/mocha.js": "./src/reporters/mocha.cjs"
+    "./reporters/mocha.js": "./src/reporters/mocha.cjs",
+    "./reporters/playwright.js": "./src/reporters/playwright.js"
   },
   "publishConfig": {
     "access": "public",
@@ -20,8 +21,12 @@
     "lint:eslint": "eslint . --ext .js,.cjs",
     "fix": "npm run fix:eslint",
     "fix:eslint": "npm run lint:eslint -- --fix",
-    "test": "npm run lint && npm run test:unit",
-    "test:unit": "c8 mocha"
+    "test": "npm run lint && npm run test:all",
+    "test:all": "c8 run-s test:unit test:integration",
+    "test:unit": "mocha test/unit/**/*.test.js",
+    "test:integration": "run-s test:integration:mocha test:integration:playwright",
+    "test:integration:mocha": "mocha --config test/integration/configs/mocha.json",
+    "test:integration:playwright": "playwright test --config test/integration/configs/playwright.js"
   },
   "engines": {
     "node": ">=20"
@@ -31,14 +36,18 @@
   ],
   "dependencies": {
     "mocha": "^10",
+    "playwright-core": "^1",
     "uuid": "^9"
   },
   "devDependencies": {
+    "@playwright/test": "^1",
     "c8": "^8",
     "chai": "^4",
     "d2l-license-checker": "^4",
     "eslint": "^8",
     "eslint-config-brightspace": "^1",
+    "npm-run-all": "^4",
+    "playwright": "^1",
     "sinon": "^17"
   }
 }
