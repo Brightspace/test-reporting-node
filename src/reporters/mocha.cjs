@@ -2,9 +2,9 @@
 const { reporters: { Base, Spec } } = require('mocha');
 const { hasContext, getContext } = require('../helpers/github.cjs');
 const { getOperatingSystem, makeLocation, generateReportOutput } = require('./helpers.cjs');
+const { randomUUID } = require('crypto');
 const { resolve } = require('path');
 const { Runner: { constants } } = require('mocha');
-const { v4: uuid } = require('uuid');
 const { writeFileSync } = require('fs');
 
 const { consoleLog: log, color } = Base;
@@ -39,7 +39,7 @@ class TestReportingMochaReporter extends Spec {
 
 		this._reportPath = reportPath ?? './d2l-test-report.json';
 		this._report = {
-			reportId: uuid(),
+			reportId: randomUUID(),
 			reportVersion: 1,
 			summary: {
 				operatingSystem: getOperatingSystem(),

@@ -1,7 +1,7 @@
 import { generateReportOutput, getOperatingSystem, makeLocation } from './helpers.cjs';
 import { getContext, hasContext } from '../helpers/github.cjs';
 import { colors } from 'playwright-core/lib/utilsBundle';
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'crypto';
 import { resolve } from 'path';
 import { writeFile } from 'fs/promises';
 
@@ -29,7 +29,7 @@ export default class Reporter {
 	constructor({ reportPath } = {}) {
 		this._reportPath = reportPath ?? './d2l-test-report.json';
 		this._report = {
-			reportId: uuid(),
+			reportId: randomUUID(),
 			reportVersion: 1,
 			summary: {
 				operatingSystem: getOperatingSystem(),
