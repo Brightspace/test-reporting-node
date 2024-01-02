@@ -1,5 +1,5 @@
 module.exports = {
-	spec: 'test/integration/mocha.test.js',
+	spec: 'test/integration/mocha-*.test.js',
 	retries: 3,
 	reporter: 'src/reporters/mocha.cjs',
 	'reporter-option': [

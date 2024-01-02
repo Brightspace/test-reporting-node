@@ -4,7 +4,7 @@ const delay = () => {
 	return new Promise(resolve => setTimeout(resolve, 250));
 };
 
-test.describe('reporter', () => {
+test.describe('reporter tests 1', () => {
 	test('test', () => { });
 
 	test.skip('skipped test', () => { });

@@ -8,7 +8,7 @@ export default defineConfig({
 	retries: 3,
 	fullyParallel: true,
 	testDir: '../',
-	testMatch: 'playwright.test.js',
+	testMatch: 'playwright-*.test.js',
 	projects: [{
 		name: 'chromium',
 		use: devices['Desktop Chrome']
