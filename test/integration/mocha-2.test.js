@@ -2,7 +2,7 @@ const delay = () => {
 	return new Promise(resolve => setTimeout(resolve, 250));
 };
 
-describe('reporter', () => {
+describe('reporter tests 2', () => {
 	let count = 0;
 
 	it('test', () => {});
