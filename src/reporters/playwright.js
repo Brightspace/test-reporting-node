@@ -8,10 +8,26 @@ import { writeFile } from 'fs/promises';
 const { cyan, red, yellow } = colors;
 
 const getProject = (config, test) => {
-	const [, projectName] = test.titlePath();
 	const { projects } = config;
+	const [, projectName] = test.titlePath();
 
 	return projects.find(({ name }) => name === projectName);
+};
+
+const convertEndStateSummary = (state) => {
+	if (!['passed', 'failed'].includes(state)) {
+		return 'failed';
+	}
+
+	return state;
+};
+
+const convertEndStateDetails = (state) => {
+	if (!['passed', 'failed', 'skipped'].includes(state)) {
+		return 'failed';
+	}
+
+	return state;
 };
 
 const makeTestName = (test) => {
@@ -60,18 +76,19 @@ export default class Reporter {
 	}
 
 	onTestEnd(test, result) {
+		const { startTime, retry, status, duration } = result;
 		const { id, location: { file } } = test;
 		const values = this._tests.get(id) ?? {};
 
 		values.name = makeTestName(test);
-		values.started = values.started ?? result.startTime;
+		values.started = values.started ?? startTime;
 		values.location = values.location ?? makeLocation(file);
-		values.retries = result.retry;
-		values.status = result.status;
-		values.duration = result.duration;
+		values.retries = retry;
+		values.status = convertEndStateDetails(status);
+		values.duration = duration;
 		values.totalDuration = values.totalDuration === undefined ?
-			result.duration :
-			values.totalDuration + result.duration;
+			duration :
+			values.totalDuration + duration;
 
 		if (values.browser === undefined) {
 			const { use: { defaultBrowserType } } = getProject(this._config, test);
@@ -83,9 +100,11 @@ export default class Reporter {
 	}
 
 	onEnd(result) {
-		this._report.summary.started = result.startTime;
-		this._report.summary.totalDuration = Math.round(result.duration);
-		this._report.summary.status = result.status;
+		const { startTime, duration, status } = result;
+
+		this._report.summary.started = startTime;
+		this._report.summary.totalDuration = Math.round(duration);
+		this._report.summary.status = convertEndStateSummary(status);
 
 		let countPassed = 0;
 		let countFailed = 0;
