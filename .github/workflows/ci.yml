@@ -2,6 +2,8 @@ name: CI
 on: pull_request
 env:
   FORCE_COLOR: 3
+permissions:
+  contents: read
 jobs:
   lint:
     name: Lint
@@ -39,6 +41,9 @@ jobs:
     name: Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: Brightspace/third-party-actions@actions/checkout
@@ -53,3 +58,27 @@ jobs:
           npx playwright install --with-deps
       - name: Run tests
         run: npm run test:all
+      - name: Hide outdated comment
+        uses: Brightspace/third-party-actions@int128/hide-comment-action
+        with:
+          starts-with: <!-- generated reports -->
+      - name: Post comment
+        run: |
+          BODY=$'<!-- generated reports -->\n\n'
+          BODY+=$'Generated reports\n\n'
+          MOCHA_REPORT=$(cat d2l-test-report-mocha.json | jq)
+          BODY+=$'<details>\n<summary>mocha</summary>\n\n'
+          BODY+=$'```json\n'
+          BODY+=$"$MOCHA_REPORT"
+          BODY+=$'\n```\n\n'
+          BODY+=$'</details>\n\n'
+          PLAYWRIGHT_REPORT=$(cat d2l-test-report-playwright.json | jq)
+          BODY+=$'<details>\n<summary>playwright</summary>\n\n'
+          BODY+=$'```json\n'
+          BODY+=$"$PLAYWRIGHT_REPORT"
+          BODY+=$'\n```\n\n'
+          BODY+=$'</details>'
+          gh pr comment "$PULL_REQUEST_NUMBER" --body "$BODY"
+        env:
+          PULL_REQUEST_NUMBER: ${{github.event.pull_request.number}}
+          GITHUB_TOKEN: ${{github.token}}
