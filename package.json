@@ -21,12 +21,13 @@
     "lint:eslint": "eslint . --ext .js,.cjs",
     "fix": "npm run fix:eslint",
     "fix:eslint": "npm run lint:eslint -- --fix",
-    "test": "npm run lint && npm run test:all",
-    "test:all": "c8 run-s test:unit test:integration",
+    "test": "run-s lint test:all",
+    "test:all": "run-s test:unit test:integration",
     "test:unit": "mocha test/unit/**/*.test.js",
     "test:integration": "run-s test:integration:mocha test:integration:playwright",
     "test:integration:mocha": "mocha --config test/integration/configs/mocha.cjs",
-    "test:integration:playwright": "playwright test --config test/integration/configs/playwright.js"
+    "test:integration:playwright": "playwright test --config test/integration/configs/playwright.js",
+    "test:coverage": "c8 npm run test:all"
   },
   "engines": {
     "node": ">=20"

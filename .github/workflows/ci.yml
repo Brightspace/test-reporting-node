@@ -57,7 +57,7 @@ jobs:
           npm ci
           npx playwright install --with-deps
       - name: Run tests
-        run: npm run test:all
+        run: npm run test:coverage
       - name: Hide outdated comment
         uses: Brightspace/third-party-actions@int128/hide-comment-action
         with:
