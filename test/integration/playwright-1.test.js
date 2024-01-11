@@ -17,4 +17,6 @@ test.describe('reporter tests 1', () => {
 			throw new Error('flaky test failure');
 		}
 	});
+
+	test('failed test', () => { throw new Error('fail'); });
 });
