@@ -117,14 +117,14 @@ export default class Reporter {
 
 			if (values.status === 'passed') {
 				countPassed++;
+
+				if (values.retries !== 0) {
+					countFlaky++;
+				}
 			} else if (values.status === 'failed') {
 				countFailed++;
 			} else if (values.status === 'skipped') {
 				countSkipped++;
-			}
-
-			if (values.retries !== 0) {
-				countFlaky++;
 			}
 
 			return { ...values };

@@ -89,7 +89,7 @@ class TestReportingMochaReporter extends Spec {
 
 		values.started = values.started ?? (new Date()).toISOString();
 		values.location = values.location ?? makeLocation(test.file);
-		values.retries = values.retries === undefined ? 0 : values.retries + 1;
+		values.retries = values.retries ?? 0;
 		values.totalDuration = values.totalDuration ?? 0;
 
 		this._tests.set(name, values);
@@ -100,9 +100,9 @@ class TestReportingMochaReporter extends Spec {
 		const values = this._tests.get(name);
 
 		values.totalDuration += test.duration;
+		values.retries += 1;
 
 		this._tests.set(name, values);
-		this._testsFlaky.add(name);
 	}
 
 	_onTestEnd(test) {
@@ -114,6 +114,10 @@ class TestReportingMochaReporter extends Spec {
 		values.totalDuration += values.duration;
 
 		this._tests.set(name, values);
+
+		if (values.status === 'passed' && values.retries !== 0) {
+			this._testsFlaky.add(name);
+		}
 	}
 
 	_onRunEnd(stats) {

@@ -5,9 +5,9 @@ const delay = () => {
 describe('reporter tests 2', () => {
 	let count = 0;
 
-	it('test', () => {});
+	it('test', () => { });
 
-	it.skip('skipped test', () => {});
+	it.skip('skipped test', () => { });
 
 	it('flaky test', async() => {
 		if (count < 2) {
@@ -18,4 +18,6 @@ describe('reporter tests 2', () => {
 			throw new Error('flaky test failure');
 		}
 	});
+
+	it('failed test', () => { throw new Error('fail'); });
 });
