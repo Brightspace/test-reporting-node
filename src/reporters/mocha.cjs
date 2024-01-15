@@ -1,13 +1,11 @@
-
 const { reporters: { Base, Spec } } = require('mocha');
 const { hasContext, getContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, makeLocation, generateReportOutput } = require('./helpers.cjs');
+const { getOperatingSystem, makeLocation, getConfiguration, getMetaData, determineReportPath, writeReport } = require('./helpers.cjs');
+const { minimatch } = require('minimatch');
 const { randomUUID } = require('crypto');
-const { resolve } = require('path');
 const { Runner: { constants } } = require('mocha');
-const { writeFileSync } = require('fs');
 
-const { consoleLog: log, color } = Base;
+const { consoleLog, color } = Base;
 
 const {
 	EVENT_RUN_BEGIN,
@@ -26,8 +24,8 @@ const convertEndState = (state) => {
 	return state === 'pending' ? 'skipped' : state;
 };
 
-const indent = (message) => {
-	return `  ${message}`;
+const log = (message) => {
+	consoleLog(`  ${message}`);
 };
 
 class TestReportingMochaReporter extends Spec {
@@ -35,9 +33,10 @@ class TestReportingMochaReporter extends Spec {
 		super(runner, options);
 
 		const { stats } = runner;
-		const { reporterOptions: { reportPath } = {} } = options;
+		const { reporterOptions: { reportPath, configurationPath } = {} } = options;
 
-		this._reportPath = reportPath ?? './d2l-test-report.json';
+		this._configuration = getConfiguration(configurationPath);
+		this._reportPath = determineReportPath(reportPath);
 		this._report = {
 			reportId: randomUUID(),
 			reportVersion: 1,
@@ -55,12 +54,7 @@ class TestReportingMochaReporter extends Spec {
 				...githubContext
 			};
 		} else {
-			const message = color(
-				'bright yellow',
-				'D2L test report will not contain GitHub context details'
-			);
-
-			log(indent(message));
+			log(color('bright yellow', 'D2L test report will not contain GitHub context details'));
 		}
 
 		this._tests = new Map();
@@ -91,6 +85,18 @@ class TestReportingMochaReporter extends Spec {
 		values.location = values.location ?? makeLocation(test.file);
 		values.retries = values.retries ?? 0;
 		values.totalDuration = values.totalDuration ?? 0;
+
+		if (!values.type || !values.tool || !values.experience) {
+			const { type, tool, experience } = getMetaData(
+				this._configuration,
+				minimatch,
+				values.location
+			);
+
+			values.type = values.type ?? type;
+			values.tool = values.tool ?? tool;
+			values.experience = values.experience ?? experience;
+		}
 
 		this._tests.set(name, values);
 	}
@@ -127,21 +133,13 @@ class TestReportingMochaReporter extends Spec {
 		this._report.summary.countFailed = stats.failures;
 		this._report.summary.countSkipped = stats.pending;
 		this._report.summary.countFlaky = this._testsFlaky.size;
-		this._report.details = [...this._tests].map(
-			([name, values]) => ({ name, ...values })
-		);
+		this._report.details = [...this._tests].map(([name, values]) => ({ name, ...values }));
 
 		try {
-			const reportOutput = generateReportOutput(this._report);
-			const filePath = resolve(this._reportPath);
-
-			writeFileSync(filePath, reportOutput, 'utf8');
-
-			const filePathMessage = color('pending', filePath);
-
-			log(indent(`D2L test report available at: ${filePathMessage}\n`));
+			writeReport(this._reportPath, this._report);
+			log(`D2L test report available at: ${color('pending', this._reportPath)}\n`);
 		} catch {
-			log(indent(color('fail', 'Failed to generate D2L test report\n')));
+			log(color('fail', 'Failed to generate D2L test report\n'));
 		}
 	}
 }

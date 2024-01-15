@@ -1,9 +1,8 @@
-import { generateReportOutput, getOperatingSystem, makeLocation } from './helpers.cjs';
+import { getOperatingSystem, getConfiguration, makeLocation, getMetaData, determineReportPath, writeReport } from './helpers.cjs';
 import { getContext, hasContext } from '../helpers/github.cjs';
 import { colors } from 'playwright-core/lib/utilsBundle';
+import { minimatch } from 'minimatch';
 import { randomUUID } from 'crypto';
-import { resolve } from 'path';
-import { writeFile } from 'fs/promises';
 
 const { cyan, red, yellow } = colors;
 
@@ -42,8 +41,9 @@ const logWarn = (message) => console.log(yellow(`\n${message}\n`));
 const logError = (message) => console.log(red(`\n${message}\n`));
 
 export default class Reporter {
-	constructor({ reportPath } = {}) {
-		this._reportPath = reportPath ?? './d2l-test-report.json';
+	constructor({ reportPath, configurationPath } = {}) {
+		this._configuration = getConfiguration(configurationPath);
+		this._reportPath = determineReportPath(reportPath);
 		this._report = {
 			reportId: randomUUID(),
 			reportVersion: 1,
@@ -86,14 +86,23 @@ export default class Reporter {
 		values.retries = retry;
 		values.status = convertEndStateDetails(status);
 		values.duration = duration;
-		values.totalDuration = values.totalDuration === undefined ?
-			duration :
-			values.totalDuration + duration;
-
+		values.totalDuration = values.totalDuration === undefined ? duration : values.totalDuration + duration;
 		if (values.browser === undefined) {
 			const { use: { defaultBrowserType } } = getProject(this._config, test);
 
 			values.browser = defaultBrowserType;
+		}
+
+		if (!values.type || !values.tool || !values.experience) {
+			const { type, tool, experience } = getMetaData(
+				this._configuration,
+				minimatch,
+				values.location
+			);
+
+			values.type = values.type ?? type;
+			values.tool = values.tool ?? tool;
+			values.experience = values.experience ?? experience;
 		}
 
 		this._tests.set(id, values);
@@ -142,12 +151,9 @@ export default class Reporter {
 		}
 
 		try {
-			const reportOutput = generateReportOutput(this._report);
-			const filePath = resolve(this._reportPath);
+			writeReport(this._reportPath, this._report);
 
-			await writeFile(filePath, reportOutput, 'utf8');
-
-			console.log(`\nD2L test report available at: ${cyan(filePath)}\n`);
+			console.log(`\nD2L test report available at: ${cyan(this._reportPath)}\n`);
 		} catch {
 			logError('\nFailed to generate D2L test report');
 		}

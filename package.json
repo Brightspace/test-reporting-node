@@ -37,6 +37,7 @@
     "/src"
   ],
   "dependencies": {
+    "minimatch": "^9",
     "mocha": "^10",
     "playwright-core": "^1"
   },

@@ -1,0 +1,25 @@
+{
+  "type": "Integration",
+  "experience": "Test Framework",
+  "tool": "Test Reporting",
+  "overrides": [
+    {
+      "pattern": "*/**/mocha-1.test.js",
+      "experience": "Mocha 1 Test Framework",
+      "tool": "Mocha 1 Test Reporting"
+    },
+    {
+      "pattern": "*/**/mocha-2.test.js",
+      "experience": "Mocha 2 Test Framework"
+    },
+    {
+      "pattern": "*/**/playwright-1.test.js",
+      "experience": "Playwright 1 Test Framework",
+      "tool": "Playwright 1 Test Reporting"
+    },
+    {
+      "pattern": "*/**/playwright-2.test.js",
+      "experience": "Playwright 2 Test Framework"
+    }
+  ]
+}
