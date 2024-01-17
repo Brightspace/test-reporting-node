@@ -1,8 +1,11 @@
-import { getOperatingSystem, getConfiguration, makeLocation, getMetaData, determineReportPath, writeReport } from './helpers.cjs';
 import { getContext, hasContext } from '../helpers/github.cjs';
+import { createRequire } from 'node:module';
 import { colors } from 'playwright-core/lib/utilsBundle';
-import { minimatch } from 'minimatch';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
+
+const require = createRequire(import.meta.url);
+
+const { getOperatingSystem, getConfiguration, makeLocation, getMetaData, determineReportPath, writeReport } = require('./helpers.cjs');
 
 const { cyan, red, yellow } = colors;
 
@@ -94,11 +97,7 @@ export default class Reporter {
 		}
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getMetaData(
-				this._configuration,
-				minimatch,
-				values.location
-			);
+			const { type, tool, experience } = getMetaData(this._configuration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;

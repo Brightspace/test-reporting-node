@@ -1,9 +1,7 @@
-const { reporters: { Base, Spec } } = require('mocha');
+const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { hasContext, getContext } = require('../helpers/github.cjs');
 const { getOperatingSystem, makeLocation, getConfiguration, getMetaData, determineReportPath, writeReport } = require('./helpers.cjs');
-const { minimatch } = require('minimatch');
-const { randomUUID } = require('crypto');
-const { Runner: { constants } } = require('mocha');
+const { randomUUID } = require('node:crypto');
 
 const { consoleLog, color } = Base;
 
@@ -87,11 +85,7 @@ class TestReportingMochaReporter extends Spec {
 		values.totalDuration = values.totalDuration ?? 0;
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getMetaData(
-				this._configuration,
-				minimatch,
-				values.location
-			);
+			const { type, tool, experience } = getMetaData(this._configuration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;

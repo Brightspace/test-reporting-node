@@ -1,7 +1,8 @@
-const { relative, sep: platformSeparator, resolve } = require('path');
-const { join } = require('path/posix');
-const { readFileSync, writeFileSync } = require('fs');
-const { type } = require('os');
+const { relative, sep: platformSeparator, resolve } = require('node:path');
+const { join } = require('node:path/posix');
+const { minimatch } = require('minimatch');
+const { readFileSync, writeFileSync } = require('node:fs');
+const { type } = require('node:os');
 
 const defaultReportPath = './d2l-test-report.json';
 const defaultConfigurationPath = './d2l-test-reporting.config.json';
@@ -92,13 +93,13 @@ const getConfiguration = (configurationPath) => {
 	}
 };
 
-const getMetaData = (configuration, callback, location) => {
+const getMetaData = (configuration, location) => {
 	const metadata = {};
 
 	for (const override of configuration.overrides ?? []) {
 		const { pattern, type, tool, experience } = override;
 
-		if (callback(location, pattern)) {
+		if (minimatch(location, pattern)) {
 			metadata.type = type;
 			metadata.tool = tool;
 			metadata.experience = experience;
@@ -114,7 +115,7 @@ const getMetaData = (configuration, callback, location) => {
 	return metadata;
 };
 
-const writeReport = (reportPath, report)=> {
+const writeReport = (reportPath, report) => {
 	writeFileSync(reportPath, JSON.stringify(report, memberPriority), 'utf8');
 };
 
