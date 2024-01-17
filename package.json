@@ -8,6 +8,7 @@
   "type": "module",
   "exports": {
     "./helpers/github.js": "./src/helpers/github.cjs",
+    "./helpers/report.js": "./src/helpers/report.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/playwright.js": "./src/reporters/playwright.js"
   },
@@ -22,13 +23,12 @@
     "fix": "npm run fix:eslint",
     "fix:eslint": "npm run lint:eslint -- --fix",
     "test": "run-s lint test:all",
-    "test:all": "run-s test:unit test:integration",
+    "test:all": "c8 run-s test:unit test:integration",
     "test:unit": "mocha \"test/unit/**/*.test.js\"",
     "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:report-validation",
     "test:integration:mocha": "mocha --config test/integration/configs/mocha.cjs || exit 0",
     "test:integration:playwright": "playwright test --config test/integration/configs/playwright.js || exit 0",
-    "test:integration:report-validation": "mocha test/integration/report-validation.test.js",
-    "test:coverage": "c8 npm run test:all"
+    "test:integration:report-validation": "mocha test/integration/report-validation.test.js"
   },
   "engines": {
     "node": ">=20"
@@ -37,6 +37,8 @@
     "/src"
   ],
   "dependencies": {
+    "ajv": "^8",
+    "ajv-formats": "^2",
     "minimatch": "^9",
     "mocha": "^10",
     "playwright-core": "^1"

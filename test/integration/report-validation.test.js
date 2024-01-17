@@ -1,13 +1,31 @@
-import { expect } from 'chai';
-import { readFile } from 'fs/promises';
+import { hasContext } from '../../src/helpers/github.cjs';
+import { readFile } from 'node:fs/promises';
+import { validateReport } from '../../src/helpers/report.cjs';
 
-describe('validation', () => {
+const dummyContext = {
+	githubOrganization: 'TestOrganization',
+	githubRepository: 'test-repository',
+	githubWorkflow: 'test-workflow.yml',
+	githubRunId: 12345,
+	githubRunAttempt: 1,
+	gitBranch: 'test/branch',
+	gitSha: '0000000000000000000000000000000000000000'
+};
+
+describe('report validation', () => {
 	it('mocha', async() => {
 		let report = await readFile('./d2l-test-report-mocha.json', 'utf8');
 
 		report = JSON.parse(report);
 
-		expect(report.reportVersion).to.eq(1);
+		if (!hasContext()) {
+			report.summary = {
+				...report.summary,
+				...dummyContext
+			};
+		}
+
+		validateReport(report);
 	});
 
 	it('playwright', async() => {
@@ -15,6 +33,13 @@ describe('validation', () => {
 
 		report = JSON.parse(report);
 
-		expect(report.reportVersion).to.eq(1);
+		if (!hasContext()) {
+			report.summary = {
+				...report.summary,
+				...dummyContext
+			};
+		}
+
+		validateReport(report);
 	});
 });

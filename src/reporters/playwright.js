@@ -1,10 +1,10 @@
-import { getContext, hasContext } from '../helpers/github.cjs';
 import { createRequire } from 'node:module';
 import { colors } from 'playwright-core/lib/utilsBundle';
 import { randomUUID } from 'node:crypto';
 
 const require = createRequire(import.meta.url);
 
+const { getContext, hasContext } = require('../helpers/github.cjs');
 const { getOperatingSystem, getConfiguration, makeLocation, getMetaData, determineReportPath, writeReport } = require('./helpers.cjs');
 
 const { cyan, red, yellow } = colors;
