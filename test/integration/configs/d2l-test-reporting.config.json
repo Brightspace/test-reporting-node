@@ -1,11 +1,11 @@
 {
-  "type": "Integration",
+  "type": "integration",
   "experience": "Test Framework",
   "tool": "Test Reporting",
   "overrides": [
     {
       "pattern": "*/**/mocha-1.test.js",
-      "experience": "Mocha 1 Test Framework",
+      "type": "ui",
       "tool": "Mocha 1 Test Reporting"
     },
     {
@@ -19,6 +19,7 @@
     },
     {
       "pattern": "*/**/playwright-2.test.js",
+      "type": "visual diff",
       "experience": "Playwright 2 Test Framework"
     }
   ]
