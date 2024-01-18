@@ -1,4 +1,4 @@
-import { getContext, GitHubActionsUnavailableError, hasContext } from '../../src/helpers/github.cjs';
+import { getContext, hasContext } from '../../src/helpers/github.cjs';
 import { createSandbox } from 'sinon';
 import { expect } from 'chai';
 
@@ -71,7 +71,7 @@ describe('github', () => {
 				try {
 					getContext();
 				} catch (err) {
-					expect(err).instanceOf(GitHubActionsUnavailableError);
+					expect(err.message).to.eq('GitHub context unavailable');
 
 					return;
 				}

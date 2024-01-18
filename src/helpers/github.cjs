@@ -1,8 +1,4 @@
-class GitHubActionsUnavailableError extends Error {
-	constructor() {
-		super('GitHub Actions context unavailable');
-	}
-}
+const { ajv: { errorsText }, validateContextAjv } = require('./schema.cjs');
 
 const hasContext = () => {
 	const { env: { GITHUB_ACTIONS } } = process;
@@ -12,7 +8,7 @@ const hasContext = () => {
 
 const getContext = () => {
 	if (!hasContext()) {
-		throw new GitHubActionsUnavailableError();
+		throw new Error('GitHub context unavailable');
 	}
 
 	const { env: {
@@ -40,4 +36,13 @@ const getContext = () => {
 	};
 };
 
-module.exports = { getContext, hasContext, GitHubActionsUnavailableError };
+const validateContext = (context) => {
+	if (!validateContextAjv(context)) {
+		const { errors } = validateContextAjv;
+		const message = errorsText(errors, { dataVar: 'context' });
+
+		throw new Error(`GitHub context does not conform to schema: ${message}`);
+	}
+};
+
+module.exports = { getContext, hasContext, validateContext };
