@@ -9,11 +9,12 @@ const { getOperatingSystem, getConfiguration, makeLocation, getMetaData, determi
 
 const { cyan, red, yellow } = colors;
 
-const getProject = (config, test) => {
-	const { projects } = config;
-	const [, projectName] = test.titlePath();
+const getRootParent = (test) => {
+	if (test.parent && test.parent.parent) {
+		return getRootParent(test.parent);
+	}
 
-	return projects.find(({ name }) => name === projectName);
+	return test;
 };
 
 const convertEndStateSummary = (state) => {
@@ -90,8 +91,14 @@ export default class Reporter {
 		values.status = convertEndStateDetails(status);
 		values.duration = duration;
 		values.totalDuration = values.totalDuration === undefined ? duration : values.totalDuration + duration;
+
 		if (values.browser === undefined) {
-			const { use: { defaultBrowserType } } = getProject(this._config, test);
+			// workaround can be removed if https://github.com/microsoft/playwright/issues/29173 is fixed
+			const rootParent = getRootParent(test);
+			// should be able to just do test.parent.project(), need to remove workaround
+			const project = rootParent.project();
+			// won't work for merge-reports workflow, defaultBrowserType will always be undefined
+			const { use: { defaultBrowserType } } = project;
 
 			values.browser = defaultBrowserType;
 		}
