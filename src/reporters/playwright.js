@@ -61,7 +61,6 @@ export default class Reporter {
 
 	onBegin(config, suite) {
 		this._hasTests = suite.allTests().length !== 0;
-		this._config = config;
 
 		if (!this._hasTests) {
 			return;
