@@ -34,7 +34,7 @@ const convertEndStateDetails = (state) => {
 
 const makeTestName = (test) => {
 	const [, projectName, , ...titles] = test.titlePath();
-	const titlePaths = projectName ? [projectName, ...titles] : titles;
+	const titlePaths = projectName ? [`[${projectName}]`, ...titles] : titles;
 
 	return titlePaths.join(' > ');
 };
