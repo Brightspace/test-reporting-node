@@ -4,8 +4,8 @@ import { randomUUID } from 'node:crypto';
 
 const require = createRequire(import.meta.url);
 
+const { determineReportPath, getOperatingSystem, getReportConfiguration, getReportOptions, makeLocation, writeReport } = require('./helpers.cjs');
 const { getContext, hasContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, getReportConfiguration, makeLocation, getReportOptions, determineReportPath, writeReport } = require('./helpers.cjs');
 
 const { cyan, red, yellow } = colors;
 

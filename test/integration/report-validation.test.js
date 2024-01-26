@@ -17,7 +17,9 @@ const dummyContext = {
 	gitSha: '0000000000000000000000000000000000000000'
 };
 const partialReportMocha = {
+	reportVersion: 1,
 	summary: {
+		status: 'failed',
 		framework: 'mocha',
 		countPassed: 2,
 		countFailed: 2,
@@ -91,7 +93,9 @@ const partialReportMocha = {
 	}]
 };
 const partialReportPlaywright = {
+	reportVersion: 1,
 	summary: {
+		status: 'failed',
 		framework: 'playwright',
 		countPassed: 5,
 		countFailed: 5,
@@ -280,6 +284,114 @@ const partialReportPlaywright = {
 		retries: 2
 	}]
 };
+const partialReportWebTestRunner = {
+	reportVersion: 1,
+	summary: {
+		status: 'failed',
+		framework: '@web/test-runner',
+		countPassed: 4,
+		countFailed: 4,
+		countSkipped: 4,
+		countFlaky: 0
+	},
+	details: [{
+		name: 'reporter tests 1 > test',
+		status: 'passed',
+		location: 'test/integration/web-test-runner-1.test.js',
+		tool: 'WebTestRunner 1 Test Reporting',
+		experience: 'WebTestRunner 1 Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: 'reporter tests 1 > skipped test',
+		status: 'skipped',
+		location: 'test/integration/web-test-runner-1.test.js',
+		tool: 'WebTestRunner 1 Test Reporting',
+		experience: 'WebTestRunner 1 Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: 'reporter tests 1 > failed test',
+		status: 'failed',
+		location: 'test/integration/web-test-runner-1.test.js',
+		tool: 'WebTestRunner 1 Test Reporting',
+		experience: 'WebTestRunner 1 Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: '[group 1] > reporter tests 2 > test',
+		status: 'passed',
+		location: 'test/integration/web-test-runner-2.test.js',
+		tool: 'Test Reporting',
+		experience: 'WebTestRunner 2 Test Framework',
+		type: 'accessibility',
+		retries: 0
+	}, {
+		name: '[group 1] > reporter tests 2 > skipped test',
+		status: 'skipped',
+		location: 'test/integration/web-test-runner-2.test.js',
+		tool: 'Test Reporting',
+		experience: 'WebTestRunner 2 Test Framework',
+		type: 'accessibility',
+		retries: 0
+	}, {
+		name: '[group 1] > reporter tests 2 > failed test',
+		status: 'failed',
+		location: 'test/integration/web-test-runner-2.test.js',
+		tool: 'Test Reporting',
+		experience: 'WebTestRunner 2 Test Framework',
+		type: 'accessibility',
+		retries: 0
+	}, {
+		name: '[group 1] > reporter tests 2 > test',
+		status: 'passed',
+		location: 'test/integration/web-test-runner-2.test.js',
+		tool: 'Test Reporting',
+		experience: 'WebTestRunner 2 Test Framework',
+		type: 'accessibility',
+		retries: 0
+	}, {
+		name: '[group 1] > reporter tests 2 > skipped test',
+		status: 'skipped',
+		location: 'test/integration/web-test-runner-2.test.js',
+		tool: 'Test Reporting',
+		experience: 'WebTestRunner 2 Test Framework',
+		type: 'accessibility',
+		retries: 0
+	}, {
+		name: '[group 1] > reporter tests 2 > failed test',
+		status: 'failed',
+		location: 'test/integration/web-test-runner-2.test.js',
+		tool: 'Test Reporting',
+		experience: 'WebTestRunner 2 Test Framework',
+		type: 'accessibility',
+		retries: 0
+	}, {
+		name: '[group 2] > reporter tests 1 > test',
+		status: 'passed',
+		location: 'test/integration/web-test-runner-1.test.js',
+		tool: 'WebTestRunner 1 Test Reporting',
+		experience: 'WebTestRunner 1 Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: '[group 2] > reporter tests 1 > skipped test',
+		status: 'skipped',
+		location: 'test/integration/web-test-runner-1.test.js',
+		tool: 'WebTestRunner 1 Test Reporting',
+		experience: 'WebTestRunner 1 Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: '[group 2] > reporter tests 1 > failed test',
+		status: 'failed',
+		location: 'test/integration/web-test-runner-1.test.js',
+		tool: 'WebTestRunner 1 Test Reporting',
+		experience: 'WebTestRunner 1 Test Framework',
+		type: 'integration',
+		retries: 0
+	}]
+};
 const reportTests = [{
 	name: 'mocha',
 	path: './d2l-test-report-mocha.json',
@@ -288,6 +400,10 @@ const reportTests = [{
 	name: 'playwright',
 	path: './d2l-test-report-playwright.json',
 	expected: partialReportPlaywright
+}, {
+	name: '@web/test-runner',
+	path: './d2l-test-report-web-test-runner.json',
+	expected: partialReportWebTestRunner
 }];
 
 describe('report validation', () => {
@@ -312,8 +428,6 @@ describe('report validation', () => {
 			it('schema', () => validateReport(report));
 
 			it('contents', () => {
-				expect(report.reportVersion).to.eq(1);
-				expect(report.summary.status).to.eq('failed');
 				expect(report.summary.operatingSystem).to.eq(getOperatingSystem());
 				expect(report).to.containSubset(reportTest.expected);
 			});

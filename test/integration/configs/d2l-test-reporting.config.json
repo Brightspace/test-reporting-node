@@ -21,6 +21,16 @@
       "pattern": "*/**/playwright-2.test.js",
       "type": "visual diff",
       "experience": "Playwright 2 Test Framework"
+    },
+    {
+      "pattern": "*/**/web-test-runner-1.test.js",
+      "experience": "WebTestRunner 1 Test Framework",
+      "tool": "WebTestRunner 1 Test Reporting"
+    },
+    {
+      "pattern": "*/**/web-test-runner-2.test.js",
+      "type": "accessibility",
+      "experience": "WebTestRunner 2 Test Framework"
     }
   ]
 }
