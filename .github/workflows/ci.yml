@@ -78,6 +78,12 @@ jobs:
           BODY+=$"$PLAYWRIGHT_REPORT"
           BODY+=$'\n```\n\n'
           BODY+=$'</details>'
+          WEB_TEST_RUNNER_REPORT=$(cat d2l-test-report-web-test-runner.json | jq)
+          BODY+=$'<details>\n<summary>@web/test-runner</summary>\n\n'
+          BODY+=$'```json\n'
+          BODY+=$"$WEB_TEST_RUNNER_REPORT"
+          BODY+=$'\n```\n\n'
+          BODY+=$'</details>'
           gh pr comment "$PULL_REQUEST_NUMBER" --body "$BODY"
         env:
           PULL_REQUEST_NUMBER: ${{github.event.pull_request.number}}
