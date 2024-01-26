@@ -29,7 +29,7 @@ const partialReportMocha = {
 	details: [{
 		name: 'reporter tests 1 > test',
 		status: 'passed',
-		location: 'test/integration/mocha-1.test.js',
+		location: 'test/integration/data/mocha-1.test.js',
 		tool: 'Mocha 1 Test Reporting',
 		experience: 'Test Framework',
 		type: 'ui',
@@ -37,7 +37,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/mocha-1.test.js',
+		location: 'test/integration/data/mocha-1.test.js',
 		tool: 'Mocha 1 Test Reporting',
 		experience: 'Test Framework',
 		type: 'ui',
@@ -45,7 +45,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 1 > flaky test that succeeds eventually',
 		status: 'passed',
-		location: 'test/integration/mocha-1.test.js',
+		location: 'test/integration/data/mocha-1.test.js',
 		tool: 'Mocha 1 Test Reporting',
 		experience: 'Test Framework',
 		type: 'ui',
@@ -53,7 +53,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 1 > failed test',
 		status: 'failed',
-		location: 'test/integration/mocha-1.test.js',
+		location: 'test/integration/data/mocha-1.test.js',
 		tool: 'Mocha 1 Test Reporting',
 		experience: 'Test Framework',
 		type: 'ui',
@@ -61,7 +61,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 2 > test',
 		status: 'passed',
-		location: 'test/integration/mocha-2.test.js',
+		location: 'test/integration/data/mocha-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'Mocha 2 Test Framework',
 		type: 'integration',
@@ -69,7 +69,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/mocha-2.test.js',
+		location: 'test/integration/data/mocha-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'Mocha 2 Test Framework',
 		type: 'integration',
@@ -77,7 +77,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 2 > flaky test',
 		status: 'passed',
-		location: 'test/integration/mocha-2.test.js',
+		location: 'test/integration/data/mocha-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'Mocha 2 Test Framework',
 		type: 'integration',
@@ -85,7 +85,7 @@ const partialReportMocha = {
 	}, {
 		name: 'reporter tests 2 > failed test',
 		status: 'failed',
-		location: 'test/integration/mocha-2.test.js',
+		location: 'test/integration/data/mocha-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'Mocha 2 Test Framework',
 		type: 'integration',
@@ -105,7 +105,7 @@ const partialReportPlaywright = {
 	details: [{
 		name: '[chromium] > reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'chromium',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -114,7 +114,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -123,7 +123,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 1 > test',
 		status: 'passed',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'chromium',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -132,7 +132,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 1 > failed test',
 		status: 'failed',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'chromium',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -141,7 +141,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 2 > test',
 		status: 'passed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -150,7 +150,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[firefox] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -159,7 +159,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -168,7 +168,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[firefox] > reporter tests 2 > test',
 		status: 'passed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -177,7 +177,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[firefox] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -186,7 +186,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 2 > flaky test',
 		status: 'passed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -195,7 +195,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[chromium] > reporter tests 1 > flaky test',
 		status: 'passed',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'chromium',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -204,7 +204,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'webkit',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -213,7 +213,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 1 > test',
 		status: 'passed',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'webkit',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -222,7 +222,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'webkit',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -231,7 +231,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[firefox] > reporter tests 2 > flaky test',
 		status: 'passed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -240,7 +240,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 1 > failed test',
 		status: 'failed',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'webkit',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -249,7 +249,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 2 > test',
 		status: 'passed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'webkit',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -258,7 +258,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'webkit',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -267,7 +267,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 1 > flaky test',
 		status: 'passed',
-		location: 'test/integration/playwright-1.test.js',
+		location: 'test/integration/data/playwright-1.test.js',
 		browser: 'webkit',
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
@@ -276,7 +276,7 @@ const partialReportPlaywright = {
 	}, {
 		name: '[webkit] > reporter tests 2 > flaky test',
 		status: 'passed',
-		location: 'test/integration/playwright-2.test.js',
+		location: 'test/integration/data/playwright-2.test.js',
 		browser: 'webkit',
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
@@ -297,7 +297,7 @@ const partialReportWebTestRunner = {
 	details: [{
 		name: 'reporter tests 1 > test',
 		status: 'passed',
-		location: 'test/integration/web-test-runner-1.test.js',
+		location: 'test/integration/data/web-test-runner-1.test.js',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -305,7 +305,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: 'reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/web-test-runner-1.test.js',
+		location: 'test/integration/data/web-test-runner-1.test.js',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -313,7 +313,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: 'reporter tests 1 > failed test',
 		status: 'failed',
-		location: 'test/integration/web-test-runner-1.test.js',
+		location: 'test/integration/data/web-test-runner-1.test.js',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -321,7 +321,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 1] > reporter tests 2 > test',
 		status: 'passed',
-		location: 'test/integration/web-test-runner-2.test.js',
+		location: 'test/integration/data/web-test-runner-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -329,7 +329,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 1] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/web-test-runner-2.test.js',
+		location: 'test/integration/data/web-test-runner-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -337,7 +337,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 1] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: 'test/integration/web-test-runner-2.test.js',
+		location: 'test/integration/data/web-test-runner-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -345,7 +345,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 1] > reporter tests 2 > test',
 		status: 'passed',
-		location: 'test/integration/web-test-runner-2.test.js',
+		location: 'test/integration/data/web-test-runner-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -353,7 +353,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 1] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/web-test-runner-2.test.js',
+		location: 'test/integration/data/web-test-runner-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -361,7 +361,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 1] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: 'test/integration/web-test-runner-2.test.js',
+		location: 'test/integration/data/web-test-runner-2.test.js',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -369,7 +369,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 2] > reporter tests 1 > test',
 		status: 'passed',
-		location: 'test/integration/web-test-runner-1.test.js',
+		location: 'test/integration/data/web-test-runner-1.test.js',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -377,7 +377,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 2] > reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: 'test/integration/web-test-runner-1.test.js',
+		location: 'test/integration/data/web-test-runner-1.test.js',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -385,7 +385,7 @@ const partialReportWebTestRunner = {
 	}, {
 		name: '[group 2] > reporter tests 1 > failed test',
 		status: 'failed',
-		location: 'test/integration/web-test-runner-1.test.js',
+		location: 'test/integration/data/web-test-runner-1.test.js',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
