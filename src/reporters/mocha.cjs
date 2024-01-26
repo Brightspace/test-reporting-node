@@ -1,6 +1,6 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { hasContext, getContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, makeLocation, getConfiguration, getMetaData, determineReportPath, writeReport } = require('./helpers.cjs');
+const { getOperatingSystem, makeLocation, getConfiguration, getReportOptions, determineReportPath, writeReport } = require('./helpers.cjs');
 const { randomUUID } = require('node:crypto');
 
 const { consoleLog, color } = Base;
@@ -85,7 +85,7 @@ class TestReportingMochaReporter extends Spec {
 		values.totalDuration = values.totalDuration ?? 0;
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getMetaData(this._configuration, values.location);
+			const { type, tool, experience } = getReportOptions(this._configuration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;
@@ -123,10 +123,13 @@ class TestReportingMochaReporter extends Spec {
 	_onRunEnd(stats) {
 		this._report.summary.totalDuration = stats.duration;
 		this._report.summary.status = stats.failures !== 0 ? 'failed' : 'passed';
-		this._report.summary.countPassed = stats.passes;
+
+		const flakyCount = this._testsFlaky.size;
+
+		this._report.summary.countPassed = stats.passes - flakyCount;
 		this._report.summary.countFailed = stats.failures;
 		this._report.summary.countSkipped = stats.pending;
-		this._report.summary.countFlaky = this._testsFlaky.size;
+		this._report.summary.countFlaky = flakyCount;
 		this._report.details = [...this._tests].map(([name, values]) => ({ name, ...values }));
 
 		try {

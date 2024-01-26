@@ -5,15 +5,16 @@ import { randomUUID } from 'node:crypto';
 const require = createRequire(import.meta.url);
 
 const { getContext, hasContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, getConfiguration, makeLocation, getMetaData, determineReportPath, writeReport } = require('./helpers.cjs');
+const { getOperatingSystem, getConfiguration, makeLocation, getReportOptions, determineReportPath, writeReport } = require('./helpers.cjs');
 
 const { cyan, red, yellow } = colors;
 
-const getProject = (config, test) => {
-	const { projects } = config;
-	const [, projectName] = test.titlePath();
+const getRootParent = (test) => {
+	if (test.parent && test.parent.parent) {
+		return getRootParent(test.parent);
+	}
 
-	return projects.find(({ name }) => name === projectName);
+	return test;
 };
 
 const convertEndStateSummary = (state) => {
@@ -60,7 +61,6 @@ export default class Reporter {
 
 	onBegin(config, suite) {
 		this._hasTests = suite.allTests().length !== 0;
-		this._config = config;
 
 		if (!this._hasTests) {
 			return;
@@ -90,14 +90,20 @@ export default class Reporter {
 		values.status = convertEndStateDetails(status);
 		values.duration = duration;
 		values.totalDuration = values.totalDuration === undefined ? duration : values.totalDuration + duration;
+
 		if (values.browser === undefined) {
-			const { use: { defaultBrowserType } } = getProject(this._config, test);
+			// workaround can be removed if https://github.com/microsoft/playwright/issues/29173 is fixed
+			const rootParent = getRootParent(test);
+			// should be able to just do test.parent.project(), need to remove workaround
+			const project = rootParent.project();
+			// won't work for merge-reports workflow, defaultBrowserType will always be undefined
+			const { use: { defaultBrowserType } } = project;
 
 			values.browser = defaultBrowserType;
 		}
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getMetaData(this._configuration, values.location);
+			const { type, tool, experience } = getReportOptions(this._configuration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;
@@ -124,10 +130,10 @@ export default class Reporter {
 			values.totalDuration = Math.round(values.totalDuration);
 
 			if (values.status === 'passed') {
-				countPassed++;
-
 				if (values.retries !== 0) {
 					countFlaky++;
+				} else {
+					countPassed++;
 				}
 			} else if (values.status === 'failed') {
 				countFailed++;
