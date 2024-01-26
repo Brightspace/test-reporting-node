@@ -123,10 +123,13 @@ class TestReportingMochaReporter extends Spec {
 	_onRunEnd(stats) {
 		this._report.summary.totalDuration = stats.duration;
 		this._report.summary.status = stats.failures !== 0 ? 'failed' : 'passed';
-		this._report.summary.countPassed = stats.passes;
+
+		const flakyCount = this._testsFlaky.size;
+
+		this._report.summary.countPassed = stats.passes - flakyCount;
 		this._report.summary.countFailed = stats.failures;
 		this._report.summary.countSkipped = stats.pending;
-		this._report.summary.countFlaky = this._testsFlaky.size;
+		this._report.summary.countFlaky = flakyCount;
 		this._report.details = [...this._tests].map(([name, values]) => ({ name, ...values }));
 
 		try {
