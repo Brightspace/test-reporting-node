@@ -124,10 +124,10 @@ export default class Reporter {
 			values.totalDuration = Math.round(values.totalDuration);
 
 			if (values.status === 'passed') {
-				countPassed++;
-
 				if (values.retries !== 0) {
 					countFlaky++;
+				} else {
+					countPassed++;
 				}
 			} else if (values.status === 'failed') {
 				countFailed++;
