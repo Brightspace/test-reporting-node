@@ -93,7 +93,7 @@ const getConfiguration = (configurationPath) => {
 	}
 };
 
-const getMetaData = (configuration, location) => {
+const getReportOptions = (configuration, location) => {
 	const metadata = {};
 
 	for (const override of configuration.overrides ?? []) {
@@ -124,6 +124,6 @@ module.exports = {
 	makeLocation,
 	determineReportPath,
 	getConfiguration,
-	getMetaData,
+	getReportOptions,
 	writeReport
 };
