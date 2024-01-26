@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 const require = createRequire(import.meta.url);
 
 const { getContext, hasContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, getConfiguration, makeLocation, getReportOptions, determineReportPath, writeReport } = require('./helpers.cjs');
+const { getOperatingSystem, getReportConfiguration, makeLocation, getReportOptions, determineReportPath, writeReport } = require('./helpers.cjs');
 
 const { cyan, red, yellow } = colors;
 
@@ -45,9 +45,9 @@ const logWarn = (message) => console.log(yellow(`\n${message}\n`));
 const logError = (message) => console.log(red(`\n${message}\n`));
 
 export default class Reporter {
-	constructor({ reportPath, configurationPath } = {}) {
-		this._configuration = getConfiguration(configurationPath);
+	constructor({ reportPath, reportConfigurationPath } = {}) {
 		this._reportPath = determineReportPath(reportPath);
+		this._reportConfiguration = getReportConfiguration(reportConfigurationPath);
 		this._report = {
 			reportId: randomUUID(),
 			reportVersion: 1,
@@ -103,7 +103,7 @@ export default class Reporter {
 		}
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getReportOptions(this._configuration, values.location);
+			const { type, tool, experience } = getReportOptions(this._reportConfiguration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;

@@ -6,7 +6,7 @@ const { type } = require('node:os');
 
 const defaultReportPath = './d2l-test-report.json';
 const defaultConfigurationPath = './d2l-test-reporting.config.json';
-const memberPriority = [
+const reportMemberPriority = [
 	'reportId',
 	'reportVersion',
 	'summary',
@@ -59,37 +59,37 @@ const makeLocation = (filePath) => {
 	return join(...pathParts);
 };
 
-const determineReportPath = (reportPath) => {
-	return resolve(reportPath ?? defaultReportPath);
+const determineReportPath = (path) => {
+	return resolve(path ?? defaultReportPath);
 };
 
-const getConfiguration = (configurationPath) => {
-	if (configurationPath) {
-		configurationPath = resolve(configurationPath);
+const getReportConfiguration = (path) => {
+	if (path) {
+		path = resolve(path);
 
 		try {
-			const configurationData = readFileSync(configurationPath, 'utf8');
+			const contents = readFileSync(path, 'utf8');
 
-			return JSON.parse(configurationData);
+			return JSON.parse(contents);
 		} catch {
-			throw new Error(`Unable to read/parse configuration at path ${configurationPath}`);
+			throw new Error(`Unable to read/parse configuration at path ${path}`);
 		}
 	}
 
-	configurationPath = resolve(defaultConfigurationPath);
+	path = resolve(defaultConfigurationPath);
 
-	let configurationData;
+	let contents;
 
 	try {
-		configurationData = readFileSync(configurationPath, 'utf8');
+		contents = readFileSync(path, 'utf8');
 	} catch {
 		return {};
 	}
 
 	try {
-		return JSON.parse(configurationData);
+		return JSON.parse(contents);
 	} catch {
-		throw new Error(`Unable to read/parse configuration at path ${defaultConfigurationPath}`);
+		throw new Error(`Unable to read/parse configuration at path ${path}`);
 	}
 };
 
@@ -116,14 +116,14 @@ const getReportOptions = (configuration, location) => {
 };
 
 const writeReport = (reportPath, report) => {
-	writeFileSync(reportPath, JSON.stringify(report, memberPriority), 'utf8');
+	writeFileSync(reportPath, JSON.stringify(report, reportMemberPriority), 'utf8');
 };
 
 module.exports = {
 	getOperatingSystem,
 	makeLocation,
 	determineReportPath,
-	getConfiguration,
+	getReportConfiguration,
 	getReportOptions,
 	writeReport
 };
