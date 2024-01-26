@@ -19,7 +19,8 @@ export default defineConfig({
 		use: devices['Desktop Chrome']
 	}, {
 		name: 'firefox',
-		use: devices['Desktop Firefox']
+		use: devices['Desktop Firefox'],
+		testMatch: 'playwright-2.test.js'
 	}, {
 		name: 'webkit',
 		use: devices['Desktop Safari']

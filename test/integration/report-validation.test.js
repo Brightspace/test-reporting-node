@@ -93,10 +93,10 @@ const partialReportMocha = {
 const partialReportPlaywright = {
 	summary: {
 		framework: 'playwright',
-		countPassed: 6,
-		countFailed: 6,
-		countSkipped: 6,
-		countFlaky: 6
+		countPassed: 5,
+		countFailed: 5,
+		countSkipped: 5,
+		countFlaky: 5
 	},
 	details: [{
 		name: '[chromium] > reporter tests 1 > skipped test',
@@ -115,15 +115,6 @@ const partialReportPlaywright = {
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
-		retries: 0
-	}, {
-		name: '[firefox] > reporter tests 1 > skipped test',
-		status: 'skipped',
-		location: 'test/integration/playwright-1.test.js',
-		browser: 'firefox',
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
 		retries: 0
 	}, {
 		name: '[chromium] > reporter tests 1 > test',
@@ -153,15 +144,6 @@ const partialReportPlaywright = {
 		type: 'visual diff',
 		retries: 0
 	}, {
-		name: '[firefox] > reporter tests 1 > test',
-		status: 'passed',
-		location: 'test/integration/playwright-1.test.js',
-		browser: 'firefox',
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
-		retries: 0
-	}, {
 		name: '[firefox] > reporter tests 2 > skipped test',
 		status: 'skipped',
 		location: 'test/integration/playwright-2.test.js',
@@ -178,15 +160,6 @@ const partialReportPlaywright = {
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
-		retries: 3
-	}, {
-		name: '[firefox] > reporter tests 1 > failed test',
-		status: 'failed',
-		location: 'test/integration/playwright-1.test.js',
-		browser: 'firefox',
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
 		retries: 3
 	}, {
 		name: '[firefox] > reporter tests 2 > test',
@@ -233,15 +206,6 @@ const partialReportPlaywright = {
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
 		retries: 0
-	}, {
-		name: '[firefox] > reporter tests 1 > flaky test',
-		status: 'passed',
-		location: 'test/integration/playwright-1.test.js',
-		browser: 'firefox',
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
-		retries: 2
 	}, {
 		name: '[webkit] > reporter tests 1 > test',
 		status: 'passed',
