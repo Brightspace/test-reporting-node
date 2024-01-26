@@ -47,6 +47,7 @@
     "@playwright/test": "^1",
     "c8": "^9",
     "chai": "^5",
+    "chai-subset": "^1",
     "d2l-license-checker": "^4",
     "eslint": "^8",
     "eslint-config-brightspace": "^1",
