@@ -19,8 +19,6 @@ This library provides a reporters for many of the test execution frameworks we
 use, if one for your test runner framework isn't provided please [file an issue]
 so we can look into adding it to our set of reporters.
 
-### Configuration
-
 ### Reporters
 
 #### [Mocha]
@@ -29,17 +27,102 @@ Please consult the [official documentation for Mocha] to see how
 to use reporters. Below is an example of how to add the reporter provided by
 this package.
 
+```js
+module.exports = {
+  spec: 'test/*.test.js',
+  reporter: 'd2l-test-reporting/reporters/mocha.cjs',
+  reporterOptions: [
+    'reportPath=./d2l-test-report.json', // optional
+    'reportConfigurationPath=./d2l-test-reporting.config.json' // optional
+  ]
+};
+```
+
+##### Inputs
+
+* `reportPath`: path to output the reporter to, relative to current working
+  directory. Not required. Defaults to `./d2l-test-report.json`.
+* `reportConfigurationPath`: path to the D2L test reporting configuration file
+  for mapping test type, experience and tool to test code. Not required.
+  Defaults to `./d2l-test-reporting.config.json`.
+
 #### [Playwright]
 
 Please consult the [official documentation for Playwright] to see how
 to use reporters. Below is an example of how to add the reporter provided by
 this package.
 
+```js
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  reporter: [
+    [
+      'd2l-test-reporting/reporters/playwright.js',
+      {
+        reportPath: './d2l-test-report.json', // optional
+        reportConfigurationPath: './d2l-test-reporting.config.json' // optional
+      }
+    ],
+    ['list']
+  ],
+  testDir: '../',
+  testMatch: '*.test.js',
+  projects: [{
+    name: 'firefox',
+    use: devices['Desktop Firefox'],
+    testMatch: 'firefox/*.test.js'
+  }]
+});
+```
+
+> [!WARNING]
+> Currently the [`merge-reports`] command is not fully supported due to a lack
+> of browser/launcher information preservation with the `blob` reporter. If you
+> are using a GitHub matrix run this may result in partial data showing in the
+> reporting dashboard as it becomes available.
+
+##### Inputs
+
+* `reportPath`: path to output the reporter to, relative to current working
+  directory. Not required. Defaults to `./d2l-test-report.json`.
+* `reportConfigurationPath`: path to the D2L test reporting configuration file
+  for mapping test type, experience and tool to test code. Not required.
+  Defaults to `./d2l-test-reporting.config.json`.
+
 #### [`@web/test-runner`]
 
 Please consult the [official documentation for `@web/test-runner`] to see how
 to use reporters. Below is an example of how to add the reporter provided by
 this package.
+
+```js
+import { defaultReporter } from '@web/test-runner';
+import { reporter } from 'd2l-test-reporting/reporters/web-test-runner.js';
+
+export default {
+  reporters: [
+    defaultReporter(),
+    reporter({
+      reportPath: './d2l-test-report.json', // optional
+      reportConfigurationPath: './d2l-test-reporting.config.json' // optional
+    })
+  ],
+  files: 'test/component-*.test.js',
+  groups: [{
+    name: 'group',
+    files: 'test/group/component-*.test.js'
+  }]
+};
+```
+
+##### Inputs
+
+* `reportPath`: path to output the reporter to, relative to current working
+  directory. Not required. Defaults to `./d2l-test-report.json`.
+* `reportConfigurationPath`: path to the D2L test reporting configuration file
+  for mapping test type, experience and tool to test code. Not required.
+  Defaults to `./d2l-test-reporting.config.json`.
 
 ## Developing
 
@@ -90,7 +173,7 @@ npm run test:integration
 [official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
 [official documentation for Playwright]: https://playwright.dev/docs/test-reporters
 [official documentation for `@web/test-runner`]: https://modern-web.dev/docs/test-runner/reporters/overview
-
 [Mocha]: https://mochajs.org
 [Playwright]: https://playwright.dev
 [`@web/test-runner`]: https://modern-web.dev/docs/test-runner/overview
+[`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
