@@ -4,26 +4,26 @@ import { randomUUID } from 'crypto';
 
 const collectTests = (reportConfiguration, session, prefix, tests) => {
 	const location = makeLocation(session.testFile);
+	const { type, tool, experience } = getReportOptions(reportConfiguration, location);
 	const flattened = [];
 
 	for (const test of tests) {
+		const { skipped, passed, duration, name } = test;
+		const testDuration = duration ?? 0;
 		let status;
 
-		if (test.skipped) {
+		if (skipped) {
 			status = 'skipped';
-		} else if (test.passed) {
+		} else if (passed) {
 			status = 'passed';
 		} else {
 			status = 'failed';
 		}
 
-		const { type, tool, experience } = getReportOptions(reportConfiguration, location);
-		const duration = test.duration ?? 0;
-
 		flattened.push({
-			name: `${prefix}${test.name}`,
-			duration: duration,
-			totalDuration: duration,
+			name: `${prefix}${name}`,
+			duration: testDuration,
+			totalDuration: testDuration,
 			status,
 			location,
 			type,
@@ -49,18 +49,24 @@ const collectSuite = (reportConfiguration, session, prefix, suite) => {
 	return tests;
 };
 
-const getAllTests = (config, reportConfiguration, sessions) => {
+const gatherTestInfo = (config, reportConfiguration, sessions) => {
 	const tests = [];
+	let overallPassed = true;
 
 	for (const session of sessions) {
-		const { group: { name: groupName } } = session;
+		const { passed, group: { name: groupName } } = session;
 		const isGroupName = groupName && config.groups?.some(({ name }) => groupName === name);
 		const prefix = isGroupName ? `[${groupName}] > ` : '';
+
+		overallPassed &= passed;
 
 		tests.push(...collectSuite(reportConfiguration, session, prefix, session.testResults));
 	}
 
-	return tests;
+	return {
+		status: overallPassed ? 'passed' : 'failed',
+		details: tests
+	};
 };
 
 export function reporter({ reportPath, reportConfigurationPath } = {}) {
@@ -108,9 +114,8 @@ export function reporter({ reportPath, reportConfigurationPath } = {}) {
 			const started = new Date(report.summary.started);
 			const ended = new Date();
 			const duration = Math.abs(ended - started);
-			const status = sessions.every(({ passed }) => passed) ? 'passed' : 'failed';
-			const allTests = getAllTests(testConfig, reportConfiguration, sessions);
-			const counts = allTests.reduce(
+			const { status, details } = gatherTestInfo(testConfig, reportConfiguration, sessions);
+			const counts = details.reduce(
 				(acc, { status }) => {
 					switch (status) {
 						case 'passed':
@@ -137,7 +142,7 @@ export function reporter({ reportPath, reportConfigurationPath } = {}) {
 			report.summary.countPassed = counts.passed;
 			report.summary.countFailed = counts.failed;
 			report.summary.countSkipped = counts.skipped;
-			report.details = allTests;
+			report.details = details;
 
 			try {
 				writeReport(reportPath, report);
