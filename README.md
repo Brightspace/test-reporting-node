@@ -19,6 +19,28 @@ This library provides a reporters for many of the test execution frameworks we
 use, if one for your test runner framework isn't provided please [file an issue]
 so we can look into adding it to our set of reporters.
 
+### Configuration
+
+### Reporters
+
+#### [Mocha]
+
+Please consult the [official documentation for Mocha] to see how
+to use reporters. Below is an example of how to add the reporter provided by
+this package.
+
+#### [Playwright]
+
+Please consult the [official documentation for Playwright] to see how
+to use reporters. Below is an example of how to add the reporter provided by
+this package.
+
+#### [`@web/test-runner`]
+
+Please consult the [official documentation for `@web/test-runner`] to see how
+to use reporters. Below is an example of how to add the reporter provided by
+this package.
+
 ## Developing
 
 After cloning the repository make sure to install dependencies.
@@ -65,3 +87,10 @@ npm run test:integration
 
 <!-- links -->
 [file an issue]: https://github.com/Brightspace/test-reporting-node/issues/new
+[official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
+[official documentation for Playwright]: https://playwright.dev/docs/test-reporters
+[official documentation for `@web/test-runner`]: https://modern-web.dev/docs/test-runner/reporters/overview
+
+[Mocha]: https://mochajs.org
+[Playwright]: https://playwright.dev
+[`@web/test-runner`]: https://modern-web.dev/docs/test-runner/overview
