@@ -19,8 +19,15 @@ const contextProperties = {
 const contextSchema = {
 	type: 'object',
 	properties: contextProperties,
-	required: Object.keys(contextProperties),
+	required: Object.keys(contextProperties)
+};
+const contextSchemaLoose = {
+	...contextSchema,
 	additionalProperties: true
+};
+const contextSchemaStrict = {
+	...contextSchema,
+	additionalProperties: false
 };
 const reportSchema = {
 	type: 'object',
@@ -96,7 +103,13 @@ const reportSchema = {
 	additionalProperties: false
 };
 
-const validateContextAjv = ajv.compile(contextSchema);
+const validateContextLooseAjv = ajv.compile(contextSchemaLoose);
+const validateContextStrictAjv = ajv.compile(contextSchemaStrict);
 const validateReportAjv = ajv.compile(reportSchema);
 
-module.exports = { ajv, validateContextAjv, validateReportAjv };
+module.exports = {
+	ajv,
+	validateContextLooseAjv,
+	validateContextStrictAjv,
+	validateReportAjv
+};

@@ -1,6 +1,16 @@
-import { getContext, hasContext } from '../../src/helpers/github.cjs';
+import { getContext, hasContext, validateContext } from '../../src/helpers/github.cjs';
 import { createSandbox } from 'sinon';
 import { expect } from 'chai';
+
+const validContext = {
+	githubOrganization: 'TestOrganization',
+	githubRepository: 'test-repository',
+	githubWorkflow: 'test-workflow.yml',
+	githubRunId: 12345,
+	githubRunAttempt: 1,
+	gitBranch: 'test/branch',
+	gitSha: '0000000000000000000000000000000000000000'
+};
 
 describe('github', () => {
 	let sandbox;
@@ -24,15 +34,7 @@ describe('github', () => {
 	});
 
 	describe('get context', () => {
-		const expectedResult = {
-			githubOrganization: 'TestOrganization',
-			githubRepository: 'test-repository',
-			githubWorkflow: 'test-workflow.yml',
-			githubRunId: 12345,
-			githubRunAttempt: 1,
-			gitBranch: 'test/branch',
-			gitSha: '0000000000000000000000000000000000000000'
-		};
+		const expectedResult = validContext;
 		const commonEnvironment = {
 			'GITHUB_ACTIONS': '1',
 			'GITHUB_REPOSITORY': 'TestOrganization/test-repository',
@@ -68,15 +70,34 @@ describe('github', () => {
 			it('not in github actions', () => {
 				sandbox.stub(process, 'env').value({});
 
-				try {
-					getContext();
-				} catch (err) {
-					expect(err.message).to.eq('GitHub context unavailable');
+				expect(getContext).to.throw('GitHub context unavailable');
+			});
+		});
+	});
 
-					return;
-				}
+	describe('validate context', () => {
+		const validContextExtraProperties = {
+			...validContext,
+			test: 'test'
+		};
 
-				throw new Error('failed');
+		it('strict', () => {
+			const wrapper = () => validateContext(validContext, true);
+
+			expect(wrapper).to.not.throw();
+		});
+
+		it('loose', () => {
+			const wrapper = () => validateContext(validContextExtraProperties);
+
+			expect(wrapper).to.not.throw();
+		});
+
+		describe('fails', () => {
+			it('strict with extra properties', () => {
+				const wrapper = () => validateContext(validContextExtraProperties, true);
+
+				expect(wrapper).to.throw('GitHub context does not conform to schema');
 			});
 		});
 	});
