@@ -4,6 +4,15 @@
 > This is still a work in progress. Any usage of this package is subject to
 > change without notice.
 
+Helper package for generating reports for use with the **D2L test reporting
+framework**.
+
+## Installation
+
+```console
+npm install d2l-test-reporting
+```
+
 ## Developing
 
 After cloning the repository make sure to install dependencies.
