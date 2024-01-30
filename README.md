@@ -13,6 +13,12 @@ framework**.
 npm install d2l-test-reporting
 ```
 
+## Usage
+
+This library provides a reporters for many of the test execution frameworks we
+use, if one for your test runner framework isn't provided please [file an issue]
+so we can look into adding it to our set of reporters.
+
 ## Developing
 
 After cloning the repository make sure to install dependencies.
@@ -56,3 +62,6 @@ npm run test:unit
 # integration tests only
 npm run test:integration
 ```
+
+<!-- links -->
+[file an issue]: https://github.com/Brightspace/test-reporting-node/issues/new
