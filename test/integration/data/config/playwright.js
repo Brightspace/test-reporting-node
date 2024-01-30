@@ -5,6 +5,10 @@ const playwrightReporterOptions = {
 	reportConfigurationPath: './test/integration/data/config/d2l-test-reporting.json'
 };
 
+const deviceTypeChrome = devices['Desktop Chrome'];
+const deviceTypeFirefox = devices['Desktop Firefox'];
+const deviceTypeSafari = devices['Desktop Safari'];
+
 export default defineConfig({
 	reporter: [
 		['../../../../src/reporters/playwright.js', playwrightReporterOptions],
@@ -16,13 +20,22 @@ export default defineConfig({
 	testMatch: 'playwright-*.test.js',
 	projects: [{
 		name: 'chromium',
-		use: devices['Desktop Chrome']
+		use: deviceTypeChrome,
+		metadata: {
+			browserType: deviceTypeChrome.defaultBrowserType
+		}
 	}, {
 		name: 'firefox',
-		use: devices['Desktop Firefox'],
-		testMatch: 'playwright-2.test.js'
+		testMatch: 'playwright-2.test.js',
+		use: deviceTypeFirefox,
+		metadata: {
+			browserType: deviceTypeFirefox.defaultBrowserType
+		}
 	}, {
 		name: 'webkit',
-		use: devices['Desktop Safari']
+		use: deviceTypeSafari,
+		metadata: {
+			browserType: deviceTypeSafari.defaultBrowserType
+		}
 	}]
 });
