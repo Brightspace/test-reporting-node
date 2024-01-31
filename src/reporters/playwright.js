@@ -17,6 +17,26 @@ const getRootParent = (test) => {
 	return test;
 };
 
+const getBrowserType = (project) => {
+	// won't work for merge-reports workflow, all information under `use` will be undefined
+	// hopefully get something included as part of https://github.com/microsoft/playwright/issues/29174
+	const { use: { browserName, defaultBrowserType }, metadata: { browserType } } = project;
+
+	if (browserType) {
+		return browserType;
+	}
+
+	if (browserName) {
+		return browserName;
+	}
+
+	if (defaultBrowserType) {
+		return defaultBrowserType;
+	}
+
+	return undefined;
+};
+
 const convertEndStateSummary = (state) => {
 	if (!['passed', 'failed'].includes(state)) {
 		return 'failed';
@@ -92,14 +112,12 @@ export default class Reporter {
 		values.totalDuration = values.totalDuration === undefined ? duration : values.totalDuration + duration;
 
 		if (values.browser === undefined) {
-			// workaround can be removed if https://github.com/microsoft/playwright/issues/29173 is fixed
+			// workaround can be removed if https://github.com/microsoft/playwright/issues/29173 is fixed/released
 			const rootParent = getRootParent(test);
 			// should be able to just do test.parent.project(), need to remove workaround
 			const project = rootParent.project();
-			// won't work for merge-reports workflow, defaultBrowserType will always be undefined
-			const { use: { defaultBrowserType } } = project;
 
-			values.browser = defaultBrowserType;
+			values.browser = getBrowserType(project);
 		}
 
 		if (!values.type || !values.tool || !values.experience) {
