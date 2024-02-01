@@ -124,6 +124,44 @@ export default {
   for mapping test type, experience and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
 
+###Configuration
+To have the test type, experience and tool mapped to test code, a D2L test reporting configuration file is required when using one of the reporters provided in this package. 
+
+Below are examples of how to create the config file.
+
+```json
+{
+  "pattern": "*/**/playwright-1.test.js",
+  "type": "visual diff",
+  "experience": "Experience",
+  "tool": "Tool",
+}
+```
+
+```json
+{
+	"type": "ui",
+	"overrides": [
+	  {
+		"pattern": "tests/account-settings/**/*",
+		"experience": "Administration",
+		"tool": "Account Settings"
+	  },
+	  {
+		"pattern": "tests/announcements/**/*",
+		"experience": "Teaching & Learning",
+		"tool": "Announcements"
+	  },
+	  {
+		"pattern": "tests/rubrics.test.js",
+		"experience": "Assessment",
+		"tool": "Rubrics"
+	  }
+  ]
+}
+```
+
+
 ## Developing
 
 After cloning the repository make sure to install dependencies.
