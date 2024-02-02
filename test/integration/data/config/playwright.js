@@ -18,12 +18,9 @@ export default defineConfig({
 	fullyParallel: true,
 	testDir: '../',
 	testMatch: 'playwright-*.test.js',
+	use: deviceTypeChrome,
 	projects: [{
-		name: 'chromium',
-		use: deviceTypeChrome,
-		metadata: {
-			browserType: deviceTypeChrome.defaultBrowserType
-		}
+		name: 'chromium'
 	}, {
 		name: 'firefox',
 		testMatch: 'playwright-2.test.js',

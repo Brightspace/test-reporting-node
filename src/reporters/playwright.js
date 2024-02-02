@@ -20,7 +20,10 @@ const getRootParent = (test) => {
 const getBrowserType = (project) => {
 	// won't work for merge-reports workflow, all information under `use` will be undefined
 	// hopefully get something included as part of https://github.com/microsoft/playwright/issues/29174
-	const { use: { browserName, defaultBrowserType }, metadata: { browserType } } = project;
+	const {
+		use: { browserName, defaultBrowserType } = {},
+		metadata: { browserType } = {}
+	} = project;
 
 	if (browserType) {
 		return browserType;
