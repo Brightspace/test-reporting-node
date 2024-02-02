@@ -33,7 +33,7 @@
     "test:integration:report-validation": "mocha test/integration/report-validation.test.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   },
   "files": [
     "/src"
