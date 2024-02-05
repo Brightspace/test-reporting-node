@@ -1,5 +1,6 @@
 import { defaultReporter } from '@web/test-runner';
 import { playwrightLauncher } from '@web/test-runner-playwright';
+import { puppeteerLauncher } from '@web/test-runner-puppeteer';
 import { reporter } from '../../../../src/reporters/web-test-runner.js';
 
 export default {
@@ -15,7 +16,7 @@ export default {
 		name: 'group 1',
 		files: 'test/integration/data/web-test-runner-2.test.js',
 		browsers: [
-			playwrightLauncher({ product: 'chromium' }),
+			puppeteerLauncher(),
 			playwrightLauncher({ product: 'firefox' })
 		]
 	}, {
