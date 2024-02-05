@@ -126,7 +126,9 @@ export default {
 
 ### Configuration
 
-To have the test type, experience and tool mapped to test code, a D2L test reporting configuration file is required when using one of the reporters provided in this package.
+To have the test type, experience and tool mapped to test code, a D2L test
+reporting configuration file is required when using one of the reporters
+provided in this package.
 
 Below are examples of how to create the config file.
 
