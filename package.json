@@ -26,11 +26,10 @@
     "test": "run-s lint test:all",
     "test:all": "c8 run-s test:unit test:integration",
     "test:unit": "mocha \"test/unit/**/*.test.js\"",
-    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner test:integration:report-validation",
+    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner && mocha test/integration/report-validation.test.js",
     "test:integration:mocha": "mocha --config test/integration/data/config/mocha.cjs || exit 0",
     "test:integration:playwright": "playwright test --config test/integration/data/config/playwright.js || exit 0",
-    "test:integration:web-test-runner": "wtr --config test/integration/data/config/web-test-runner.js || exit 0",
-    "test:integration:report-validation": "mocha test/integration/report-validation.test.js"
+    "test:integration:web-test-runner": "wtr --config test/integration/data/config/web-test-runner.js || exit 0"
   },
   "engines": {
     "node": ">=18"
@@ -54,6 +53,7 @@
     "@playwright/test": "^1",
     "@web/test-runner": "^0.18",
     "@web/test-runner-playwright": "^0.11",
+    "@web/test-runner-puppeteer": "^0.15",
     "c8": "^9",
     "chai": "^5",
     "chai-subset": "^1",
