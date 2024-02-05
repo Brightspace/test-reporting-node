@@ -3,12 +3,14 @@ import { getContext, hasContext } from '../helpers/github.cjs';
 import { randomUUID } from 'crypto';
 
 const collectTests = (reportConfiguration, session, prefix, tests) => {
-	const location = makeLocation(session.testFile);
+	const { browser, testFile } = session;
+	const browserName = browser.name.toLowerCase();
+	const location = makeLocation(testFile);
 	const { type, tool, experience } = getReportOptions(reportConfiguration, location);
 	const flattened = [];
 
 	for (const test of tests) {
-		const { skipped, passed, duration, name } = test;
+		const { skipped, passed, duration, name: testName } = test;
 		const testDuration = duration ?? 0;
 		let status;
 
@@ -21,7 +23,7 @@ const collectTests = (reportConfiguration, session, prefix, tests) => {
 		}
 
 		flattened.push({
-			name: `${prefix}${name}`,
+			name: `${prefix}${testName}`,
 			duration: testDuration,
 			totalDuration: testDuration,
 			status,
@@ -30,7 +32,8 @@ const collectTests = (reportConfiguration, session, prefix, tests) => {
 			tool,
 			experience,
 			retries: 0,
-			started: (new Date()).toISOString()
+			started: (new Date()).toISOString(),
+			browser: browserName
 		});
 	}
 

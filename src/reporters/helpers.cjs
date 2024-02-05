@@ -94,13 +94,14 @@ const getReportConfiguration = (path) => {
 };
 
 const getReportOptions = (configuration, location) => {
+	const { overrides } = configuration;
 	const metadata = {};
 
-	for (const override of configuration.overrides ?? []) {
+	for (const override of overrides ?? []) {
 		const { pattern, type, tool, experience } = override;
 
 		if (minimatch(location, pattern)) {
-			metadata.type = type;
+			metadata.type = type?.toLowerCase();
 			metadata.tool = tool;
 			metadata.experience = experience;
 
@@ -108,7 +109,7 @@ const getReportOptions = (configuration, location) => {
 		}
 	}
 
-	metadata.type = metadata.type ?? configuration.type;
+	metadata.type = metadata.type ?? configuration.type?.toLowerCase();
 	metadata.tool = metadata.tool ?? configuration.tool;
 	metadata.experience = metadata.experience ?? configuration.experience;
 
