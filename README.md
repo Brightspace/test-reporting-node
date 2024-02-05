@@ -130,11 +130,12 @@ To have the test type, experience and tool mapped to test code, a D2L test
 reporting configuration file is required when using one of the reporters
 provided in this package.
 
-Below are examples of how to create the config file.
+Below are examples of how to create the config file. Note that the `type` field
+will end up lowercase in the report.
 
 ```json
 {
-  "type": "Visual Diff", // will always be lowercase in report output
+  "type": "Visual Diff",
   "experience": "Experience",
   "tool": "Tool",
 }
@@ -142,7 +143,7 @@ Below are examples of how to create the config file.
 
 ```json
 {
-  "type": "UI", // will always be lowercase in report output
+  "type": "UI",
   "overrides": [
     {
       "pattern": "tests/account-settings/**/*",
