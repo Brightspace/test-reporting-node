@@ -19,18 +19,30 @@ export default defineConfig({
 	testDir: '../',
 	testMatch: 'playwright-*.test.js',
 	use: deviceTypeChrome,
+	globalSetup: '../playwright.global.setup.js',
+	globalTeardown: '../playwright.global.teardown.js',
 	projects: [{
-		name: 'chromium'
+		name: 'setup',
+		testMatch: 'playwright.setup.js',
+		teardown: 'teardown'
+	}, {
+		name: 'teardown',
+		testMatch: 'playwright.teardown.js'
+	}, {
+		name: 'chromium',
+		dependencies: ['setup']
 	}, {
 		name: 'firefox',
 		testMatch: 'playwright-2.test.js',
 		use: deviceTypeFirefox,
+		dependencies: ['setup'],
 		metadata: {
 			browserType: deviceTypeFirefox.defaultBrowserType
 		}
 	}, {
 		name: 'webkit',
 		use: deviceTypeSafari,
+		dependencies: ['setup'],
 		metadata: {
 			browserType: deviceTypeSafari.defaultBrowserType
 		}
