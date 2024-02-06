@@ -294,7 +294,11 @@ class ReportDetail {
 	}
 
 	incrementRetries() {
-		this._reportDetail.retries += 1;
+		return this.addRetries(1);
+	}
+
+	addRetries(count) {
+		this._reportDetail.retries += count;
 
 		return this;
 	}

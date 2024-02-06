@@ -7,7 +7,8 @@
     "**/playwright-3.test.js",
     "**/playwright.setup.js",
     "**/playwright.teardown.js",
-    "**/web-test-runner-3.test.js"
+    "**/web-test-runner-3.test.js",
+    "**/testcafe-3.test.js"
   ],
   "overrides": [
     {
@@ -38,6 +39,16 @@
       "pattern": "**/web-test-runner-2.test.js",
       "type": "accessibility",
       "experience": "WebTestRunner 2 Test Framework"
+    },
+    {
+      "pattern": "**/testcafe-1.test.js",
+      "type": "ui",
+      "tool": "TestCafe 1 Test Reporting"
+    },
+    {
+      "pattern": "**/testcafe-2.test.js",
+      "tool": "TestCafe 2 Test Reporting",
+      "experience": "TestCafe 2 Test Framework"
     }
   ]
 }
