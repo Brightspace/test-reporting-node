@@ -58,33 +58,39 @@ jobs:
           npx playwright install --with-deps
       - name: Run tests
         run: npm run test:all
+      - name: Upload coverage report
+        id: coverage-report
+        uses: actions/upload-artifact@main
+        with:
+          name: coverage-report
+          path: coverage/lcov-report/
       - name: Hide outdated comment
         uses: Brightspace/third-party-actions@int128/hide-comment-action
         with:
-          starts-with: <!-- generated reports -->
+          starts-with: <!-- reports -->
       - name: Post comment
         run: |
-          BODY=$'<!-- generated reports -->\n\n'
-          BODY+=$'Generated reports\n\n'
-          MOCHA_REPORT=$(cat d2l-test-report-mocha.json | jq)
+          BODY=$'<!-- reports -->'
+          BODY+=$'\n\n### Coverage report\n\n'
+          BODY+=$"[Report]($COVERAGE_REPORT_URL)"
+          BODY+=$'\n\n### Generated reports\n\n'
           BODY+=$'<details>\n<summary>mocha</summary>\n\n'
           BODY+=$'```json\n'
-          BODY+=$"$MOCHA_REPORT"
+          BODY+=$"$(cat d2l-test-report-mocha.json | jq)"
           BODY+=$'\n```\n\n'
           BODY+=$'</details>\n\n'
-          PLAYWRIGHT_REPORT=$(cat d2l-test-report-playwright.json | jq)
           BODY+=$'<details>\n<summary>playwright</summary>\n\n'
           BODY+=$'```json\n'
-          BODY+=$"$PLAYWRIGHT_REPORT"
+          BODY+=$"$(cat d2l-test-report-playwright.json | jq)"
           BODY+=$'\n```\n\n'
           BODY+=$'</details>'
-          WEB_TEST_RUNNER_REPORT=$(cat d2l-test-report-web-test-runner.json | jq)
           BODY+=$'<details>\n<summary>@web/test-runner</summary>\n\n'
           BODY+=$'```json\n'
-          BODY+=$"$WEB_TEST_RUNNER_REPORT"
+          BODY+=$"$(cat d2l-test-report-web-test-runner.json | jq)"
           BODY+=$'\n```\n\n'
           BODY+=$'</details>'
           gh pr comment "$PULL_REQUEST_NUMBER" --body "$BODY"
         env:
+          COVERAGE_REPORT_URL: ${{steps.coverage-report.outputs.artifact-url}}
           PULL_REQUEST_NUMBER: ${{github.event.pull_request.number}}
           GITHUB_TOKEN: ${{github.token}}
