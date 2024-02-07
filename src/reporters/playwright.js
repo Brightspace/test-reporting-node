@@ -63,12 +63,13 @@ const makeTestName = (test) => {
 	return titlePaths.join(' > ');
 };
 
-const logWarn = (message) => console.log(yellow(`\n${message}\n`));
+const logWarning = (message) => console.log(yellow(message));
 
-const logError = (message) => console.log(red(`\n${message}\n`));
+const logError = (message) => console.log(red(message));
 
 export default class Reporter {
-	constructor({ reportPath, reportConfigurationPath } = {}) {
+	constructor({ reportPath, reportConfigurationPath, verbose } = {}) {
+		this._verbose = verbose || false;
 		this._reportPath = determineReportPath(reportPath);
 		this._reportConfiguration = getReportConfiguration(reportConfigurationPath);
 		this._report = {
@@ -97,7 +98,7 @@ export default class Reporter {
 				...githubContext
 			};
 		} else {
-			logWarn('D2L test report will not contain GitHub context details');
+			logWarning('\nD2L test report will not contain GitHub context details\n');
 		}
 	}
 
@@ -147,6 +148,23 @@ export default class Reporter {
 		let countFlaky = 0;
 
 		this._report.details = [...this._tests].map(([, values]) => {
+			if (this._verbose) {
+				const { name, location, type, tool, experience } = values;
+				const prefix = `Test '${name}' at '${location}' is missing`;
+
+				if (!type) {
+					logWarning(`${prefix} a 'type'`);
+				}
+
+				if (!tool) {
+					logWarning(`${prefix} a 'tool'`);
+				}
+
+				if (!experience) {
+					logWarning(`${prefix} an 'experience'`);
+				}
+			}
+
 			values.duration = Math.round(values.duration);
 			values.totalDuration = Math.round(values.totalDuration);
 
@@ -181,7 +199,7 @@ export default class Reporter {
 
 			console.log(`\nD2L test report available at: ${cyan(this._reportPath)}\n`);
 		} catch {
-			logError('\nFailed to generate D2L test report');
+			logError('\nFailed to generate D2L test report\n');
 		}
 	}
 }

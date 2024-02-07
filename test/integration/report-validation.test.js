@@ -43,7 +43,7 @@ const partialReportMocha = {
 		type: 'ui',
 		retries: 0
 	}, {
-		name: 'reporter tests 1 > flaky test that succeeds eventually',
+		name: 'reporter tests 1 > flaky test',
 		status: 'passed',
 		location: 'test/integration/data/mocha-1.test.js',
 		tool: 'Mocha 1 Test Reporting',

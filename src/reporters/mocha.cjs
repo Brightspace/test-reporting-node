@@ -22,8 +22,16 @@ const convertEndState = (state) => {
 	return state === 'pending' ? 'skipped' : state;
 };
 
-const log = (message) => {
+const logInfo = (message) => {
 	consoleLog(`  ${message}`);
+};
+
+const logError = (message) => {
+	logInfo(color('fail', message));
+};
+
+const logWarning = (message) => {
+	logInfo(color('bright yellow', message));
 };
 
 class TestReportingMochaReporter extends Spec {
@@ -31,8 +39,10 @@ class TestReportingMochaReporter extends Spec {
 		super(runner, options);
 
 		const { stats } = runner;
-		const { reporterOptions: { reportPath, reportConfigurationPath } = {} } = options;
+		const { reporterOptions = {} } = options;
+		const { reportPath, reportConfigurationPath, verbose } = reporterOptions;
 
+		this._verbose = verbose || false;
 		this._reportConfiguration = getReportConfiguration(reportConfigurationPath);
 		this._reportPath = determineReportPath(reportPath);
 		this._report = {
@@ -52,7 +62,7 @@ class TestReportingMochaReporter extends Spec {
 				...githubContext
 			};
 		} else {
-			log(color('bright yellow', 'D2L test report will not contain GitHub context details'));
+			logWarning('D2L test report will not contain GitHub context details');
 		}
 
 		this._tests = new Map();
@@ -130,13 +140,32 @@ class TestReportingMochaReporter extends Spec {
 		this._report.summary.countFailed = stats.failures;
 		this._report.summary.countSkipped = stats.pending;
 		this._report.summary.countFlaky = flakyCount;
-		this._report.details = [...this._tests].map(([name, values]) => ({ name, ...values }));
+		this._report.details = [...this._tests].map(([name, values]) => {
+			if (this._verbose) {
+				const { location, type, tool, experience } = values;
+				const prefix = `Test '${name}' at '${location}' is missing`;
+
+				if (!type) {
+					logWarning(`${prefix} a 'type'`);
+				}
+
+				if (!tool) {
+					logWarning(`${prefix} a 'tool'`);
+				}
+
+				if (!experience) {
+					logWarning(`${prefix} an 'experience'`);
+				}
+			}
+
+			return { name, ...values };
+		});
 
 		try {
 			writeReport(this._reportPath, this._report);
-			log(`D2L test report available at: ${color('pending', this._reportPath)}\n`);
+			logInfo(`D2L test report available at: ${color('pending', this._reportPath)}`);
 		} catch {
-			log(color('fail', 'Failed to generate D2L test report\n'));
+			logError('Failed to generate D2L test report\n');
 		}
 	}
 }

@@ -2,78 +2,9 @@ import { determineReportPath, getOperatingSystem, getReportConfiguration, getRep
 import { getContext, hasContext } from '../helpers/github.cjs';
 import { randomUUID } from 'crypto';
 
-const collectTests = (reportConfiguration, session, prefix, tests) => {
-	const { browser, testFile } = session;
-	const browserName = browser.name.toLowerCase();
-	const location = makeLocation(testFile);
-	const { type, tool, experience } = getReportOptions(reportConfiguration, location);
-	const flattened = [];
-
-	for (const test of tests) {
-		const { skipped, passed, duration, name: testName } = test;
-		const testDuration = duration ?? 0;
-		let status;
-
-		if (skipped) {
-			status = 'skipped';
-		} else if (passed) {
-			status = 'passed';
-		} else {
-			status = 'failed';
-		}
-
-		flattened.push({
-			name: `${prefix}${testName}`,
-			duration: testDuration,
-			totalDuration: testDuration,
-			status,
-			location,
-			type,
-			tool,
-			experience,
-			retries: 0,
-			started: (new Date()).toISOString(),
-			browser: browserName
-		});
-	}
-
-	return flattened;
-};
-
-const collectSuite = (reportConfiguration, session, prefix, suite) => {
-	const tests = collectTests(reportConfiguration, session, prefix, suite.tests);
-
-	for (const childSuite of suite.suites) {
-		const newPrefix = `${prefix}${childSuite.name} > `;
-
-		tests.push(...collectSuite(reportConfiguration, session, newPrefix, childSuite));
-	}
-
-	return tests;
-};
-
-const gatherTestInfo = (config, reportConfiguration, sessions) => {
-	const tests = [];
-	let overallPassed = true;
-
-	for (const session of sessions) {
-		const { passed, group: { name: groupName } } = session;
-		const isGroupName = groupName && config.groups?.some(({ name }) => groupName === name);
-		const prefix = isGroupName ? `[${groupName}] > ` : '';
-
-		overallPassed &= passed;
-
-		tests.push(...collectSuite(reportConfiguration, session, prefix, session.testResults));
-	}
-
-	return {
-		status: overallPassed ? 'passed' : 'failed',
-		details: tests
-	};
-};
-
-export function reporter({ reportPath, reportConfigurationPath } = {}) {
+export function reporter({ reportPath, reportConfigurationPath, verbose } = {}) {
 	reportPath = determineReportPath(reportPath);
+	verbose = verbose || false;
 
 	const reportConfiguration = getReportConfiguration(reportConfigurationPath);
 	const report = {
@@ -99,6 +30,93 @@ export function reporter({ reportPath, reportConfigurationPath } = {}) {
 
 	let testConfig;
 
+	const collectTests = (session, prefix, tests) => {
+		const { browser, testFile } = session;
+		const browserName = browser.name.toLowerCase();
+		const location = makeLocation(testFile);
+		const { type, tool, experience } = getReportOptions(reportConfiguration, location);
+		const flattened = [];
+
+		for (const test of tests) {
+			const { skipped, passed, duration, name: testName } = test;
+
+			if (verbose) {
+				const prefix = `Test '${testName}' at '${location}' is missing`;
+
+				if (!type) {
+					console.log(`${prefix} a 'type'`);
+				}
+
+				if (!tool) {
+					console.log(`${prefix} a 'tool'`);
+				}
+
+				if (!experience) {
+					console.log(`${prefix} an 'experience'`);
+				}
+			}
+
+			const testDuration = duration ?? 0;
+			let status;
+
+			if (skipped) {
+				status = 'skipped';
+			} else if (passed) {
+				status = 'passed';
+			} else {
+				status = 'failed';
+			}
+
+			flattened.push({
+				name: `${prefix}${testName}`,
+				duration: testDuration,
+				totalDuration: testDuration,
+				status,
+				location,
+				type,
+				tool,
+				experience,
+				retries: 0,
+				started: (new Date()).toISOString(),
+				browser: browserName
+			});
+		}
+
+		return flattened;
+	};
+
+	const collectSuite = (session, prefix, suite) => {
+		const tests = collectTests(session, prefix, suite.tests);
+
+		for (const childSuite of suite.suites) {
+			const newPrefix = `${prefix}${childSuite.name} > `;
+
+			tests.push(...collectSuite(session, newPrefix, childSuite));
+		}
+
+		return tests;
+	};
+
+	const gatherTestInfo = (sessions) => {
+		const tests = [];
+		let overallPassed = true;
+
+		for (const session of sessions) {
+			const { passed, group: { name: groupName } } = session;
+			const isGroupName = groupName && testConfig.groups?.some(({ name }) => groupName === name);
+			const prefix = isGroupName ? `[${groupName}] > ` : '';
+
+			overallPassed &= passed;
+
+			tests.push(...collectSuite(session, prefix, session.testResults));
+		}
+
+		return {
+			status: overallPassed ? 'passed' : 'failed',
+			details: tests
+		};
+	};
+
 	return {
 		name: 'd2l-test-reporting',
 		start({ config, sessions, startTime }) {
@@ -117,7 +135,7 @@ export function reporter({ reportPath, reportConfigurationPath } = {}) {
 			const started = new Date(report.summary.started);
 			const ended = new Date();
 			const duration = Math.abs(ended - started);
-			const { status, details } = gatherTestInfo(testConfig, reportConfiguration, sessions);
+			const { status, details } = gatherTestInfo(sessions);
 			const counts = details.reduce(
 				(acc, { status }) => {
 					switch (status) {

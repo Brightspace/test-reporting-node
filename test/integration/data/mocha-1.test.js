@@ -9,7 +9,7 @@ describe('reporter tests 1', () => {
 
 	it.skip('skipped test', () => { });
 
-	it('flaky test that succeeds eventually', async() => {
+	it('flaky test', async() => {
 		if (count < 2) {
 			await delay();
 
