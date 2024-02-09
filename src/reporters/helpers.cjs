@@ -1,7 +1,8 @@
+const { formatErrorAjv, validateReportConfigurationAjv } = require('../helpers/schema.cjs');
+const { readFileSync, writeFileSync } = require('node:fs');
 const { relative, sep: platformSeparator, resolve } = require('node:path');
 const { join } = require('node:path/posix');
 const { minimatch } = require('minimatch');
-const { readFileSync, writeFileSync } = require('node:fs');
 const { type } = require('node:os');
 
 const defaultReportPath = './d2l-test-report.json';
@@ -64,33 +65,43 @@ const determineReportPath = (path) => {
 };
 
 const getReportConfiguration = (path) => {
+	let reportConfiguration;
+
 	if (path) {
 		path = resolve(path);
 
 		try {
 			const contents = readFileSync(path, 'utf8');
 
-			return JSON.parse(contents);
+			reportConfiguration = JSON.parse(contents);
+		} catch {
+			throw new Error(`Unable to read/parse configuration at path ${path}`);
+		}
+	} else {
+		path = resolve(defaultConfigurationPath);
+
+		let contents;
+
+		try {
+			contents = readFileSync(path, 'utf8');
+		} catch {
+			return {};
+		}
+
+		try {
+			reportConfiguration = JSON.parse(contents);
 		} catch {
 			throw new Error(`Unable to read/parse configuration at path ${path}`);
 		}
 	}
 
-	path = resolve(defaultConfigurationPath);
+	if (!validateReportConfigurationAjv(reportConfiguration)) {
+		const { errors } = validateReportConfigurationAjv;
 
-	let contents;
-
-	try {
-		contents = readFileSync(path, 'utf8');
-	} catch {
-		return {};
+		throw new Error(formatErrorAjv('report configuration', errors));
 	}
 
-	try {
-		return JSON.parse(contents);
-	} catch {
-		throw new Error(`Unable to read/parse configuration at path ${path}`);
-	}
+	return reportConfiguration;
 };
 
 const getReportOptions = (configuration, location) => {

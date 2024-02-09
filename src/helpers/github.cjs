@@ -1,4 +1,4 @@
-const { ajv: { errorsText }, validateContextLooseAjv, validateContextStrictAjv } = require('./schema.cjs');
+const { formatErrorAjv, validateContextLooseAjv, validateContextStrictAjv } = require('./schema.cjs');
 
 const hasContext = () => {
 	const { env: { GITHUB_ACTIONS } } = process;
@@ -43,9 +43,8 @@ const validateContext = (context, strict = false) => {
 
 	if (!validateContextAjv(context)) {
 		const { errors } = validateContextAjv;
-		const message = errorsText(errors, { dataVar: 'context' });
 
-		throw new Error(`GitHub context does not conform to schema: ${message}`);
+		throw new Error(formatErrorAjv('github context', errors));
 	}
 };
 

@@ -1,25 +1,27 @@
 const Ajv = require('ajv/dist/2019');
 const addFormats = require('ajv-formats');
 
-const nonEmptyNoPaddingStringSchema = {
-	$id: '/test-reporting/non-empty-no-padding-string',
+const nonEmptyUnpaddedStringSchema = {
+	$id: '/testReporting/nonEmptyUnpaddedString',
 	type: 'string',
 	minLength: 1,
 	pattern: '^(?!\\s).+(?<!\\s)$'
 };
 const contextSchema = {
-	$id: '/test-reporting/context',
+	$id: '/testReporting/context',
 	$defs: {
-		gitHubPattern: {
+		gitHubAllowedCharactersString: {
 			type: 'string',
+			minLength: 1,
 			pattern: '[A-Za-z0-9_.-]+'
 		}
 	},
 	type: 'object',
 	properties: {
-		githubOrganization: { $ref: '#/$defs/gitHubPattern' },
-		githubRepository: { $ref: '#/$defs/gitHubPattern' },
-		githubWorkflow: { $ref: '/test-reporting/non-empty-no-padding-string' },
+		githubOrganization: { $ref: '#/$defs/gitHubAllowedCharactersString' },
+		githubRepository: { $ref: '#/$defs/gitHubAllowedCharactersString' },
+		githubWorkflow: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+		gitBranch: { $ref: '/testReporting/nonEmptyUnpaddedString' },
 		githubRunId: {
 			type: 'integer',
 			minimum: 0
@@ -28,7 +30,6 @@ const contextSchema = {
 			type: 'integer',
 			minimum: 1
 		},
-		gitBranch: { $ref: '/test-reporting/non-empty-no-padding-string' },
 		gitSha: {
 			type: 'string',
 			minLength: 40,
@@ -47,20 +48,21 @@ const contextSchema = {
 	]
 };
 const contextSchemaLoose = {
-	$id: '/test-reporting/context-loose',
-	$ref: '/test-reporting/context',
+	$id: '/testReporting/contextLoose',
+	$ref: '/testReporting/context',
 	type: 'object',
 	unevaluatedProperties: true
 };
 const contextSchemaStrict = {
-	$id: '/test-reporting/context-strict',
-	$ref: '/test-reporting/context',
+	$id: '/testReporting/contextStrict',
+	$ref: '/testReporting/context',
 	type: 'object',
 	unevaluatedProperties: false
 };
 const reportSchema = {
-	$id: '/test-reporting/report',
+	$id: '/testReporting/report',
 	type: 'object',
+	unevaluatedProperties: false,
 	properties: {
 		reportId: {
 			type: 'string',
@@ -71,9 +73,11 @@ const reportSchema = {
 			const: 1
 		},
 		summary: {
+			$ref: '/testReporting/context',
 			type: 'object',
-			$ref: '/test-reporting/context',
+			unevaluatedProperties: false,
 			properties: {
+				framework: { $ref: '/testReporting/nonEmptyUnpaddedString' },
 				lmsBuild: {
 					type: 'string',
 					pattern: '([0-9]{2}\\.){3}[0-9]{5}'
@@ -86,7 +90,6 @@ const reportSchema = {
 					type: 'string',
 					enum: ['windows', 'linux', 'mac']
 				},
-				framework: { $ref: '/test-reporting/non-empty-no-padding-string' },
 				started: {
 					type: 'string',
 					format: 'date-time'
@@ -126,17 +129,25 @@ const reportSchema = {
 				'countFailed',
 				'countSkipped',
 				'countFlaky'
-			],
-			unevaluatedProperties: false
+			]
 		},
 		details: {
 			type: 'array',
+			minItems: 1,
+			uniqueItems: true,
 			items: {
 				type: 'object',
+				unevaluatedProperties: false,
 				properties: {
-					name: { $ref: '/test-reporting/non-empty-no-padding-string' },
-					location: { $ref: '/test-reporting/non-empty-no-padding-string' },
-					started: { type: 'string', format: 'date-time' },
+					name: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+					location: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+					tool: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+					experience: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+					type: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+					started: {
+						type: 'string',
+						format: 'date-time'
+					},
 					duration: {
 						type: 'integer',
 						minimum: 0
@@ -145,11 +156,23 @@ const reportSchema = {
 						type: 'integer',
 						minimum: 0
 					},
-					status: { type: 'string', enum: ['passed', 'failed', 'skipped'] },
-					tool: { $ref: '/test-reporting/non-empty-no-padding-string' },
-					experience: { $ref: '/test-reporting/non-empty-no-padding-string' },
-					type: { $ref: '/test-reporting/non-empty-no-padding-string' },
-					browser: { type: 'string', enum: ['chromium', 'chrome', 'firefox', 'webkit'] },
+					status: {
+						type: 'string',
+						enum: [
+							'passed',
+							'failed',
+							'skipped'
+						]
+					},
+					browser: {
+						type: 'string',
+						enum: [
+							'chromium',
+							'chrome',
+							'firefox',
+							'webkit'
+						]
+					},
 					retries: {
 						type: 'integer',
 						minimum: 0
@@ -163,11 +186,8 @@ const reportSchema = {
 					'totalDuration',
 					'status',
 					'retries'
-				],
-				additionalProperties: false
-			},
-			minItems: 1,
-			uniqueItems: true
+				]
+			}
 		}
 	},
 	required: [
@@ -175,31 +195,171 @@ const reportSchema = {
 		'reportVersion',
 		'summary',
 		'details'
-	],
-	additionalProperties: false
+	]
+};
+const reportConfigurationSchema = {
+	$id: '/testReporting/reportConfiguration',
+	$defs: {
+		taxonomyObject: {
+			type: 'object',
+			properties: {
+				type: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+				tool: { $ref: '/testReporting/nonEmptyUnpaddedString' },
+				experience: { $ref: '/testReporting/nonEmptyUnpaddedString' }
+			}
+		}
+	},
+	type: 'object',
+	unevaluatedProperties: false,
+	$ref: '#/$defs/taxonomyObject',
+	properties: {
+		overrides: {
+			type: 'array',
+			minItems: 1,
+			items: {
+				type: 'object',
+				unevaluatedProperties: false,
+				minProperties: 2,
+				$ref: '#/$defs/taxonomyObject',
+				properties: {
+					pattern: { $ref: '/testReporting/nonEmptyUnpaddedString' }
+				},
+				required: [
+					'pattern'
+				]
+			}
+		}
+	},
+	allOf: [
+		{
+			if: {
+				properties: {
+					type: { const: null }
+				}
+			},
+			then: {
+				properties: {
+					overrides: {
+						type: 'array',
+						items: {
+							type: 'object',
+							properties: {
+								type: { $ref: '#/$defs/taxonomyObject/properties/type' }
+							},
+							required: [
+								'type'
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			if: {
+				properties: {
+					tool: { const: null }
+				}
+			},
+			then: {
+				properties: {
+					overrides: {
+						type: 'array',
+						items: {
+							type: 'object',
+							properties: {
+								tool: { $ref: '#/$defs/taxonomyObject/properties/tool' }
+							},
+							required: [
+								'tool'
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			if: {
+				properties: {
+					experience: { const: null }
+				}
+			},
+			then: {
+				properties: {
+					overrides: {
+						type: 'array',
+						items: {
+							type: 'object',
+							properties: {
+								experience: { $ref: '#/$defs/taxonomyObject/properties/experience' }
+							},
+							required: [
+								'experience'
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			if: {
+				properties: {
+					type: { const: null },
+					tool: { const: null },
+					experience: { const: null }
+				}
+			},
+			then: {
+				required: [
+					'overrides'
+				]
+			}
+		}
+	]
 };
 
 const ajv = new Ajv({
 	verbose: true,
 	strict: true,
+	allErrors: false,
 	schemas: [
-		nonEmptyNoPaddingStringSchema,
+		nonEmptyUnpaddedStringSchema,
 		contextSchema,
 		contextSchemaStrict,
 		contextSchemaLoose,
-		reportSchema
+		reportSchema,
+		reportConfigurationSchema
 	]
 });
 
 addFormats(ajv, ['date-time', 'uri', 'uuid']);
 
-const validateContextLooseAjv = ajv.getSchema('/test-reporting/context-loose');
-const validateContextStrictAjv = ajv.getSchema('/test-reporting/context-strict');
-const validateReportAjv = ajv.getSchema('/test-reporting/report');
+const validateContextLooseAjv = ajv.getSchema('/testReporting/contextLoose');
+const validateContextStrictAjv = ajv.getSchema('/testReporting/contextStrict');
+const validateReportAjv = ajv.getSchema('/testReporting/report');
+const validateReportConfigurationAjv = ajv.getSchema('/testReporting/reportConfiguration');
+
+const formatErrorAjv = (dataVar, errors) => {
+	const { instancePath, message: ajvMessage, parentSchema: { type }, data } = errors[0];
+	const formattedData = JSON.stringify(data, null, 2);
+	const sanitizedInstancePath = instancePath === '' ? '/' : instancePath;
+	const errorMessageParts = [
+		`${dataVar} does not conform to schema`,
+		`Details: the ${type} at '${sanitizedInstancePath}' ${ajvMessage}`
+	];
+
+	if (formattedData.includes('\n')) {
+		errorMessageParts.push(`Current value:\n\n${formattedData}\n`);
+	} else {
+		errorMessageParts.push(`Current value: ${formattedData}`);
+	}
+
+	return errorMessageParts.join('\n');
+};
 
 module.exports = {
-	ajv,
+	formatErrorAjv,
 	validateContextLooseAjv,
 	validateContextStrictAjv,
-	validateReportAjv
+	validateReportAjv,
+	validateReportConfigurationAjv
 };

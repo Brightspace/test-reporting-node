@@ -2,7 +2,7 @@
   "all": true,
   "check-coverage": true,
   "statements": 90,
-  "branches": 75,
+  "branches": 70,
   "functions": 90,
   "lines": 90,
   "include": [

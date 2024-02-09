@@ -97,7 +97,7 @@ describe('github', () => {
 			it('strict with extra properties', () => {
 				const wrapper = () => validateContext(validContextExtraProperties, true);
 
-				expect(wrapper).to.throw('GitHub context does not conform to schema');
+				expect(wrapper).to.throw('github context does not conform to schema');
 			});
 		});
 	});
