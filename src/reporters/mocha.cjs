@@ -2,6 +2,13 @@ const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { Report } = require('../helpers/report.cjs');
 const { consoleLog, color } = Base;
 
+class MochaLogger {
+	info(message) { consoleLog(`  ${message}`); }
+	warning(message) { this.info(color('bright yellow', message)); }
+	error(message) { this.info(color('fail', message)); }
+	location(message, location) { this.info(`${message}: ${color('pending', location)}`); }
+}
+
 const {
 	EVENT_RUN_BEGIN,
 	EVENT_RUN_END,
@@ -18,13 +25,6 @@ const makeDetailName = (test) => {
 const makeDetailId = (file, name) => {
 	return `${file}[${name}]`;
 };
-
-class MochaLogger {
-	info(message) { consoleLog(`  ${message}`); }
-	warning(message) { this.info(color('bright yellow', message)); }
-	error(message) { this.info(color('fail', message)); }
-	location(message, location) { this.info(`${message}: ${color('pending', location)}`); }
-}
 
 class TestReportingMochaReporter extends Spec {
 	constructor(runner, options) {

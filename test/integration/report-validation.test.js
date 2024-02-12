@@ -1,6 +1,6 @@
 import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
-import { getOperatingSystem } from '../../src/reporters/helpers.cjs';
+import { getOperatingSystem } from '../../src/helpers/os.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { readFile } from 'node:fs/promises';
 import { validateReport } from '../../src/helpers/report.cjs';

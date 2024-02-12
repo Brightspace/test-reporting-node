@@ -7,24 +7,28 @@ const { Report } = require('../helpers/report.cjs');
 
 const { cyan, red, yellow } = colors;
 
-const getRootParent = (test) => {
-	if (test.parent && test.parent.parent) {
-		return getRootParent(test.parent);
-	}
+class PlaywrightLogger {
+	info(message) { console.log(`\n${message}\n`); }
+	warning(message) { this.info(yellow(message)); }
+	error(message) { this.info(red(message)); }
+	location(message, location) { this.info(`${message}: ${cyan(location)}`); }
+}
 
-	return test;
+const makeTestName = (test) => {
+	const [, projectName, , ...titles] = test.titlePath();
+	const titlePaths = projectName ? [`[${projectName}]`, ...titles] : titles;
+
+	return titlePaths.join(' > ');
 };
 
-const getBrowserType = (project) => {
-	// won't work for merge-reports workflow, all information under `use` will be undefined
-	// hopefully get something included as part of https://github.com/microsoft/playwright/issues/29174
+const getBrowser = (project) => {
 	const {
 		use: { browserName, defaultBrowserType } = {},
-		metadata: { browserType } = {}
+		metadata: { browser } = {}
 	} = project;
 
-	if (browserType) {
-		return browserType;
+	if (browser) {
+		return browser;
 	}
 
 	if (browserName) {
@@ -38,23 +42,9 @@ const getBrowserType = (project) => {
 	return undefined;
 };
 
-const makeTestName = (test) => {
-	const [, projectName, , ...titles] = test.titlePath();
-	const titlePaths = projectName ? [`[${projectName}]`, ...titles] : titles;
-
-	return titlePaths.join(' > ');
-};
-
-class PlaywrightLogger {
-	info(message) { console.log(`\n${message}\n`); }
-	warning(message) { this.info(yellow(message)); }
-	error(message) { this.info(red(message)); }
-	location(message, location) { this.info(`${message}: ${cyan(location)}`); }
-}
-
 export default class Reporter {
-	constructor(reporterOptions = {}) {
-		this._reporterOptions = reporterOptions;
+	constructor(options = {}) {
+		this._options = options;
 	}
 
 	onBegin(_, suite) {
@@ -65,7 +55,7 @@ export default class Reporter {
 		}
 
 		this._logger = new PlaywrightLogger();
-		this._report = new Report('playwright', this._logger, this._reporterOptions);
+		this._report = new Report('playwright', this._logger, this._options);
 
 		this._report
 			.getSummary()
@@ -81,23 +71,23 @@ export default class Reporter {
 
 		const { id } = test;
 		const { startTime, retry, status, duration } = result;
-		// workaround can be removed if https://github.com/microsoft/playwright/issues/29173 is fixed/released
-		// should be able to just do test.parent.project(), need to remove workaround
-		const rootParent = getRootParent(test);
-		const project = rootParent.project();
-		//////////////////////////////////////////////////////////////////////////////////////////////////////
-		const browser = getBrowserType(project);
+		const project = test.parent.project();
 		const name = makeTestName(test);
 		const detail = this._report
 			.getDetail(id)
 			.setName(name)
 			.setLocation(file)
 			.setStarted(startTime)
-			.setBrowser(browser)
 			.addDuration(Math.round(duration));
 
 		if (retry > 0) {
 			detail.incrementRetries();
+		}
+
+		const browser = getBrowser(project);
+
+		if (browser !== undefined) {
+			detail.setBrowser(browser);
 		}
 
 		if (status === 'passed') {
