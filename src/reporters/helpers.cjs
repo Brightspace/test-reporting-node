@@ -104,7 +104,7 @@ const getReportConfiguration = (path) => {
 	return reportConfiguration;
 };
 
-const getReportOptions = (configuration, location) => {
+const getReportTaxonomy = (configuration, location) => {
 	const { overrides } = configuration;
 	const metadata = {};
 
@@ -127,6 +127,18 @@ const getReportOptions = (configuration, location) => {
 	return metadata;
 };
 
+const ignorePattern = (configuration, location) => {
+	const { ignorePatterns } = configuration;
+
+	for (const ignorePattern of ignorePatterns ?? []) {
+		if (minimatch(location, ignorePattern)) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
 const writeReport = (reportPath, report) => {
 	writeFileSync(reportPath, JSON.stringify(report, reportMemberPriority), 'utf8');
 };
@@ -136,6 +148,7 @@ module.exports = {
 	makeLocation,
 	determineReportPath,
 	getReportConfiguration,
-	getReportOptions,
+	getReportTaxonomy,
+	ignorePattern,
 	writeReport
 };

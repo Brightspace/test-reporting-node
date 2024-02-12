@@ -213,6 +213,11 @@ const reportConfigurationSchema = {
 	unevaluatedProperties: false,
 	$ref: '#/$defs/taxonomyObject',
 	properties: {
+		ignorePatterns: {
+			type: 'array',
+			minItems: 1,
+			items: { $ref: '/testReporting/nonEmptyUnpaddedString' }
+		},
 		overrides: {
 			type: 'array',
 			minItems: 1,
