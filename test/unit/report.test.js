@@ -61,7 +61,7 @@ describe('report', () => {
 			it('invalid', () => {
 				const wrapper = () => validateReport({});
 
-				expect(wrapper).to.throw('Report does not conform to schema');
+				expect(wrapper).to.throw('report does not conform to schema');
 			});
 
 			it('extra properties', () => {
@@ -72,7 +72,7 @@ describe('report', () => {
 
 				const wrapper = () => validateReport(extraProperties);
 
-				expect(wrapper).to.throw('Report does not conform to schema');
+				expect(wrapper).to.throw('report does not conform to schema');
 			});
 		});
 	});
