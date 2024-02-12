@@ -199,6 +199,7 @@ const reportSchema = {
 };
 const reportConfigurationSchema = {
 	$id: '/testReporting/reportConfiguration',
+	$ref: '#/$defs/taxonomyObject',
 	$defs: {
 		taxonomyObject: {
 			type: 'object',
@@ -211,16 +212,17 @@ const reportConfigurationSchema = {
 	},
 	type: 'object',
 	unevaluatedProperties: false,
-	$ref: '#/$defs/taxonomyObject',
 	properties: {
 		ignorePatterns: {
 			type: 'array',
 			minItems: 1,
+			uniqueItems: true,
 			items: { $ref: '/testReporting/nonEmptyUnpaddedString' }
 		},
 		overrides: {
 			type: 'array',
 			minItems: 1,
+			uniqueItems: true,
 			items: {
 				type: 'object',
 				unevaluatedProperties: false,
@@ -235,91 +237,86 @@ const reportConfigurationSchema = {
 			}
 		}
 	},
-	allOf: [
-		{
-			if: {
-				properties: {
-					type: { const: null }
-				}
-			},
-			then: {
-				properties: {
-					overrides: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								type: { $ref: '#/$defs/taxonomyObject/properties/type' }
-							},
-							required: [
-								'type'
-							]
-						}
-					}
-				}
+	allOf: [{
+		if: {
+			properties: {
+				type: { const: null }
 			}
 		},
-		{
-			if: {
-				properties: {
-					tool: { const: null }
-				}
-			},
-			then: {
-				properties: {
-					overrides: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								tool: { $ref: '#/$defs/taxonomyObject/properties/tool' }
-							},
-							required: [
-								'tool'
-							]
-						}
+		then: {
+			properties: {
+				overrides: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							type: { $ref: '#/$defs/taxonomyObject/properties/type' }
+						},
+						required: [
+							'type'
+						]
 					}
 				}
-			}
-		},
-		{
-			if: {
-				properties: {
-					experience: { const: null }
-				}
-			},
-			then: {
-				properties: {
-					overrides: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								experience: { $ref: '#/$defs/taxonomyObject/properties/experience' }
-							},
-							required: [
-								'experience'
-							]
-						}
-					}
-				}
-			}
-		},
-		{
-			if: {
-				properties: {
-					type: { const: null },
-					tool: { const: null },
-					experience: { const: null }
-				}
-			},
-			then: {
-				required: [
-					'overrides'
-				]
 			}
 		}
-	]
+	}, {
+		if: {
+			properties: {
+				tool: { const: null }
+			}
+		},
+		then: {
+			properties: {
+				overrides: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							tool: { $ref: '#/$defs/taxonomyObject/properties/tool' }
+						},
+						required: [
+							'tool'
+						]
+					}
+				}
+			}
+		}
+	}, {
+		if: {
+			properties: {
+				experience: { const: null }
+			}
+		},
+		then: {
+			properties: {
+				overrides: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							experience: { $ref: '#/$defs/taxonomyObject/properties/experience' }
+						},
+						required: [
+							'experience'
+						]
+					}
+				}
+			}
+		}
+	}, {
+		if: {
+			properties: {
+				type: { const: null },
+				tool: { const: null },
+				experience: { const: null }
+			}
+		},
+		then: {
+			required: [
+				'overrides'
+			]
+		}
+	}]
 };
 
 const ajv = new Ajv({

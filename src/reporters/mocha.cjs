@@ -1,8 +1,5 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
-const { hasContext, getContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, makeLocation, getReportConfiguration, getReportTaxonomy, determineReportPath, writeReport, ignorePattern } = require('./helpers.cjs');
-const { randomUUID } = require('node:crypto');
-
+const { Report } = require('../helpers/report.cjs');
 const { consoleLog, color } = Base;
 
 const {
@@ -14,25 +11,20 @@ const {
 	EVENT_TEST_RETRY
 } = constants;
 
-const makeTestName = (test) => {
+const makeDetailName = (test) => {
 	return test.titlePath().join(' > ');
 };
 
-const convertEndState = (state) => {
-	return state === 'pending' ? 'skipped' : state;
+const makeDetailId = (file, name) => {
+	return `${file}[${name}]`;
 };
 
-const logInfo = (message) => {
-	consoleLog(`  ${message}`);
-};
-
-const logError = (message) => {
-	logInfo(color('fail', message));
-};
-
-const logWarning = (message) => {
-	logInfo(color('bright yellow', message));
-};
+class MochaLogger {
+	info(message) { consoleLog(`  ${message}`); }
+	warning(message) { this.info(color('bright yellow', message)); }
+	error(message) { this.info(color('fail', message)); }
+	location(message, location) { this.info(`${message}: ${color('pending', location)}`); }
+}
 
 class TestReportingMochaReporter extends Spec {
 	constructor(runner, options) {
@@ -40,33 +32,9 @@ class TestReportingMochaReporter extends Spec {
 
 		const { stats } = runner;
 		const { reporterOptions = {} } = options;
-		const { reportPath, reportConfigurationPath, verbose } = reporterOptions;
 
-		this._verbose = verbose || false;
-		this._reportConfiguration = getReportConfiguration(reportConfigurationPath);
-		this._reportPath = determineReportPath(reportPath);
-		this._report = {
-			reportId: randomUUID(),
-			reportVersion: 1,
-			summary: {
-				operatingSystem: getOperatingSystem(),
-				framework: 'mocha'
-			}
-		};
-
-		if (hasContext()) {
-			const githubContext = getContext();
-
-			this._report.summary = {
-				...this._report.summary,
-				...githubContext
-			};
-		} else {
-			logWarning('D2L test report will not contain GitHub context details');
-		}
-
-		this._tests = new Map();
-		this._testsFlaky = new Set();
+		this._logger = new MochaLogger();
+		this._report = new Report('mocha', this._logger, reporterOptions);
 
 		runner
 			.once(EVENT_RUN_BEGIN, () => this._onRunBegin(stats))
@@ -78,7 +46,10 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onRunBegin(stats) {
-		this._report.summary.started = stats.start.toISOString();
+		this._report
+			.getSummary()
+			.addContext()
+			.setStarted(stats.start.toISOString());
 	}
 
 	_onTestPending(test) {
@@ -86,117 +57,76 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestBegin(test) {
-		const location = makeLocation(test.file);
+		const { file } = test;
 
-		if (ignorePattern(this._reportConfiguration, location)) {
+		if (this._report.ignorePattern(file)) {
 			return;
 		}
 
-		const name = makeTestName(test);
-		const values = this._tests.get(name) ?? {};
+		const name = makeDetailName(test);
+		const id = makeDetailId(file, name);
+		const detail = this._report.getDetail(id);
 
-		values.started = values.started ?? (new Date()).toISOString();
-		values.location = values.location ?? location;
-		values.retries = values.retries ?? 0;
-		values.totalDuration = values.totalDuration ?? 0;
-
-		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getReportTaxonomy(this._reportConfiguration, values.location);
-
-			values.type = values.type ?? type;
-			values.tool = values.tool ?? tool;
-			values.experience = values.experience ?? experience;
-		}
-
-		this._tests.set(name, values);
+		detail
+			.setName(name)
+			.setLocation(file)
+			.setStarted((new Date()).toISOString());
 	}
 
 	_onTestRetry(test) {
-		const location = makeLocation(test.file);
+		const { duration, file } = test;
 
-		if (ignorePattern(this._reportConfiguration, location)) {
+		if (this._report.ignorePattern(file)) {
 			return;
 		}
 
-		const name = makeTestName(test);
-		const values = this._tests.get(name);
+		const name = makeDetailName(test);
+		const id = makeDetailId(file, name);
+		const detail = this._report.getDetail(id);
 
-		values.totalDuration += test.duration;
-		values.retries += 1;
-
-		this._tests.set(name, values);
+		detail
+			.incrementRetries()
+			.addDuration(duration);
 	}
 
 	_onTestEnd(test) {
-		const location = makeLocation(test.file);
+		const { duration, file, state } = test;
 
-		if (ignorePattern(this._reportConfiguration, location)) {
+		if (this._report.ignorePattern(file)) {
 			return;
 		}
 
-		const name = makeTestName(test);
-		const values = this._tests.get(name);
+		const name = makeDetailName(test);
+		const id = makeDetailId(file, name);
+		const detail = this._report.getDetail(id);
 
-		values.status = convertEndState(test.state);
-		values.duration = test.duration ?? 0;
-		values.totalDuration += values.duration;
+		if (state === 'pending') {
+			detail.setSkipped();
+		} else {
+			detail.addDuration(duration);
 
-		this._tests.set(name, values);
+			if (state === 'passed') {
+				detail.setPassed();
+			} else {
+				detail.setFailed();
+			}
+		}
 	}
 
 	_onRunEnd(stats) {
-		this._report.summary.totalDuration = stats.duration;
-		this._report.summary.status = stats.failures !== 0 ? 'failed' : 'passed';
+		const { duration, failures } = stats;
+		const summary = this._report
+			.getSummary()
+			.setTotalDuration(duration);
 
-		let countPassed = 0;
-		let countFailed = 0;
-		let countSkipped = 0;
-		let countFlaky = 0;
-
-		this._report.details = [...this._tests].map(([name, values]) => {
-			if (values.status === 'passed') {
-				if (values.retries !== 0) {
-					countFlaky++;
-				} else {
-					countPassed++;
-				}
-			} else if (values.status === 'failed') {
-				countFailed++;
-			} else if (values.status === 'skipped') {
-				countSkipped++;
-			}
-
-			if (this._verbose) {
-				const { location, type, tool, experience } = values;
-				const prefix = `Test '${name}' at '${location}' is missing`;
-
-				if (!type) {
-					logWarning(`${prefix} a 'type'`);
-				}
-
-				if (!tool) {
-					logWarning(`${prefix} a 'tool'`);
-				}
-
-				if (!experience) {
-					logWarning(`${prefix} an 'experience'`);
-				}
-			}
-
-			return { name, ...values };
-		});
-
-		this._report.summary.countPassed = countPassed;
-		this._report.summary.countFailed = countFailed;
-		this._report.summary.countSkipped = countSkipped;
-		this._report.summary.countFlaky = countFlaky;
-
-		try {
-			writeReport(this._reportPath, this._report);
-			logInfo(`D2L test report available at: ${color('pending', this._reportPath)}`);
-		} catch {
-			logError('Failed to generate D2L test report\n');
+		if (failures === 0) {
+			summary.setPassed();
+		} else {
+			summary.setFailed();
 		}
+
+		this._report.finalize();
+		this._report.save();
 	}
 }
 
