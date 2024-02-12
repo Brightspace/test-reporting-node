@@ -1,4 +1,4 @@
-import { determineReportPath, getOperatingSystem, getReportConfiguration, getReportOptions, makeLocation, writeReport } from './helpers.cjs';
+import { determineReportPath, ignorePattern, getOperatingSystem, getReportConfiguration, getReportTaxonomy, makeLocation, writeReport } from './helpers.cjs';
 import { getContext, hasContext } from '../helpers/github.cjs';
 import { randomUUID } from 'crypto';
 
@@ -32,9 +32,14 @@ export function reporter({ reportPath, reportConfigurationPath, verbose } = {}) 
 
 	const collectTests = (session, prefix, tests) => {
 		const { browser, testFile } = session;
-		const browserName = browser.name.toLowerCase();
 		const location = makeLocation(testFile);
-		const { type, tool, experience } = getReportOptions(reportConfiguration, location);
+
+		if (ignorePattern(reportConfiguration, location)) {
+			return [];
+		}
+
+		const browserName = browser.name.toLowerCase();
+		const { type, tool, experience } = getReportTaxonomy(reportConfiguration, location);
 		const flattened = [];
 
 		for (const test of tests) {

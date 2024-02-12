@@ -1,6 +1,6 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { hasContext, getContext } = require('../helpers/github.cjs');
-const { getOperatingSystem, makeLocation, getReportConfiguration, getReportOptions, determineReportPath, writeReport } = require('./helpers.cjs');
+const { getOperatingSystem, makeLocation, getReportConfiguration, getReportTaxonomy, determineReportPath, writeReport, ignorePattern } = require('./helpers.cjs');
 const { randomUUID } = require('node:crypto');
 
 const { consoleLog, color } = Base;
@@ -86,16 +86,22 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestBegin(test) {
+		const location = makeLocation(test.file);
+
+		if (ignorePattern(this._reportConfiguration, location)) {
+			return;
+		}
+
 		const name = makeTestName(test);
 		const values = this._tests.get(name) ?? {};
 
 		values.started = values.started ?? (new Date()).toISOString();
-		values.location = values.location ?? makeLocation(test.file);
+		values.location = values.location ?? location;
 		values.retries = values.retries ?? 0;
 		values.totalDuration = values.totalDuration ?? 0;
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getReportOptions(this._reportConfiguration, values.location);
+			const { type, tool, experience } = getReportTaxonomy(this._reportConfiguration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;
@@ -106,6 +112,12 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestRetry(test) {
+		const location = makeLocation(test.file);
+
+		if (ignorePattern(this._reportConfiguration, location)) {
+			return;
+		}
+
 		const name = makeTestName(test);
 		const values = this._tests.get(name);
 
@@ -116,6 +128,12 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestEnd(test) {
+		const location = makeLocation(test.file);
+
+		if (ignorePattern(this._reportConfiguration, location)) {
+			return;
+		}
+
 		const name = makeTestName(test);
 		const values = this._tests.get(name);
 
@@ -124,23 +142,30 @@ class TestReportingMochaReporter extends Spec {
 		values.totalDuration += values.duration;
 
 		this._tests.set(name, values);
-
-		if (values.status === 'passed' && values.retries !== 0) {
-			this._testsFlaky.add(name);
-		}
 	}
 
 	_onRunEnd(stats) {
 		this._report.summary.totalDuration = stats.duration;
 		this._report.summary.status = stats.failures !== 0 ? 'failed' : 'passed';
 
-		const flakyCount = this._testsFlaky.size;
+		let countPassed = 0;
+		let countFailed = 0;
+		let countSkipped = 0;
+		let countFlaky = 0;
 
-		this._report.summary.countPassed = stats.passes - flakyCount;
-		this._report.summary.countFailed = stats.failures;
-		this._report.summary.countSkipped = stats.pending;
-		this._report.summary.countFlaky = flakyCount;
 		this._report.details = [...this._tests].map(([name, values]) => {
+			if (values.status === 'passed') {
+				if (values.retries !== 0) {
+					countFlaky++;
+				} else {
+					countPassed++;
+				}
+			} else if (values.status === 'failed') {
+				countFailed++;
+			} else if (values.status === 'skipped') {
+				countSkipped++;
+			}
+
 			if (this._verbose) {
 				const { location, type, tool, experience } = values;
 				const prefix = `Test '${name}' at '${location}' is missing`;
@@ -160,6 +185,11 @@ class TestReportingMochaReporter extends Spec {
 
 			return { name, ...values };
 		});
+
+		this._report.summary.countPassed = countPassed;
+		this._report.summary.countFailed = countFailed;
+		this._report.summary.countSkipped = countSkipped;
+		this._report.summary.countFlaky = countFlaky;
 
 		try {
 			writeReport(this._reportPath, this._report);

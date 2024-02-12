@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 
 const require = createRequire(import.meta.url);
 
-const { determineReportPath, getOperatingSystem, getReportConfiguration, getReportOptions, makeLocation, writeReport } = require('./helpers.cjs');
+const { determineReportPath, getOperatingSystem, getReportConfiguration, getReportTaxonomy, makeLocation, writeReport, ignorePattern } = require('./helpers.cjs');
 const { getContext, hasContext } = require('../helpers/github.cjs');
 
 const { cyan, red, yellow } = colors;
@@ -103,13 +103,19 @@ export default class Reporter {
 	}
 
 	onTestEnd(test, result) {
-		const { startTime, retry, status, duration } = result;
 		const { id, location: { file } } = test;
+		const location = makeLocation(file);
+
+		if (ignorePattern(this._reportConfiguration, location)) {
+			return;
+		}
+
+		const { startTime, retry, status, duration } = result;
 		const values = this._tests.get(id) ?? {};
 
 		values.name = makeTestName(test);
 		values.started = values.started ?? startTime;
-		values.location = values.location ?? makeLocation(file);
+		values.location = values.location ?? location;
 		values.retries = retry;
 		values.status = convertEndStateDetails(status);
 		values.duration = duration;
@@ -125,7 +131,7 @@ export default class Reporter {
 		}
 
 		if (!values.type || !values.tool || !values.experience) {
-			const { type, tool, experience } = getReportOptions(this._reportConfiguration, values.location);
+			const { type, tool, experience } = getReportTaxonomy(this._reportConfiguration, values.location);
 
 			values.type = values.type ?? type;
 			values.tool = values.tool ?? tool;

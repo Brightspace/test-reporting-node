@@ -97,21 +97,12 @@ const partialReportPlaywright = {
 	summary: {
 		status: 'failed',
 		framework: 'playwright',
-		countPassed: 7,
+		countPassed: 5,
 		countFailed: 5,
 		countSkipped: 5,
 		countFlaky: 5
 	},
 	details: [{
-		name: '[setup] > setup',
-		status: 'passed',
-		location: 'test/integration/data/playwright.setup.js',
-		browser: 'chromium',
-		tool: 'Test Reporting',
-		experience: 'Test Framework',
-		type: 'integration',
-		retries: 0
-	}, {
 		name: '[chromium] > reporter tests 1 > skipped test',
 		status: 'skipped',
 		location: 'test/integration/data/playwright-1.test.js',
@@ -291,15 +282,6 @@ const partialReportPlaywright = {
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
 		retries: 2
-	}, {
-		name: '[teardown] > teardown',
-		status: 'passed',
-		location: 'test/integration/data/playwright.teardown.js',
-		browser: 'chromium',
-		tool: 'Test Reporting',
-		experience: 'Test Framework',
-		type: 'integration',
-		retries: 0
 	}]
 };
 const partialReportWebTestRunner = {

@@ -2,33 +2,40 @@
   "type": "integration",
   "experience": "Test Framework",
   "tool": "Test Reporting",
+  "ignorePatterns": [
+    "**/mocha-3.test.js",
+    "**/playwright-3.test.js",
+    "**/playwright.setup.js",
+    "**/playwright.teardown.js",
+    "**/web-test-runner-3.test.js"
+  ],
   "overrides": [
     {
-      "pattern": "*/**/mocha-1.test.js",
+      "pattern": "**/mocha-1.test.js",
       "type": "ui",
       "tool": "Mocha 1 Test Reporting"
     },
     {
-      "pattern": "*/**/mocha-2.test.js",
+      "pattern": "**/mocha-2.test.js",
       "experience": "Mocha 2 Test Framework"
     },
     {
-      "pattern": "*/**/playwright-1.test.js",
+      "pattern": "**/playwright-1.test.js",
       "experience": "Playwright 1 Test Framework",
       "tool": "Playwright 1 Test Reporting"
     },
     {
-      "pattern": "*/**/playwright-2.test.js",
+      "pattern": "**/playwright-2.test.js",
       "type": "visual diff",
       "experience": "Playwright 2 Test Framework"
     },
     {
-      "pattern": "*/**/web-test-runner-1.test.js",
+      "pattern": "**/web-test-runner-1.test.js",
       "experience": "WebTestRunner 1 Test Framework",
       "tool": "WebTestRunner 1 Test Reporting"
     },
     {
-      "pattern": "*/**/web-test-runner-2.test.js",
+      "pattern": "**/web-test-runner-2.test.js",
       "type": "accessibility",
       "experience": "WebTestRunner 2 Test Framework"
     }
