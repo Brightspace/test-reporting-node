@@ -199,6 +199,7 @@ const reportSchema = {
 };
 const reportConfigurationSchema = {
 	$id: '/testReporting/reportConfiguration',
+	$ref: '#/$defs/taxonomyObject',
 	$defs: {
 		taxonomyObject: {
 			type: 'object',
@@ -211,16 +212,17 @@ const reportConfigurationSchema = {
 	},
 	type: 'object',
 	unevaluatedProperties: false,
-	$ref: '#/$defs/taxonomyObject',
 	properties: {
 		ignorePatterns: {
 			type: 'array',
 			minItems: 1,
+			uniqueItems: true,
 			items: { $ref: '/testReporting/nonEmptyUnpaddedString' }
 		},
 		overrides: {
 			type: 'array',
 			minItems: 1,
+			uniqueItems: true,
 			items: {
 				type: 'object',
 				unevaluatedProperties: false,

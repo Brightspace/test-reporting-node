@@ -1,6 +1,6 @@
 import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
-import { getOperatingSystem } from '../../src/reporters/helpers.cjs';
+import { getOperatingSystem } from '../../src/helpers/os.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { readFile } from 'node:fs/promises';
 import { validateReport } from '../../src/helpers/report.cjs';
@@ -440,8 +440,35 @@ describe('report validation', () => {
 			it('schema', () => validateReport(report));
 
 			it('contents', () => {
-				expect(report.summary.operatingSystem).to.eq(getOperatingSystem());
+				const now = new Date();
+				const nowMinus30Minutes = new Date(now);
+
+				nowMinus30Minutes.setMinutes(now.getMinutes() - 30);
+
 				expect(report).to.containSubset(reportTest.expected);
+
+				const { summary, details } = report;
+
+				expect(summary.operatingSystem).to.eq(getOperatingSystem());
+				expect(summary.totalDuration).to.be.above(0);
+
+				const summaryStarted = new Date(summary.started);
+
+				expect(summaryStarted).to.be.at.most(now);
+				expect(summaryStarted).to.be.at.least(nowMinus30Minutes);
+
+				for (const detail of details) {
+					const detailStarted = new Date(detail.started);
+
+					expect(detail.duration).to.be.at.least(0);
+					expect(detail.totalDuration).to.be.at.least(0);
+					expect(detail.totalDuration).to.be.at.least(detail.duration);
+					expect(detail.duration).to.be.at.most(summary.totalDuration);
+					expect(detail.totalDuration).to.be.at.most(summary.totalDuration);
+					expect(detailStarted).to.be.at.most(now);
+					expect(detailStarted).to.be.at.least(nowMinus30Minutes);
+					expect(detailStarted).to.be.at.least(summaryStarted);
+				}
 			});
 		});
 	}

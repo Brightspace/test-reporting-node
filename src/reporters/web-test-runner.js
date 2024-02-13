@@ -1,125 +1,91 @@
-import { determineReportPath, ignorePattern, getOperatingSystem, getReportConfiguration, getReportTaxonomy, makeLocation, writeReport } from './helpers.cjs';
-import { getContext, hasContext } from '../helpers/github.cjs';
-import { randomUUID } from 'crypto';
+import { Report } from '../helpers/report.cjs';
 
-export function reporter({ reportPath, reportConfigurationPath, verbose } = {}) {
-	reportPath = determineReportPath(reportPath);
-	verbose = verbose || false;
+class WebTestRunnerLogger {
+	info(message) { console.log(`\n${message}\n`); }
+	warning(message) { this.info(message); }
+	error(message) { this.info(message); }
+	location(message, location) { this.info(`${message}: ${location}`); }
+}
 
-	const reportConfiguration = getReportConfiguration(reportConfigurationPath);
-	const report = {
-		reportId: randomUUID(),
-		reportVersion: 1,
-		summary: {
-			operatingSystem: getOperatingSystem(),
-			framework: '@web/test-runner',
-			countFlaky: 0
-		}
-	};
+const makeDetailName = (prefix, testName) => {
+	return `${prefix}${testName}`;
+};
 
-	if (hasContext()) {
-		const githubContext = getContext();
+const makeDetailId = (sessionId, file, name) => {
+	return `${sessionId}/${file}/${name}`;
+};
 
-		report.summary = {
-			...report.summary,
-			...githubContext
-		};
-	} else {
-		console.log('D2L test report will not contain GitHub context details');
-	}
-
+export function reporter(options = {}) {
+	const logger = new WebTestRunnerLogger();
+	const report = new Report('@web/test-runner', logger, options);
+	const summary = report
+		.getSummary()
+		.addContext();
+	let overallStarted;
 	let testConfig;
 
 	const collectTests = (session, prefix, tests) => {
-		const { browser, testFile } = session;
-		const location = makeLocation(testFile);
+		const { id: sessionId, browser: { name: browserName }, testFile } = session;
 
-		if (ignorePattern(reportConfiguration, location)) {
-			return [];
+		if (report.ignorePattern(testFile)) {
+			return;
 		}
 
-		const browserName = browser.name.toLowerCase();
-		const { type, tool, experience } = getReportTaxonomy(reportConfiguration, location);
-		const flattened = [];
+		const browser = browserName.toLowerCase();
 
 		for (const test of tests) {
-			const { skipped, passed, duration, name: testName } = test;
+			const { skipped, passed, duration, name } = test;
+			const testName = makeDetailName(prefix, name);
+			const id = makeDetailId(sessionId, testFile, testName);
+			const detail = report
+				.getDetail(id)
+				.setName(testName)
+				.setLocation(testFile)
+				.setStarted((new Date()).toISOString())
+				.setBrowser(browser);
 
-			if (verbose) {
-				const prefix = `Test '${testName}' at '${location}' is missing`;
-
-				if (!type) {
-					console.log(`${prefix} a 'type'`);
-				}
-
-				if (!tool) {
-					console.log(`${prefix} a 'tool'`);
-				}
-
-				if (!experience) {
-					console.log(`${prefix} an 'experience'`);
-				}
-			}
-
-			const testDuration = duration ?? 0;
-			let status;
-
-			if (skipped) {
-				status = 'skipped';
-			} else if (passed) {
-				status = 'passed';
+			if (passed) {
+				detail.setPassed();
+			} else if (skipped) {
+				detail.setSkipped();
 			} else {
-				status = 'failed';
+				detail.setFailed();
 			}
 
-			flattened.push({
-				name: `${prefix}${testName}`,
-				duration: testDuration,
-				totalDuration: testDuration,
-				status,
-				location,
-				type,
-				tool,
-				experience,
-				retries: 0,
-				started: (new Date()).toISOString(),
-				browser: browserName
-			});
+			if (duration !== undefined) {
+				detail.addDuration(duration);
+			}
 		}
-
-		return flattened;
 	};
 
 	const collectSuite = (session, prefix, suite) => {
-		const tests = collectTests(session, prefix, suite.tests);
+		collectTests(session, prefix, suite.tests);
 
 		for (const childSuite of suite.suites) {
 			const newPrefix = `${prefix}${childSuite.name} > `;
 
-			tests.push(...collectSuite(session, newPrefix, childSuite));
+			collectSuite(session, newPrefix, childSuite);
 		}
-
-		return tests;
 	};
 
 	const gatherTestInfo = (sessions) => {
-		const tests = [];
 		let overallPassed = true;
 
 		for (const session of sessions) {
-			const { passed, group: { name: groupName } } = session;
+			const { passed, group: { name: groupName }, testResults } = session;
 			const isGroupName = groupName && testConfig.groups?.some(({ name }) => groupName === name);
 			const prefix = isGroupName ? `[${groupName}] > ` : '';
 
 			overallPassed &= passed;
 
-			tests.push(...collectSuite(session, prefix, session.testResults));
+			collectSuite(session, prefix, testResults);
 		}
 
-		return {
-			status: overallPassed ? 'passed' : 'failed',
-			details: tests
-		};
+		if (overallPassed) {
+			summary.setPassed();
+		} else {
+			summary.setFailed();
+		}
 	};
 
 	return {
@@ -129,54 +95,26 @@ export function reporter({ reportPath, reportConfigurationPath, verbose } = {}) 
 				return;
 			}
 
+			overallStarted = (new Date(startTime)).toISOString();
 			testConfig = config;
-			report.summary.started = (new Date(startTime)).toISOString();
+
+			summary.setStarted(overallStarted);
 		},
 		onTestRunFinished({ sessions }) {
 			if (sessions.length === 0) {
 				return;
 			}
 
-			const started = new Date(report.summary.started);
+			const started = new Date(overallStarted);
 			const ended = new Date();
 			const duration = Math.abs(ended - started);
-			const { status, details } = gatherTestInfo(sessions);
-			const counts = details.reduce(
-				(acc, { status }) => {
-					switch (status) {
-						case 'passed':
-							++acc.passed;
 
-							break;
-						case 'failed':
-							++acc.failed;
+			summary.setTotalDuration(duration);
 
-							break;
-						case 'skipped':
-							++acc.skipped;
+			gatherTestInfo(sessions);
 
-							break;
-					}
-
-					return acc;
-				},
-				{ passed: 0, failed: 0, skipped: 0 }
-			);
-
-			report.summary.status = status;
-			report.summary.totalDuration = duration;
-			report.summary.countPassed = counts.passed;
-			report.summary.countFailed = counts.failed;
-			report.summary.countSkipped = counts.skipped;
-			report.details = details;
-
-			try {
-				writeReport(reportPath, report);
-
-				console.log(`\nD2L test report available at: ${reportPath}\n`);
-			} catch {
-				console.log('\nFailed to generate D2L test report\n');
-			}
+			report.finalize();
+			report.save();
 		}
 	};
 }
