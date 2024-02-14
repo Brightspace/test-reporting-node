@@ -1,14 +1,7 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { Report } = require('../helpers/report.cjs');
+
 const { consoleLog, color } = Base;
-
-class MochaLogger {
-	info(message) { consoleLog(`  ${message}`); }
-	warning(message) { this.info(color('bright yellow', message)); }
-	error(message) { this.info(color('fail', message)); }
-	location(message, location) { this.info(`${message}: ${color('pending', location)}`); }
-}
-
 const {
 	EVENT_RUN_BEGIN,
 	EVENT_RUN_END,
@@ -17,6 +10,13 @@ const {
 	EVENT_TEST_PENDING,
 	EVENT_TEST_RETRY
 } = constants;
+
+class MochaLogger {
+	info(message) { consoleLog(`  ${message}`); }
+	warning(message) { this.info(color('bright yellow', message)); }
+	error(message) { this.info(color('fail', message)); }
+	location(message, location) { this.info(`${message}: ${color('pending', location)}`); }
+}
 
 const makeDetailName = (test) => {
 	return test.titlePath().join(' > ');
@@ -74,12 +74,13 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestRetry(test) {
-		const { duration, file } = test;
+		const { file } = test;
 
 		if (this._report.ignorePattern(file)) {
 			return;
 		}
 
+		const { duration } = test;
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
 		const detail = this._report.getDetail(id);
@@ -90,12 +91,13 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestEnd(test) {
-		const { duration, file, state } = test;
+		const { file } = test;
 
 		if (this._report.ignorePattern(file)) {
 			return;
 		}
 
+		const { duration, state } = test;
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
 		const detail = this._report.getDetail(id);
