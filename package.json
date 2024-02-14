@@ -38,8 +38,10 @@
     "/src"
   ],
   "dependencies": {
+    "@web/test-runner-core": "^0.13",
     "ajv": "^8",
     "ajv-formats": "^2",
+    "chalk": "^5",
     "minimatch": "^9",
     "mocha": "^10",
     "playwright-core": "^1"
