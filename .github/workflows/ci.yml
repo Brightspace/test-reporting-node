@@ -69,28 +69,48 @@ jobs:
         with:
           starts-with: <!-- reports -->
       - name: Post comment
-        run: |
-          BODY=$'<!-- reports -->'
-          BODY+=$'\n\n### Coverage report\n\n'
-          BODY+=$"[Report]($COVERAGE_REPORT_URL)"
-          BODY+=$'\n\n### Generated reports\n\n'
-          BODY+=$'<details>\n<summary>mocha</summary>\n\n'
-          BODY+=$'```json\n'
-          BODY+=$"$(cat d2l-test-report-mocha.json | jq)"
-          BODY+=$'\n```\n\n'
-          BODY+=$'</details>\n\n'
-          BODY+=$'<details>\n<summary>playwright</summary>\n\n'
-          BODY+=$'```json\n'
-          BODY+=$"$(cat d2l-test-report-playwright.json | jq)"
-          BODY+=$'\n```\n\n'
-          BODY+=$'</details>'
-          BODY+=$'<details>\n<summary>@web/test-runner</summary>\n\n'
-          BODY+=$'```json\n'
-          BODY+=$"$(cat d2l-test-report-web-test-runner.json | jq)"
-          BODY+=$'\n```\n\n'
-          BODY+=$'</details>'
-          gh pr comment "$PULL_REQUEST_NUMBER" --body "$BODY"
+        uses: Brightspace/third-party-actions@actions/github-script
+        with:
+          script: |
+            const { summary } = core;
+
+            summary.clear();
+            summary.addRaw('<!-- reports -->', true);
+            summary.addHeading('Coverage report', 3);
+            summary.addLink('Report', process.env.COVERAGE_REPORT_URL);
+            summary.addHeading('Generated reports', 3);
+
+            const reporters = [{
+              name: 'mocha',
+              path: './d2l-test-report-mocha.json'
+            }, {
+              name: 'playwright',
+              path: './d2l-test-report-playwright.json'
+            }, {
+              name: '@web/test-runner',
+              path: './d2l-test-report-web-test-runner.json'
+            }];
+
+
+            for (const { name, path } of reporters) {
+              let report = require(path);
+
+              report = JSON.stringify(report, null, 2);
+              report = `\n\n\`\`\`json\n${report}\n\`\`\`\n\n`;
+
+              summary.addDetails(name, report);
+            }
+
+            const { rest: { issues } } = github;
+            const { repo: { owner, repo }, issue: { number } } = context;
+
+            issues.createComment({
+              issue_number: number,
+              owner: owner,
+              repo: repo,
+              body: summary.stringify()
+            });
+
+            summary.write({ overwrite: true });
         env:
           COVERAGE_REPORT_URL: ${{steps.coverage-report.outputs.artifact-url}}
-          PULL_REQUEST_NUMBER: ${{github.event.pull_request.number}}
-          GITHUB_TOKEN: ${{github.token}}
