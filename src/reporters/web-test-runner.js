@@ -1,10 +1,14 @@
 import { Report } from '../helpers/report.cjs';
+import { SESSION_STATUS } from '@web/test-runner-core';
+import chalk from 'chalk';
+
+const { yellow, red, cyan, bold } = chalk;
 
 class WebTestRunnerLogger {
 	info(message) { console.log(`\n${message}\n`); }
-	warning(message) { this.info(message); }
-	error(message) { this.info(message); }
-	location(message, location) { this.info(`${message}: ${location}`); }
+	warning(message) { this.info(yellow(bold(message))); }
+	error(message) { this.info(red(bold(message))); }
+	location(message, location) { this.info(`${message}: ${cyan(bold(location))}`); }
 }
 
 const makeDetailName = (prefix, testName) => {
@@ -16,16 +20,18 @@ const makeDetailId = (sessionId, file, name) => {
 };
 
 export function reporter(options = {}) {
+	let overallStarted;
+	let testConfig;
+	const sessionStarts = new Map();
 	const logger = new WebTestRunnerLogger();
 	const report = new Report('@web/test-runner', logger, options);
 	const summary = report
 		.getSummary()
 		.addContext();
-	let overallStarted;
-	let testConfig;
 
 	const collectTests = (session, prefix, tests) => {
 		const { id: sessionId, browser: { name: browserName }, testFile } = session;
+		const started = sessionStarts.get(sessionId) ?? (new Date()).toISOString();
 
 		if (report.ignorePattern(testFile)) {
 			return;
@@ -41,7 +47,7 @@ export function reporter(options = {}) {
 				.getDetail(id)
 				.setName(testName)
 				.setLocation(testFile)
-				.setStarted((new Date()).toISOString())
+				.setStarted(started)
 				.setBrowser(browser);
 
 			if (passed) {
@@ -114,6 +120,30 @@ export function reporter(options = {}) {
 			gatherTestInfo(sessions);
 
 			report.finalize();
+		},
+		getTestProgress({ sessions }) {
+			for (const session of sessions) {
+				const { id, status } = session;
+
+				switch (status) {
+					case SESSION_STATUS.SCHEDULED:
+					case SESSION_STATUS.INITIALIZING:
+					case SESSION_STATUS.TEST_STARTED:
+						sessionStarts.set(id, (new Date()).toISOString());
+
+						break;
+					case SESSION_STATUS.TEST_FINISHED:
+					case SESSION_STATUS.FINISHED:
+					default:
+						if (!sessionStarts.has(id)) {
+							sessionStarts.set(id, (new Date()).toISOString());
+						}
+
+						break;
+				}
+			}
+		},
+		stop() {
 			report.save();
 		}
 	};

@@ -80,7 +80,7 @@ export default class Reporter {
 			.setStarted(startTime)
 			.addDuration(Math.round(duration));
 
-		if (retry > 0) {
+		if (retry !== 0) {
 			detail.incrementRetries();
 		}
 
@@ -105,7 +105,6 @@ export default class Reporter {
 		}
 
 		const { startTime, duration, status } = result;
-
 		const summary = this._report
 			.getSummary()
 			.setStarted(startTime)
@@ -116,6 +115,8 @@ export default class Reporter {
 		} else {
 			summary.setFailed();
 		}
+
+		this._report.finalize();
 	}
 
 	async onExit() {
@@ -123,7 +124,6 @@ export default class Reporter {
 			return;
 		}
 
-		this._report.finalize();
 		this._report.save();
 	}
 }
