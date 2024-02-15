@@ -5,9 +5,9 @@ const delay = () => {
 describe('reporter tests 1', () => {
 	let count = 0;
 
-	it('test', () => { });
+	it('test', () => {});
 
-	it.skip('skipped test', () => { });
+	it.skip('skipped test', () => {});
 
 	it('flaky test', async() => {
 		if (count < 2) {

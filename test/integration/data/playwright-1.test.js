@@ -5,12 +5,12 @@ const delay = () => {
 };
 
 test.describe('reporter tests 1', () => {
-	test('test', () => { });
+	test('test', () => {});
 
-	test.skip('skipped test', () => { });
+	test.skip('skipped test', () => {});
 
-	// eslint-disable-next-line no-unused-vars
-	test('flaky test', async({ page }, testInfo) => {
+	// eslint-disable-next-line no-empty-pattern
+	test('flaky test', async({}, testInfo) => {
 		if (testInfo.retry < 2) {
 			await delay();
 
