@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
 const delay = () => {
-	return new Promise(resolve => setTimeout(resolve, 250));
+	return new Promise(resolve => setTimeout(resolve, 100));
 };
 
 test.describe('reporter tests 2', () => {
