@@ -127,8 +127,9 @@ class TestReportingMochaReporter extends Spec {
 			summary.setFailed();
 		}
 
-		this._report.finalize();
-		this._report.save();
+		this._report
+			.finalize()
+			.save();
 	}
 }
 

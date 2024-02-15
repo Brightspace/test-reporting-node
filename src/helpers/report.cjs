@@ -310,12 +310,32 @@ class ReportDetail {
 
 class Report {
 	constructor(framework, logger, options) {
-		const { reportPath, reportConfigurationPath, verbose = false } = options;
+		const { reportPath, reportConfigurationPath, reportWriter, verbose = false } = options;
 
 		this._logger = logger;
 		this._verbose = verbose;
+
+		if (reportWriter) {
+			if (reportPath) {
+				throw new Error('must supply only one of \'reportPath\' or \'reportWriter\'');
+			}
+
+			this._writeReport = (reportData) => {
+				reportWriter(reportData);
+
+				this._logger.info('D2L test report available at output location');
+			};
+		} else {
+			const reportPathFinal = determineReportPath(reportPath);
+
+			this._writeReport = (reportData) => {
+				writeFileSync(reportPathFinal, reportData, 'utf8');
+
+				this._logger.location('D2L test report available at', reportPathFinal);
+			};
+		}
+
 		this._reportConfiguration = getReportConfiguration(reportConfigurationPath);
-		this._reportPath = determineReportPath(reportPath);
 		this._report = {
 			reportId: randomUUID(),
 			reportVersion: 1,
@@ -388,6 +408,8 @@ class Report {
 			.setFlakyCount(countFlaky)
 			.setSkippedCount(countSkipped)
 			.setFailedCount(countFailed);
+
+		return this;
 	}
 
 	toJSON() {
@@ -403,9 +425,7 @@ class Report {
 		try {
 			const reportData = JSON.stringify(this, reportMemberPriority);
 
-			writeFileSync(this._reportPath, reportData, 'utf8');
-
-			this._logger.location('D2L test report available at', this._reportPath);
+			this._writeReport(reportData);
 		} catch {
 			this._logger.error('Failed to generate D2L test report');
 		}
