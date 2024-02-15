@@ -5,7 +5,7 @@ const delay = () => {
 };
 
 test.describe('reporter tests 1', () => {
-	test.only('test', () => {});
+	test('test', () => {});
 
 	test.skip('skipped test', () => {});
 
