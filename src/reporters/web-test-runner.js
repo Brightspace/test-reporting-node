@@ -65,6 +65,10 @@ export function reporter(options = {}) {
 	};
 
 	const collectSuite = (session, prefix, suite) => {
+		if (!suite) {
+			return;
+		}
+
 		collectTests(session, prefix, suite.tests);
 
 		for (const childSuite of suite.suites) {
