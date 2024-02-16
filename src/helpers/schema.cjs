@@ -88,7 +88,11 @@ const reportSchema = {
 				},
 				operatingSystem: {
 					type: 'string',
-					enum: ['windows', 'linux', 'mac']
+					enum: [
+						'windows',
+						'linux',
+						'mac'
+					]
 				},
 				started: {
 					type: 'string',
@@ -100,7 +104,10 @@ const reportSchema = {
 				},
 				status: {
 					type: 'string',
-					enum: ['passed', 'failed']
+					enum: [
+						'passed',
+						'failed'
+					]
 				},
 				countPassed: {
 					type: 'integer',
@@ -170,7 +177,9 @@ const reportSchema = {
 							'chromium',
 							'chrome',
 							'firefox',
-							'webkit'
+							'webkit',
+							'safari',
+							'edge'
 						]
 					},
 					retries: {

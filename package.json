@@ -11,7 +11,8 @@
     "./helpers/report.js": "./src/helpers/report.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/playwright.js": "./src/reporters/playwright.js",
-    "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js"
+    "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js",
+    "./reporters/testcafe.js": "./src/reporters/testcafe.js"
   },
   "publishConfig": {
     "access": "public",
@@ -26,10 +27,11 @@
     "test": "run-s lint test:all",
     "test:all": "c8 run-s test:unit test:integration",
     "test:unit": "mocha \"test/unit/**/*.test.js\"",
-    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner && mocha test/integration/report-validation.test.js",
+    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner test:integration:testcafe && mocha test/integration/report-validation.test.js",
     "test:integration:mocha": "mocha --config test/integration/data/config/mocha.cjs || exit 0",
     "test:integration:playwright": "playwright test --config test/integration/data/config/playwright.js || exit 0",
-    "test:integration:web-test-runner": "wtr --config test/integration/data/config/web-test-runner.js || exit 0"
+    "test:integration:web-test-runner": "wtr --config test/integration/data/config/web-test-runner.js || exit 0",
+    "test:integration:testcafe": "start-server-and-test \"http-server --silent\" 8080 \"testcafe --config-file test/integration/data/config/testcafe.cjs || exit 0\""
   },
   "engines": {
     "node": ">=18"
@@ -49,7 +51,9 @@
   "peerDependencies": {
     "@web/test-runner": "^0.18",
     "mocha": "^10",
-    "playwright": "^1"
+    "playwright": "^1",
+    "testcafe": "^3",
+    "testcafe-reporter-custom": "^1"
   },
   "devDependencies": {
     "@playwright/test": "^1",
@@ -62,8 +66,12 @@
     "d2l-license-checker": "^4",
     "eslint": "^8",
     "eslint-config-brightspace": "^1",
+    "http-server": "^14",
     "npm-run-all": "^4",
     "playwright": "^1",
-    "sinon": "^17"
+    "sinon": "^17",
+    "start-server-and-test": "^2",
+    "testcafe": "^3",
+    "testcafe-reporter-custom": "^1"
   }
 }
