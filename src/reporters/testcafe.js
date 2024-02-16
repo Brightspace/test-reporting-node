@@ -11,6 +11,17 @@ const makeDetailId = (testId, testRunId) => {
 	return `${testId}/${testRunId}`;
 };
 
+const getBrowserName = (name) => {
+	name = name.toLowerCase();
+
+	switch (name) {
+		case 'microsoft edge':
+			return 'edge';
+		default:
+			return name;
+	}
+};
+
 class TestCafeLogger {
 	info(message) { console.log(`\n${message}\n`); }
 	warning(message) { this.info(yellow(message)); }
@@ -78,8 +89,8 @@ export default function() {
 			const { testId, skipped, browsers, durationMs, errs } = testRunInfo;
 			const { startTime } = testExecutionInfo.get(testId);
 			const browserRunInfo = browsers.map((browser) => {
-				const { testRunId, alias, quarantineAttemptsTestRunIds } = browser;
-				const browserName = (alias.split(':')[0]).toLowerCase();
+				const { testRunId, name, quarantineAttemptsTestRunIds } = browser;
+				const browserName = getBrowserName(name);
 				const runs = quarantineAttemptsTestRunIds?.length ?? 1;
 				const retries = runs - 1;
 
