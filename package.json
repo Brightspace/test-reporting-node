@@ -34,7 +34,7 @@
     "test:integration:testcafe": "start-server-and-test \"http-server --silent\" 8080 \"testcafe --config-file test/integration/data/config/testcafe.cjs || exit 0\""
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "files": [
     "/src"
