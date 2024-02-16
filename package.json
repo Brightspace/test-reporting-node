@@ -48,13 +48,6 @@
     "mocha": "^10",
     "playwright-core": "^1"
   },
-  "peerDependencies": {
-    "@web/test-runner": "^0.18",
-    "mocha": "^10",
-    "playwright": "^1",
-    "testcafe": "^3",
-    "testcafe-reporter-custom": "^1"
-  },
   "devDependencies": {
     "@playwright/test": "^1",
     "@web/test-runner": "^0.18",
