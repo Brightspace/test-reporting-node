@@ -16,7 +16,7 @@ export default {
 		name: 'group 1',
 		files: './test/integration/data/web-test-runner-2.test.js',
 		browsers: [
-			puppeteerLauncher({ launchOptions: { headless: true } }),
+			puppeteerLauncher({ launchOptions: { headless: 'new' } }),
 			playwrightLauncher({ product: 'firefox' })
 		]
 	}, {
