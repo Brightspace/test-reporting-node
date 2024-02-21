@@ -11,7 +11,7 @@ const makeDetailId = (testId, testRunId) => {
 	return `${testId}/${testRunId}`;
 };
 
-const getBrowserName = (name) => {
+const getBrowser = (name) => {
 	name = name.toLowerCase();
 
 	switch (name) {
@@ -90,13 +90,12 @@ export default function() {
 			const { startTime } = testExecutionInfo.get(testId);
 			const browserRunInfo = browsers.map((browser) => {
 				const { testRunId, name, quarantineAttemptsTestRunIds } = browser;
-				const browserName = getBrowserName(name);
 				const runs = quarantineAttemptsTestRunIds?.length ?? 1;
 				const retries = runs - 1;
 
 				return {
 					testRunId,
-					browser: browserName,
+					browser: getBrowser(name),
 					retries
 				};
 			});
