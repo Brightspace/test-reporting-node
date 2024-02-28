@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test } from '../../../src/helpers/runners/playwright.js';
 
 const delay = (ms = 100) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
