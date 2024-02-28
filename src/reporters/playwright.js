@@ -21,15 +21,16 @@ const makeTestName = (test) => {
 	return titlePaths.join(' > ');
 };
 
-const getBrowser = (project) => {
-	const {
-		use: { browserName, defaultBrowserType } = {},
-		metadata: { browser } = {}
-	} = project;
+const getBrowser = (test) => {
+	const { annotations, parent } = test;
+	const annotation = annotations.find(({ type }) => type === 'browser') ?? {};
+	const { description: browserAnnotation } = annotation;
 
-	if (browser) {
-		return browser;
+	if (browserAnnotation) {
+		return browserAnnotation;
 	}
+
+	const { use: { browserName, defaultBrowserType } = {} } = parent.project();
 
 	if (browserName) {
 		return browserName;
@@ -45,6 +46,8 @@ const getBrowser = (project) => {
 export default class Reporter {
 	constructor(options = {}) {
 		this._options = options;
+		this._projectBrowsers = new Map();
+		this._testsWithoutBrowser = new Map();
 	}
 
 	onBegin(_, suite) {
@@ -69,12 +72,11 @@ export default class Reporter {
 			return;
 		}
 
-		const { id } = test;
+		const { id: testId, parent } = test;
 		const { startTime, retry, status, duration } = result;
-		const project = test.parent.project();
 		const name = makeTestName(test);
 		const detail = this._report
-			.getDetail(id)
+			.getDetail(testId)
 			.setName(name)
 			.setLocation(file)
 			.setStarted(startTime)
@@ -84,10 +86,21 @@ export default class Reporter {
 			detail.incrementRetries();
 		}
 
-		const browser = getBrowser(project);
+		const { name: projectName } = parent.project();
+		let browser = getBrowser(test);
 
-		if (browser !== undefined) {
+		if (browser == null) {
+			browser = this._projectBrowsers.get(projectName);
+		}
+
+		if (browser != null) {
 			detail.setBrowser(browser);
+
+			if (!this._projectBrowsers.has(projectName)) {
+				this._projectBrowsers.set(projectName, browser);
+			}
+		} else {
+			this._testsWithoutBrowser.set(testId, projectName);
 		}
 
 		if (status === 'passed') {
@@ -114,6 +127,15 @@ export default class Reporter {
 			summary.setPassed();
 		} else {
 			summary.setFailed();
+		}
+
+		for (const [testId, projectName] of this._testsWithoutBrowser) {
+			const detail = this._report.getDetail(testId);
+			const browser = this._projectBrowsers.get(projectName);
+
+			if (browser != null) {
+				detail.setBrowser(browser);
+			}
 		}
 
 		this._report.finalize();
