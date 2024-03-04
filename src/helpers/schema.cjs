@@ -78,11 +78,11 @@ const reportSchema = {
 			unevaluatedProperties: false,
 			properties: {
 				framework: { $ref: '/testReporting/nonEmptyUnpaddedString' },
-				lmsBuild: {
+				lmsBuildNumber: {
 					type: 'string',
 					pattern: '([0-9]{2}\\.){3}[0-9]{5}'
 				},
-				lmsInstance: {
+				lmsInstanceUrl: {
 					type: 'string',
 					format: 'uri'
 				},
