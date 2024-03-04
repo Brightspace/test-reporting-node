@@ -80,7 +80,7 @@ const reportSchema = {
 				framework: { $ref: '/testReporting/nonEmptyUnpaddedString' },
 				lmsBuildNumber: {
 					type: 'string',
-					pattern: '([0-9]{2}\\.){3}[0-9]{5}'
+					pattern: '([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}'
 				},
 				lmsInstanceUrl: {
 					type: 'string',
