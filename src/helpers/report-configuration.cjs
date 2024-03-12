@@ -2,6 +2,7 @@ const { readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 const { formatErrorAjv, validateReportConfigurationAjv } = require('./schema.cjs');
 const { minimatch } = require('minimatch');
+const { makeLocation } = require('./system.cjs');
 
 const defaultConfigurationPath = './d2l-test-reporting.config.json';
 
@@ -47,6 +48,8 @@ class ReportConfiguration {
 	}
 
 	getTaxonomy(location) {
+		location = makeLocation(location);
+
 		const { overrides } = this._reportConfiguration;
 		const metadata = {};
 
@@ -89,6 +92,8 @@ class ReportConfiguration {
 	}
 
 	ignoreLocation(location) {
+		location = makeLocation(location);
+
 		const { ignorePatterns } = this._reportConfiguration;
 
 		for (const ignorePattern of ignorePatterns ?? []) {

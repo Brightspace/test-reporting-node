@@ -1,9 +1,8 @@
 const { formatErrorAjv, validateReportAjv } = require('./schema.cjs');
 const { getContext, hasContext } = require('./github.cjs');
+const { getOperatingSystem, makeLocation } = require('./system.cjs');
 const { writeFileSync } = require('node:fs');
-const { relative, sep: platformSeparator, resolve } = require('node:path');
-const { getOperatingSystem } = require('./system.cjs');
-const { join } = require('node:path/posix');
+const { resolve } = require('node:path');
 const { randomUUID } = require('node:crypto');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 
@@ -40,13 +39,6 @@ const reportMemberPriority = [
 	'countFlaky',
 	'retries'
 ];
-
-const makeLocation = (filePath) => {
-	const path = relative(process.cwd(), filePath);
-	const pathParts = path.split(platformSeparator);
-
-	return join(...pathParts);
-};
 
 const determineReportPath = (path) => {
 	return resolve(path ?? defaultReportPath);
@@ -273,8 +265,6 @@ class Report {
 	}
 
 	ignoreLocation(location) {
-		location = makeLocation(location);
-
 		return this._reportConfiguration.ignoreLocation(location);
 	}
 
