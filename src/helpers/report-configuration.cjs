@@ -28,7 +28,9 @@ class ReportConfiguration {
 			try {
 				contents = readFileSync(path, 'utf8');
 			} catch {
-				return {};
+				this._reportConfiguration = {};
+
+				return;
 			}
 
 			try {
