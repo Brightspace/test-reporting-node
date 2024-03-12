@@ -9,6 +9,7 @@
   "exports": {
     "./helpers/github.js": "./src/helpers/github.cjs",
     "./helpers/report.js": "./src/helpers/report.cjs",
+    "./helpers/report-configuration.js": "./src/helpers/report-configuration.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/playwright.js": "./src/reporters/playwright.js",
     "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js",
