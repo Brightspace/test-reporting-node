@@ -65,7 +65,7 @@ export default class Reporter {
 	onTestEnd(test, result) {
 		const { location: { file } } = test;
 
-		if (this._report.ignorePattern(file)) {
+		if (this._report.ignoreLocation(file)) {
 			return;
 		}
 

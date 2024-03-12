@@ -59,7 +59,7 @@ class TestReportingMochaReporter extends Spec {
 	_onTestBegin(test) {
 		const { file } = test;
 
-		if (this._report.ignorePattern(file)) {
+		if (this._report.ignoreLocation(file)) {
 			return;
 		}
 
@@ -76,7 +76,7 @@ class TestReportingMochaReporter extends Spec {
 	_onTestRetry(test) {
 		const { file } = test;
 
-		if (this._report.ignorePattern(file)) {
+		if (this._report.ignoreLocation(file)) {
 			return;
 		}
 
@@ -93,7 +93,7 @@ class TestReportingMochaReporter extends Spec {
 	_onTestEnd(test) {
 		const { file } = test;
 
-		if (this._report.ignorePattern(file)) {
+		if (this._report.ignoreLocation(file)) {
 			return;
 		}
 
