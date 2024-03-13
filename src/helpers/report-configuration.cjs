@@ -9,6 +9,7 @@ const defaultConfigurationPath = './d2l-test-reporting.config.json';
 class ReportConfiguration {
 	constructor(path) {
 		let reportConfiguration;
+		let reportConfigurationPath;
 
 		if (path) {
 			path = resolve(path);
@@ -20,6 +21,8 @@ class ReportConfiguration {
 			} catch {
 				throw new Error(`Unable to read/parse configuration at path ${path}`);
 			}
+
+			reportConfigurationPath = makeLocation(path);
 		} else {
 			path = resolve(defaultConfigurationPath);
 
@@ -38,6 +41,8 @@ class ReportConfiguration {
 			} catch {
 				throw new Error(`Unable to read/parse configuration at path ${path}`);
 			}
+
+			reportConfigurationPath = makeLocation(path);
 		}
 
 		if (!validateReportConfigurationAjv(reportConfiguration)) {
@@ -46,7 +51,12 @@ class ReportConfiguration {
 			throw new Error(formatErrorAjv('report configuration', errors));
 		}
 
+		this._reportConfigurationPath = reportConfigurationPath;
 		this._reportConfiguration = reportConfiguration;
+	}
+
+	getPath() {
+		return this._reportConfigurationPath;
 	}
 
 	getTaxonomy(location) {
