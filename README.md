@@ -1,5 +1,7 @@
 # d2l-test-reporting
 
+[![Release][Release Badge Image]][Release Badge Workflow]
+
 > [!WARNING]
 > This is still a work in progress. Any usage of this package is subject to
 > change without notice.
@@ -209,6 +211,8 @@ npm run test:integration
 ```
 
 <!-- links -->
+[Release Badge Image]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml/badge.svg
+[Release Badge Workflow]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml
 [file an issue]: https://github.com/Brightspace/test-reporting-node/issues/new
 [official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
 [official documentation for Playwright]: https://playwright.dev/docs/test-reporters
