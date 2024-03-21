@@ -1,6 +1,9 @@
 # d2l-test-reporting
 
-[![Release][Release Badge Image]][Release Badge Workflow]
+[![License][License Badge]][License File]
+[![Version][Version Badge]][Version Package]
+[![Release][Release Badge]][Release Workflow]
+[![Node Version][Node Version Badge]][Node Version Rules]
 
 > [!WARNING]
 > This is still a work in progress. Any usage of this package is subject to
@@ -211,8 +214,14 @@ npm run test:integration
 ```
 
 <!-- links -->
-[Release Badge Image]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml/badge.svg
-[Release Badge Workflow]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml
+[License Badge]: https://img.shields.io/github/license/Brightspace/test-reporting-node?label=License
+[License File]: ./LICENSE
+[Version Badge]: https://img.shields.io/npm/v/d2l-test-reporting?label=Version
+[Version Package]: https://www.npmjs.com/d2l-test-reporting
+[Node Version Badge]: https://img.shields.io/node/v/d2l-test-reporting
+[Node Version Rules]: ./package.json#L38
+[Release Badge]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml/badge.svg
+[Release Workflow]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml
 [file an issue]: https://github.com/Brightspace/test-reporting-node/issues/new
 [official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
 [official documentation for Playwright]: https://playwright.dev/docs/test-reporters
