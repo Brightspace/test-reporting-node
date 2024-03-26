@@ -1,12 +1,38 @@
 version: 2
 updates:
   - package-ecosystem: npm
+    open-pull-requests-limit: 99
     directory: /
     schedule:
       interval: weekly
+      time: '08:00'
+      timezone: America/Toronto
+    versioning-strategy: increase
     ignore:
-      # update-dependencies workflow already handles minor/patch updates
       - dependency-name: '*'
-        update-types:
-          - version-update:semver-minor
-          - version-update:semver-patch
+        update-types: ['version-update:semver-patch']
+    groups:
+      playwright:
+        dependency-type: development
+        patterns:
+          - playwright
+          - '@playwright/*'
+      eslint:
+        dependency-type: development
+        patterns:
+          - eslint
+          - eslint-*
+      chai:
+        dependency-type: development
+        patterns:
+          - chai
+          - chai-*
+      web:
+        dependency-type: development
+        patterns:
+          - '@web/*'
+      ajv:
+        dependency-type: production
+        patterns:
+          - ajv
+          - ajv-*
