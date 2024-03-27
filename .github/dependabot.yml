@@ -12,11 +12,11 @@ updates:
       - dependency-name: '*'
         update-types: ['version-update:semver-patch']
     groups:
-      playwright:
-        dependency-type: development
+      testcafe:
+        dependency-type: production
         patterns:
-          - playwright
-          - '@playwright/*'
+          - testcafe
+          - testcafe-*
       eslint:
         dependency-type: development
         patterns:
@@ -27,12 +27,15 @@ updates:
         patterns:
           - chai
           - chai-*
-      web:
-        dependency-type: development
-        patterns:
-          - '@web/*'
       ajv:
         dependency-type: production
         patterns:
           - ajv
           - ajv-*
+      web:
+        patterns:
+          - '@web/*'
+      playwright:
+        patterns:
+          - playwright
+          - '@playwright/*'
