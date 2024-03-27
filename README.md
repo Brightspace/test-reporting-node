@@ -5,10 +5,6 @@
 [![Release][Release Badge]][Release Workflow]
 [![Node Version][Node Version Badge]][Node Version Rules]
 
-> [!WARNING]
-> This is still a work in progress. Any usage of this package is subject to
-> change without notice.
-
 Helper package for generating reports for use with the **D2L test reporting
 framework**.
 
