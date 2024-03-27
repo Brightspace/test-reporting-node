@@ -6,7 +6,8 @@
 [![Node Version][Node Version Badge]][Node Version Rules]
 
 Helper package for generating reports for use with the **D2L test reporting
-framework**.
+framework**. This package is meant to be used in conjunction with this [GitHub
+Action].
 
 ## Installation
 
@@ -226,3 +227,4 @@ npm run test:integration
 [Playwright]: https://playwright.dev
 [`@web/test-runner`]: https://modern-web.dev/docs/test-runner/overview
 [`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
+[GitHub Action]: https://github.com/Brightspace/test-reporting-action
