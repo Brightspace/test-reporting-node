@@ -1,4 +1,4 @@
-import { test as teardown } from '@playwright/test';
+import { teardown } from '../../../src/helpers/runners/playwright.js';
 
 teardown('teardown', async() => {
 
