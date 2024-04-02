@@ -1,9 +1,13 @@
-const delay = () => {
-	return new Promise(resolve => setTimeout(resolve, 100));
+const delay = (ms = 100) => {
+	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 describe('reporter tests 3', () => {
 	let count = 0;
+
+	before(async() => { await delay(1000); });
+
+	beforeEach(async() => { await delay(1000); });
 
 	it('test', () => {});
 
@@ -20,4 +24,8 @@ describe('reporter tests 3', () => {
 	});
 
 	it('failed test', () => { throw new Error('fail'); });
+
+	afterEach(async() => { await delay(1000); });
+
+	after(async() => { await delay(1000); });
 });
