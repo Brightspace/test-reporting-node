@@ -47,7 +47,7 @@
     "chalk": "^5",
     "minimatch": "^9",
     "mocha": "^10",
-    "playwright-core": "^1.42.1"
+    "playwright-core": "^1.43.0"
   },
   "devDependencies": {
     "@playwright/test": "^1",
