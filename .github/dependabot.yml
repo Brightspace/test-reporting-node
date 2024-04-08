@@ -40,4 +40,5 @@ updates:
       playwright:
         patterns:
           - playwright
+          - playwright-*
           - '@playwright/*'
