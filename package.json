@@ -66,6 +66,7 @@
     "sinon": "^17",
     "start-server-and-test": "^2",
     "testcafe": "^3",
-    "testcafe-reporter-custom": "^1"
+    "testcafe-reporter-custom": "^1",
+    "typescript": "^5"
   }
 }
