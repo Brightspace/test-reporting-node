@@ -1,6 +1,6 @@
 import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
-import { getOperatingSystem } from '../../src/helpers/system.cjs';
+import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { readFile } from 'node:fs/promises';
 import { validateReport } from '../../src/helpers/report.cjs';
@@ -682,7 +682,7 @@ describe('report validation', () => {
 
 				const { summary, details } = report;
 
-				expect(summary.operatingSystem).to.eq(getOperatingSystem());
+				expect(summary.operatingSystem).to.eq(getOperatingSystemType());
 				expect(summary.totalDuration).to.be.above(0);
 
 				const summaryStarted = new Date(summary.started);
