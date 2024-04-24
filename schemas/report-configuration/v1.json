@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "/test-reporting/schemas/report-configuration/v1.json",
+  "$ref": "#/$defs/taxonomyObject",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "properties": {
+    "ignorePatterns": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyUnpaddedString"
+      }
+    },
+    "overrides": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "unevaluatedProperties": false,
+        "minProperties": 2,
+        "$ref": "#/$defs/taxonomyObject",
+        "properties": {
+          "pattern": {
+            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          }
+        },
+        "required": [
+          "pattern"
+        ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": null
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "overrides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "$ref": "#/$defs/taxonomyObject/properties/type"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "tool": {
+            "const": null
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "overrides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tool": {
+                  "$ref": "#/$defs/taxonomyObject/properties/tool"
+                }
+              },
+              "required": [
+                "tool"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "experience": {
+            "const": null
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "overrides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "experience": {
+                  "$ref": "#/$defs/taxonomyObject/properties/experience"
+                }
+              },
+              "required": [
+                "experience"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": null
+          },
+          "tool": {
+            "const": null
+          },
+          "experience": {
+            "const": null
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "overrides"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyUnpaddedString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s).+(?<!\\s)$"
+    },
+    "taxonomyObject": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/nonEmptyUnpaddedString"
+        },
+        "tool": {
+          "$ref": "#/$defs/nonEmptyUnpaddedString"
+        },
+        "experience": {
+          "$ref": "#/$defs/nonEmptyUnpaddedString"
+        }
+      }
+    }
+  }
+}

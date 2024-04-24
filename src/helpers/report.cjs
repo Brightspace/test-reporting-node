@@ -1,4 +1,4 @@
-const { formatErrorAjv, validateReportAjv } = require('./schema.cjs');
+const { formatErrorAjv, validateReportV1Ajv } = require('./schema.cjs');
 const { getContext, hasContext } = require('./github.cjs');
 const { getOperatingSystem, makeLocation } = require('./system.cjs');
 const { writeFileSync } = require('node:fs');
@@ -45,8 +45,8 @@ const determineReportPath = (path) => {
 };
 
 const validateReport = (report) => {
-	if (!validateReportAjv(report)) {
-		const { errors } = validateReportAjv;
+	if (!validateReportV1Ajv(report)) {
+		const { errors } = validateReportV1Ajv;
 
 		throw new Error(formatErrorAjv('report', errors));
 	}

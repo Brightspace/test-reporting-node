@@ -1,4 +1,4 @@
-const { formatErrorAjv, validateContextLooseAjv, validateContextStrictAjv } = require('./schema.cjs');
+const { formatErrorAjv, validateReportV1ContextLooseAjv, validateReportV1ContextStrictAjv } = require('./schema.cjs');
 
 const hasContext = () => {
 	const { env: { GITHUB_ACTIONS } } = process;
@@ -38,8 +38,8 @@ const getContext = () => {
 
 const validateContext = (context, strict = false) => {
 	const validateContextAjv = strict ?
-		validateContextStrictAjv :
-		validateContextLooseAjv;
+		validateReportV1ContextStrictAjv :
+		validateReportV1ContextLooseAjv;
 
 	if (!validateContextAjv(context)) {
 		const { errors } = validateContextAjv;
