@@ -19,7 +19,7 @@ class ReportConfiguration {
 
 				reportConfiguration = JSON.parse(contents);
 			} catch {
-				throw new Error(`Unable to read/parse configuration at path ${path}`);
+				throw new Error(`Unable to read/parse report configuration at path ${path}`);
 			}
 
 			reportConfigurationPath = makeRelativeFilePath(path);
@@ -39,7 +39,7 @@ class ReportConfiguration {
 			try {
 				reportConfiguration = JSON.parse(contents);
 			} catch {
-				throw new Error(`Unable to read/parse configuration at path ${path}`);
+				throw new Error(`Unable to read/parse report configuration at path ${path}`);
 			}
 
 			reportConfigurationPath = makeRelativeFilePath(path);
@@ -115,6 +115,10 @@ class ReportConfiguration {
 		}
 
 		return false;
+	}
+
+	toJSON() {
+		return this._reportConfiguration;
 	}
 }
 

@@ -2,19 +2,22 @@ import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
 import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
-import { readFile } from 'node:fs/promises';
-import { validateReport } from '../../src/helpers/report.cjs';
+import { Report } from '../../src/helpers/report.cjs';
 
 use(chaiSubset);
 
 const dummyContext = {
-	githubOrganization: 'TestOrganization',
-	githubRepository: 'test-repository',
-	githubWorkflow: 'test-workflow.yml',
-	githubRunId: 12345,
-	githubRunAttempt: 1,
-	gitBranch: 'test/branch',
-	gitSha: '0000000000000000000000000000000000000000'
+	github: {
+		organization: 'TestOrganization',
+		repository: 'test-repository',
+		workflow: 'test-workflow.yml',
+		runId: 12345,
+		runAttempt: 1
+	},
+	git: {
+		branch: 'test/branch',
+		sha: '0000000000000000000000000000000000000000'
+	}
 };
 const partialReportMocha = {
 	reportVersion: 1,
@@ -654,29 +657,29 @@ const reportTests = [{
 describe('report validation', () => {
 	for (const reportTest of reportTests) {
 		describe(reportTest.name, () => {
-			let report;
-
-			before(async() => {
-				const reportFileContents = await readFile(reportTest.path, 'utf8');
-				const reportJson = JSON.parse(reportFileContents);
-
+			it('schema', () => {
 				if (!hasContext()) {
-					reportJson.summary = {
-						...reportJson.summary,
-						...dummyContext
-					};
+					new Report(reportTest.path, { context: dummyContext });
+				} else {
+					new Report(reportTest.path);
 				}
-
-				report = reportJson;
 			});
 
-			it('schema', () => validateReport(report));
-
 			it('contents', () => {
+				let report;
+
+				if (!hasContext()) {
+					report = new Report(reportTest.path, { context: dummyContext });
+				} else {
+					report = new Report(reportTest.path);
+				}
+
 				const now = new Date();
 				const nowMinus30Minutes = new Date(now);
 
 				nowMinus30Minutes.setMinutes(now.getMinutes() - 30);
+
+				report = report.toJSON();
 
 				expect(report).to.containSubset(reportTest.expected);
 
