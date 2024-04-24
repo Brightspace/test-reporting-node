@@ -1,6 +1,6 @@
 const { readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
-const { formatErrorAjv, validateReportConfigurationAjv } = require('./schema.cjs');
+const { formatErrorAjv, validateReportConfigurationV1Ajv } = require('./schema.cjs');
 const { minimatch } = require('minimatch');
 const { makeLocation } = require('./system.cjs');
 
@@ -45,8 +45,8 @@ class ReportConfiguration {
 			reportConfigurationPath = makeLocation(path);
 		}
 
-		if (!validateReportConfigurationAjv(reportConfiguration)) {
-			const { errors } = validateReportConfigurationAjv;
+		if (!validateReportConfigurationV1Ajv(reportConfiguration)) {
+			const { errors } = validateReportConfigurationV1Ajv;
 
 			throw new Error(formatErrorAjv('report configuration', errors));
 		}
