@@ -3,7 +3,7 @@ import { colors } from 'playwright-core/lib/utilsBundle';
 
 const require = createRequire(import.meta.url);
 
-const { Report } = require('../helpers/report.cjs');
+const { ReportBuilder } = require('../helpers/report-builder.cjs');
 
 const { cyan, red, yellow } = colors;
 
@@ -55,7 +55,7 @@ export default class Reporter {
 		}
 
 		this._logger = new PlaywrightLogger();
-		this._report = new Report('playwright', this._logger, this._options);
+		this._report = new ReportBuilder('playwright', this._logger, this._options);
 
 		this._report
 			.getSummary()

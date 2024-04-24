@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { Report } from '../helpers/report.cjs';
+import { ReportBuilder } from '../helpers/report-builder.cjs';
 
 const { yellow, red, cyan } = chalk;
 
@@ -49,7 +49,7 @@ export default function() {
 				reportWriter: (reportData) => this.write(reportData)
 			};
 
-			report = new Report('testcafe', logger, options);
+			report = new ReportBuilder('testcafe', logger, options);
 
 			report
 				.getSummary()

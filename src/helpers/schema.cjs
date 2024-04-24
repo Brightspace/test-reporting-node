@@ -6,8 +6,8 @@ const ajv = new Ajv({
 	strict: true,
 	allErrors: false,
 	schemas: [
-		require('../../schemas/report/v1.json'),
-		require('../../schemas/report-configuration/v1.json')
+		require('../../schemas/report-configuration/v1.json'),
+		require('../../schemas/report/v1.json')
 	]
 });
 
@@ -31,8 +31,8 @@ ajv.addSchema({
 
 const validateReportV1ContextLooseAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');
 const validateReportV1ContextStrictAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/strict.json');
-const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
 const validateReportConfigurationV1Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v1.json');
+const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
 
 const formatErrorAjv = (dataVar, errors) => {
 	const { instancePath, message: ajvMessage, parentSchema: { type }, data } = errors[0];
@@ -54,8 +54,8 @@ const formatErrorAjv = (dataVar, errors) => {
 
 module.exports = {
 	formatErrorAjv,
+	validateReportConfigurationV1Ajv,
 	validateReportV1ContextLooseAjv,
 	validateReportV1ContextStrictAjv,
-	validateReportV1Ajv,
-	validateReportConfigurationV1Ajv
+	validateReportV1Ajv
 };
