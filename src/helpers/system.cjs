@@ -15,11 +15,11 @@ const getOperatingSystem = () => {
 	}
 };
 
-const makeLocation = (filePath) => {
+const makeRelativeFilePath = (filePath) => {
 	const path = relative(process.cwd(), filePath);
 	const pathParts = path.split(platformSeparator);
 
 	return join(...pathParts);
 };
 
-module.exports = { getOperatingSystem, makeLocation };
+module.exports = { getOperatingSystem, makeRelativeFilePath };

@@ -1,5 +1,5 @@
 const { getContext, hasContext } = require('./github.cjs');
-const { getOperatingSystem, makeLocation } = require('./system.cjs');
+const { getOperatingSystem, makeRelativeFilePath } = require('./system.cjs');
 const { writeFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 const { randomUUID } = require('node:crypto');
@@ -163,7 +163,7 @@ class ReportDetailBuilder {
 	}
 
 	setLocation(location, options) {
-		location = makeLocation(location);
+		location = makeRelativeFilePath(location);
 
 		this._setProperty('location', location, options);
 

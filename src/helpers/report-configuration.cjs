@@ -2,7 +2,7 @@ const { readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 const { formatErrorAjv, validateReportConfigurationV1Ajv } = require('./schema.cjs');
 const { minimatch } = require('minimatch');
-const { makeLocation } = require('./system.cjs');
+const { makeRelativeFilePath } = require('./system.cjs');
 
 const defaultConfigurationPath = './d2l-test-reporting.config.json';
 
@@ -22,7 +22,7 @@ class ReportConfiguration {
 				throw new Error(`Unable to read/parse configuration at path ${path}`);
 			}
 
-			reportConfigurationPath = makeLocation(path);
+			reportConfigurationPath = makeRelativeFilePath(path);
 		} else {
 			path = resolve(defaultConfigurationPath);
 
@@ -42,7 +42,7 @@ class ReportConfiguration {
 				throw new Error(`Unable to read/parse configuration at path ${path}`);
 			}
 
-			reportConfigurationPath = makeLocation(path);
+			reportConfigurationPath = makeRelativeFilePath(path);
 		}
 
 		if (!validateReportConfigurationV1Ajv(reportConfiguration)) {
@@ -60,7 +60,7 @@ class ReportConfiguration {
 	}
 
 	getTaxonomy(location) {
-		location = makeLocation(location);
+		location = makeRelativeFilePath(location);
 
 		const { overrides } = this._reportConfiguration;
 		const metadata = {};
@@ -104,7 +104,7 @@ class ReportConfiguration {
 	}
 
 	ignoreLocation(location) {
-		location = makeLocation(location);
+		location = makeRelativeFilePath(location);
 
 		const { ignorePatterns } = this._reportConfiguration;
 
