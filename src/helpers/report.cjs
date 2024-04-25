@@ -138,7 +138,7 @@ class Report {
 		this._reportVersionOriginal = reportVersionOriginal;
 
 		if (reportVersionOriginal < latestReportVersion) {
-			upgradeReport(report);
+			report = upgradeReport(report);
 
 			const reportVersionUpgraded = getReportVersion(report);
 
@@ -165,6 +165,24 @@ class Report {
 
 	getVersion() {
 		return this._report.reportVersion;
+	}
+
+	getContext() {
+		const { summary } = this._report;
+
+		return {
+			github: {
+				organization: summary.githubOrganization,
+				repository: summary.githubRepository,
+				workflow: summary.githubWorkflow,
+				runId: summary.githubRunId,
+				runAttempt: summary.githubRunAttempt
+			},
+			git: {
+				branch: summary.gitBranch,
+				sha: summary.gitSha
+			}
+		};
 	}
 
 	toJSON() {
