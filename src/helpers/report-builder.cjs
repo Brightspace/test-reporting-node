@@ -1,5 +1,5 @@
 const { getContext, hasContext } = require('./github.cjs');
-const { getOperatingSystem, makeLocation } = require('./system.cjs');
+const { getOperatingSystemType, makeRelativeFilePath } = require('./system.cjs');
 const { writeFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 const { randomUUID } = require('node:crypto');
@@ -47,7 +47,7 @@ class ReportSummaryBuilder {
 	constructor(framework, logger) {
 		this._logger = logger;
 		this._reportSummary = {
-			operatingSystem: getOperatingSystem(),
+			operatingSystem: getOperatingSystemType(),
 			framework
 		};
 	}
@@ -163,7 +163,7 @@ class ReportDetailBuilder {
 	}
 
 	setLocation(location, options) {
-		location = makeLocation(location);
+		location = makeRelativeFilePath(location);
 
 		this._setProperty('location', location, options);
 

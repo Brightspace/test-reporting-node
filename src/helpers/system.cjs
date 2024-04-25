@@ -2,7 +2,7 @@ const { relative, sep: platformSeparator } = require('node:path');
 const { join } = require('node:path/posix');
 const { type } = require('node:os');
 
-const getOperatingSystem = () => {
+const getOperatingSystemType = () => {
 	switch (type()) {
 		case 'Linux':
 			return 'linux';
@@ -15,11 +15,11 @@ const getOperatingSystem = () => {
 	}
 };
 
-const makeLocation = (filePath) => {
+const makeRelativeFilePath = (filePath) => {
 	const path = relative(process.cwd(), filePath);
 	const pathParts = path.split(platformSeparator);
 
 	return join(...pathParts);
 };
 
-module.exports = { getOperatingSystem, makeLocation };
+module.exports = { getOperatingSystemType, makeRelativeFilePath };
