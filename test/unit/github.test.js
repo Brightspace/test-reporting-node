@@ -20,16 +20,16 @@ describe('github', () => {
 	afterEach(() => sandbox.restore());
 
 	describe('has context', () => {
-		it('true', () => {
-			sandbox.stub(process, 'env').value({ 'GITHUB_ACTIONS': '1' });
-
-			expect(hasContext()).to.be.true;
-		});
-
-		it('false', () => {
+		it('not in github actions', () => {
 			sandbox.stub(process, 'env').value({});
 
 			expect(hasContext()).to.be.false;
+		});
+
+		it('in github actions', () => {
+			sandbox.stub(process, 'env').value({ 'GITHUB_ACTIONS': '1' });
+
+			expect(hasContext()).to.be.true;
 		});
 	});
 
@@ -44,34 +44,34 @@ describe('github', () => {
 			'GITHUB_SHA': '0000000000000000000000000000000000000000'
 		};
 
-		it('pull request', () => {
-			sandbox.stub(process, 'env').value({
-				...commonEnvironment,
-				'GITHUB_HEAD_REF': 'test/branch'
+		describe('in github actions', () => {
+			it('on pull request', () => {
+				sandbox.stub(process, 'env').value({
+					...commonEnvironment,
+					'GITHUB_HEAD_REF': 'test/branch'
+				});
+
+				const context = getContext();
+
+				expect(expectedResult).to.deep.eq(context);
 			});
 
-			const context = getContext();
+			it('on branch', () => {
+				sandbox.stub(process, 'env').value({
+					...commonEnvironment,
+					'GITHUB_REF': 'test/branch'
+				});
 
-			expect(expectedResult).to.deep.eq(context);
+				const context = getContext();
+
+				expect(expectedResult).to.deep.eq(context);
+			});
 		});
 
-		it('branch', () => {
-			sandbox.stub(process, 'env').value({
-				...commonEnvironment,
-				'GITHUB_REF': 'test/branch'
-			});
+		it('not in github actions', () => {
+			sandbox.stub(process, 'env').value({});
 
-			const context = getContext();
-
-			expect(expectedResult).to.deep.eq(context);
-		});
-
-		describe('fails', () => {
-			it('not in github actions', () => {
-				sandbox.stub(process, 'env').value({});
-
-				expect(getContext).to.throw('GitHub context unavailable');
-			});
+			expect(getContext).to.throw('GitHub context unavailable');
 		});
 	});
 
