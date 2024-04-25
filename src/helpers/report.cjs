@@ -128,7 +128,7 @@ class Report {
 		}
 
 		if (lmsInfo) {
-			report = injectReportLmsInfo(report, context, overrideContext);
+			report = injectReportLmsInfo(report, lmsInfo);
 		}
 
 		const reportVersionOriginal = getReportVersion(report);
