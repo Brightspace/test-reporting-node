@@ -33,7 +33,7 @@ export function reporter(options = {}) {
 		const { id: sessionId, browser: { name: browserName }, testFile } = session;
 		const started = sessionStarts.get(sessionId) ?? (new Date()).toISOString();
 
-		if (report.ignoreLocation(testFile)) {
+		if (report.ignoreFilePath(testFile)) {
 			return;
 		}
 

@@ -67,7 +67,7 @@ export default function() {
 				return;
 			}
 
-			if (report.ignoreLocation(this._fixturePath)) {
+			if (report.ignoreFilePath(this._fixturePath)) {
 				return;
 			}
 
@@ -81,7 +81,7 @@ export default function() {
 				return;
 			}
 
-			if (report.ignoreLocation(this._fixturePath)) {
+			if (report.ignoreFilePath(this._fixturePath)) {
 				return;
 			}
 
