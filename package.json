@@ -48,7 +48,7 @@
     "chalk": "^5",
     "minimatch": "^9",
     "mocha": "^10",
-    "playwright-core": "^1.43.0"
+    "playwright-core": "^1.43.1"
   },
   "devDependencies": {
     "@playwright/test": "^1",
@@ -63,7 +63,7 @@
     "eslint-config-brightspace": "^1",
     "http-server": "^14",
     "npm-run-all": "^4",
-    "playwright": "^1.43.0",
+    "playwright": "^1.43.1",
     "sinon": "^17",
     "start-server-and-test": "^2",
     "testcafe": "^3",
