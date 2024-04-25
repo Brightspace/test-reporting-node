@@ -59,8 +59,8 @@ class ReportConfiguration {
 		return this._reportConfigurationPath;
 	}
 
-	getTaxonomy(location) {
-		location = makeRelativeFilePath(location);
+	getTaxonomy(filePath) {
+		filePath = makeRelativeFilePath(filePath);
 
 		const { overrides } = this._reportConfiguration;
 		const metadata = {};
@@ -73,7 +73,7 @@ class ReportConfiguration {
 				experience: overriddenExperience
 			} = override;
 
-			if (minimatch(location, pattern)) {
+			if (minimatch(filePath, pattern)) {
 				metadata.type = overriddenType?.toLowerCase();
 				metadata.tool = overriddenTool;
 				metadata.experience = overriddenExperience;
@@ -95,21 +95,21 @@ class ReportConfiguration {
 		return metadata;
 	}
 
-	hasTaxonomy(location) {
-		const taxonomy = this.getTaxonomy(location);
+	hasTaxonomy(filePath) {
+		const taxonomy = this.getTaxonomy(filePath);
 
 		return taxonomy.type != null &&
 			taxonomy.tool != null &&
 			taxonomy.experience != null;
 	}
 
-	ignoreLocation(location) {
-		location = makeRelativeFilePath(location);
+	ignoreFilePath(filePath) {
+		filePath = makeRelativeFilePath(filePath);
 
 		const { ignorePatterns } = this._reportConfiguration;
 
 		for (const ignorePattern of ignorePatterns ?? []) {
-			if (minimatch(location, ignorePattern)) {
+			if (minimatch(filePath, ignorePattern)) {
 				return true;
 			}
 		}

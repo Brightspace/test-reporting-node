@@ -162,12 +162,12 @@ class ReportDetailBuilder {
 		return this;
 	}
 
-	setLocation(location, options) {
-		location = makeRelativeFilePath(location);
+	setLocation(filePath, options) {
+		filePath = makeRelativeFilePath(filePath);
 
-		this._setProperty('location', location, options);
+		this._setProperty('location', filePath, options);
 
-		const { type, tool, experience } = this._reportConfiguration.getTaxonomy(location);
+		const { type, tool, experience } = this._reportConfiguration.getTaxonomy(filePath);
 
 		this._setProperty('type', type, options);
 		this._setProperty('tool', tool, options);
@@ -255,8 +255,8 @@ class ReportBuilder {
 		};
 	}
 
-	ignoreLocation(location) {
-		return this._reportConfiguration.ignoreLocation(location);
+	ignoreFilePath(filePath) {
+		return this._reportConfiguration.ignoreFilePath(filePath);
 	}
 
 	getSummary() {
