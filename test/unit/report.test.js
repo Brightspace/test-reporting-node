@@ -6,6 +6,19 @@ import { Report } from '../../src/helpers/report.cjs';
 import { resolve } from 'node:path';
 
 const reportPath = resolve('./test-report.json');
+const reportContext = {
+	github: {
+		organization: 'TestOrganization',
+		repository: 'test-repository',
+		workflow: 'test-workflow.yml',
+		runId: 123465,
+		runAttempt: 1
+	},
+	git: {
+		branch: 'test/branch',
+		sha: '0000000000000000000000000000000000000000'
+	}
+};
 const reportOverrideContext = {
 	github: {
 		organization: 'TestOrganizationOther',
@@ -16,7 +29,7 @@ const reportOverrideContext = {
 	},
 	git: {
 		branch: 'test/branch/other',
-		sha: '0000000000000000000000000000000000000000'
+		sha: '1111111111111111111111111111111111111111'
 	}
 };
 const reportStarted = (new Date()).toISOString();
@@ -24,13 +37,7 @@ const reportFull = {
 	reportId: '00000000-0000-0000-0000-000000000000',
 	reportVersion: 1,
 	summary: {
-		githubOrganization: 'TestOrganization',
-		githubRepository: 'test-repository',
-		githubWorkflow: 'test-workflow.yml',
-		githubRunId: 12345,
-		githubRunAttempt: 1,
-		gitBranch: 'test/branch',
-		gitSha: '0000000000000000000000000000000000000000',
+		...flatten(reportContext),
 		operatingSystem: 'linux',
 		framework: 'mocha',
 		started: reportStarted,
@@ -91,10 +98,10 @@ const reportNoContext = {
 const reportPartialContext = {
 	...reportFull,
 	summary: {
-		githubOrganization: 'TestOrganization',
-		githubWorkflow: 'test-workflow.yml',
-		gitBranch: 'test/branch',
-		gitSha: '0000000000000000000000000000000000000000',
+		githubOrganization: reportContext.github.organization,
+		githubWorkflow: reportContext.github.workflow,
+		gitBranch: reportContext.git.branch,
+		gitSha: reportContext.git.sha,
 		operatingSystem: 'linux',
 		framework: 'mocha',
 		started: reportStarted,
@@ -124,6 +131,7 @@ describe('report', () => {
 
 			expect(wrapper).to.not.throw();
 			expect(report.toJSON()).to.deep.equal(reportFull);
+			expect(report.getContext()).to.deep.equal(reportContext);
 		});
 
 		describe('full report', () => {
@@ -140,6 +148,7 @@ describe('report', () => {
 
 				expect(wrapper).to.not.throw();
 				expect(report.toJSON()).to.deep.equal(reportFullOverridden);
+				expect(report.getContext()).to.deep.equal(reportOverrideContext);
 			});
 
 			it('inject context if needed', () => {
@@ -152,6 +161,7 @@ describe('report', () => {
 
 				expect(wrapper).to.not.throw();
 				expect(report.toJSON()).to.deep.equal(reportFull);
+				expect(report.getContext()).to.deep.equal(reportContext);
 			});
 		});
 
@@ -169,6 +179,7 @@ describe('report', () => {
 
 				expect(wrapper).to.not.throw();
 				expect(report.toJSON()).to.deep.equal(reportFullOverridden);
+				expect(report.getContext()).to.deep.equal(reportOverrideContext);
 			});
 
 			it('inject context if needed', () => {
@@ -181,6 +192,7 @@ describe('report', () => {
 
 				expect(wrapper).to.not.throw();
 				expect(report.toJSON()).to.deep.equal(reportFullOverridden);
+				expect(report.getContext()).to.deep.equal(reportOverrideContext);
 			});
 		});
 
@@ -198,6 +210,7 @@ describe('report', () => {
 
 				expect(wrapper).to.not.throw();
 				expect(report.toJSON()).to.deep.equal(reportFullOverridden);
+				expect(report.getContext()).to.deep.equal(reportOverrideContext);
 			});
 
 			it('inject context if needed', () => {
@@ -210,6 +223,7 @@ describe('report', () => {
 
 				expect(wrapper).to.not.throw();
 				expect(report.toJSON()).to.deep.equal(reportFullOverridden);
+				expect(report.getContext()).to.deep.equal(reportOverrideContext);
 			});
 		});
 	});
