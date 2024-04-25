@@ -1,5 +1,5 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
-const { Report } = require('../helpers/report.cjs');
+const { ReportBuilder } = require('../helpers/report-builder.cjs');
 
 const { consoleLog, color } = Base;
 const {
@@ -34,7 +34,7 @@ class TestReportingMochaReporter extends Spec {
 		const { reporterOptions = {} } = options;
 
 		this._logger = new MochaLogger();
-		this._report = new Report('mocha', this._logger, reporterOptions);
+		this._report = new ReportBuilder('mocha', this._logger, reporterOptions);
 
 		runner
 			.once(EVENT_RUN_BEGIN, () => this._onRunBegin(stats))

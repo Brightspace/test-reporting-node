@@ -1,4 +1,4 @@
-import { Report } from '../helpers/report.cjs';
+import { ReportBuilder } from '../helpers/report-builder.cjs';
 import { SESSION_STATUS } from '@web/test-runner-core';
 import chalk from 'chalk';
 
@@ -24,7 +24,7 @@ export function reporter(options = {}) {
 	let testConfig;
 	const sessionStarts = new Map();
 	const logger = new WebTestRunnerLogger();
-	const report = new Report('@web/test-runner', logger, options);
+	const report = new ReportBuilder('@web/test-runner', logger, options);
 	const summary = report
 		.getSummary()
 		.addContext();
