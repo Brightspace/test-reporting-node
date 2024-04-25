@@ -1,9 +1,10 @@
 const { getContext, hasContext } = require('./github.cjs');
 const { getOperatingSystemType, makeRelativeFilePath } = require('./system.cjs');
-const { writeFileSync } = require('node:fs');
-const { resolve } = require('node:path');
+const { flatten } = require('./object.cjs');
 const { randomUUID } = require('node:crypto');
+const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
+const { writeFileSync } = require('node:fs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -66,11 +67,11 @@ class ReportSummaryBuilder {
 
 	addContext() {
 		if (hasContext()) {
-			const githubContext = getContext();
+			const context = getContext();
 
 			this._reportSummary = {
 				...this._reportSummary,
-				...githubContext
+				...flatten(context)
 			};
 		} else {
 			this._logger.warning('D2L test report will not contain GitHub context details');

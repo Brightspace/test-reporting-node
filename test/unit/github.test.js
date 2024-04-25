@@ -1,15 +1,19 @@
-import { getContext, hasContext, validateContext } from '../../src/helpers/github.cjs';
+import { getContext, hasContext } from '../../src/helpers/github.cjs';
 import { createSandbox } from 'sinon';
 import { expect } from 'chai';
 
 const validContext = {
-	githubOrganization: 'TestOrganization',
-	githubRepository: 'test-repository',
-	githubWorkflow: 'test-workflow.yml',
-	githubRunId: 12345,
-	githubRunAttempt: 1,
-	gitBranch: 'test/branch',
-	gitSha: '0000000000000000000000000000000000000000'
+	github: {
+		organization: 'TestOrganization',
+		repository: 'test-repository',
+		workflow: 'test-workflow.yml',
+		runId: 12345,
+		runAttempt: 1
+	},
+	git: {
+		branch: 'test/branch',
+		sha: '0000000000000000000000000000000000000000'
+	}
 };
 
 describe('github', () => {
@@ -72,33 +76,6 @@ describe('github', () => {
 			sandbox.stub(process, 'env').value({});
 
 			expect(getContext).to.throw('GitHub context unavailable');
-		});
-	});
-
-	describe('validate context', () => {
-		const validContextExtraProperties = {
-			...validContext,
-			test: 'test'
-		};
-
-		it('strict', () => {
-			const wrapper = () => validateContext(validContext, true);
-
-			expect(wrapper).to.not.throw();
-		});
-
-		it('loose', () => {
-			const wrapper = () => validateContext(validContextExtraProperties);
-
-			expect(wrapper).to.not.throw();
-		});
-
-		describe('fails', () => {
-			it('strict with extra properties', () => {
-				const wrapper = () => validateContext(validContextExtraProperties, true);
-
-				expect(wrapper).to.throw('github context does not conform to schema');
-			});
 		});
 	});
 });

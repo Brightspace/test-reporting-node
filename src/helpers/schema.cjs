@@ -15,24 +15,16 @@ addFormats(ajv, ['date-time', 'uri', 'uuid']);
 
 ajv.addSchema({
 	$schema: 'https://json-schema.org/draft/2019-09/schema',
-	$id: '/test-reporting/schemas/report/v1/context/strict.json',
-	$ref: '/test-reporting/schemas/report/v1/context.json',
-	type: 'object',
-	unevaluatedProperties: false
-});
-
-ajv.addSchema({
-	$schema: 'https://json-schema.org/draft/2019-09/schema',
 	$id: '/test-reporting/schemas/report/v1/context/loose.json',
 	$ref: '/test-reporting/schemas/report/v1/context.json',
 	type: 'object',
 	unevaluatedProperties: true
 });
 
-const validateReportV1ContextLooseAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');
-const validateReportV1ContextStrictAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/strict.json');
+const validateReportV1ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');
 const validateReportConfigurationV1Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v1.json');
 const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
+const latestReportVersion = 1;
 
 const formatErrorAjv = (dataVar, errors) => {
 	const { instancePath, message: ajvMessage, parentSchema: { type }, data } = errors[0];
@@ -55,7 +47,7 @@ const formatErrorAjv = (dataVar, errors) => {
 module.exports = {
 	formatErrorAjv,
 	validateReportConfigurationV1Ajv,
-	validateReportV1ContextLooseAjv,
-	validateReportV1ContextStrictAjv,
-	validateReportV1Ajv
+	validateReportV1Ajv,
+	validateReportV1ContextAjv,
+	latestReportVersion
 };

@@ -1,5 +1,3 @@
-const { formatErrorAjv, validateReportV1ContextLooseAjv, validateReportV1ContextStrictAjv } = require('./schema.cjs');
-
 const hasContext = () => {
 	const { env: { GITHUB_ACTIONS } } = process;
 
@@ -26,26 +24,18 @@ const getContext = () => {
 	const branchRef = GITHUB_HEAD_REF || GITHUB_REF;
 
 	return {
-		githubOrganization: owner,
-		githubRepository: repo,
-		githubWorkflow: workflowPath.replace(workflowRegex, ''),
-		githubRunId: parseInt(GITHUB_RUN_ID, 10),
-		githubRunAttempt: parseInt(GITHUB_RUN_ATTEMPT, 10),
-		gitBranch: branchRef.replace(/^refs\/heads\//i, ''),
-		gitSha: GITHUB_SHA
+		github: {
+			organization: owner,
+			repository: repo,
+			workflow: workflowPath.replace(workflowRegex, ''),
+			runId: parseInt(GITHUB_RUN_ID, 10),
+			runAttempt: parseInt(GITHUB_RUN_ATTEMPT, 10)
+		},
+		git: {
+			branch: branchRef.replace(/^refs\/heads\//i, ''),
+			sha: GITHUB_SHA
+		}
 	};
 };
 
-const validateContext = (context, strict = false) => {
-	const validateContextAjv = strict ?
-		validateReportV1ContextStrictAjv :
-		validateReportV1ContextLooseAjv;
-
-	if (!validateContextAjv(context)) {
-		const { errors } = validateContextAjv;
-
-		throw new Error(formatErrorAjv('github context', errors));
-	}
-};
-
-module.exports = { getContext, hasContext, validateContext };
+module.exports = { getContext, hasContext };
