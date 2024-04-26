@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "/test-reporting/schemas/report/v2.json",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "version": {
+      "type": "integer",
+      "const": 2
+    },
+    "summary": {
+      "$ref": "#/$defs/context",
+      "type": "object",
+      "unevaluatedProperties": false,
+      "properties": {
+        "framework": {
+          "$ref": "#/$defs/nonEmptyUnpaddedString"
+        },
+        "lms": {
+          "type": "object",
+          "properties": {
+            "buildNumber": {
+              "type": "string",
+              "pattern": "([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}"
+            },
+            "instanceUrl": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        },
+        "operatingSystem": {
+          "type": "string",
+          "enum": [
+            "windows",
+            "linux",
+            "mac"
+          ]
+        },
+        "started": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "duration": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "total"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "failed"
+          ]
+        },
+        "count": {
+          "type": "object",
+          "properties": {
+            "passed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skipped": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "flaky": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "passed",
+            "failed",
+            "skipped",
+            "flaky"
+          ]
+        }
+      },
+      "required": [
+        "operatingSystem",
+        "framework",
+        "started",
+        "duration",
+        "status",
+        "count"
+      ]
+    },
+    "details": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "unevaluatedProperties": false,
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "$ref": "#/$defs/nonEmptyUnpaddedString"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "column": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "file"
+            ]
+          },
+          "tool": {
+            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          },
+          "experience": {
+            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          },
+          "type": {
+            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeout": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "duration": {
+            "type": "object",
+            "properties": {
+              "final": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "final",
+              "total"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "skipped"
+            ]
+          },
+          "browser": {
+            "type": "string",
+            "enum": [
+              "chromium",
+              "chrome",
+              "firefox",
+              "webkit",
+              "safari",
+              "edge"
+            ]
+          },
+          "retries": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "error": {
+            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          }
+        },
+        "required": [
+          "name",
+          "location",
+          "started",
+          "duration",
+          "status",
+          "retries"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "summary",
+    "details"
+  ],
+  "$defs": {
+    "nonEmptyUnpaddedString": {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "$id": "/test-reporting/schemas/report/v2/non-empty-unpadded-string.json",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s).+(?<!\\s)$"
+    },
+    "context": {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "$id": "/test-reporting/schemas/report/v2/context.json",
+      "type": "object",
+      "properties": {
+        "github": {
+          "type": "object",
+          "properties": {
+            "organization": {
+              "$ref": "#/$defs/gitHubAllowedCharactersString"
+            },
+            "repository": {
+              "$ref": "#/$defs/gitHubAllowedCharactersString"
+            },
+            "workflow": {
+              "$ref": "/test-reporting/schemas/report/v2/non-empty-unpadded-string.json"
+            },
+            "runId": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "runAttempt": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "organization",
+            "repository",
+            "workflow",
+            "runId",
+            "runAttempt"
+          ]
+        },
+        "git": {
+          "type": "object",
+          "properties": {
+            "branch": {
+              "$ref": "/test-reporting/schemas/report/v2/non-empty-unpadded-string.json"
+            },
+            "sha": {
+              "type": "string",
+              "minLength": 40,
+              "maxLength": 40,
+              "pattern": "[A-Fa-f0-9]+"
+            }
+          },
+          "required": [
+            "branch",
+            "sha"
+          ]
+        }
+      },
+      "required": [
+        "github",
+        "git"
+      ],
+      "$defs": {
+        "gitHubAllowedCharactersString": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "[A-Za-z0-9_.-]+"
+        }
+      }
+    }
+  }
+}
