@@ -28,9 +28,25 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - name: Semantic Release
+      - name: Release
+        id: release
         uses: BrightspaceUI/actions/semantic-release@main
         with:
           GITHUB_TOKEN: ${{secrets.D2L_RELEASE_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM: true
+      - name: Trigger downstream updates
+        uses: Brightspace/third-party-actions@actions/github-script
+        if: github.ref == 'refs/heads/main' && steps.release.outputs.VERSION != ''
+        with:
+          github-token: ${{secrets.REPOSITORY_DISPATCH_TOKEN}}
+          script: |
+            const result = await github.rest.repos.createDispatchEvent({
+              owner: 'Brightspace',
+              repo: 'test-reporting-action',
+              event_type: 'test-reporting-node-release'
+            }
+            console.log(result);
+            if (results.status === 'rejected') {
+              throw new Error('Dispatch failed. See details above.');
+            }
