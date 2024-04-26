@@ -4,14 +4,6 @@ const fs = require('node:fs');
 const { makeRelativeFilePath } = require('./system.cjs');
 const { resolve } = require('node:path');
 
-const validateReport = (report, dataVar = 'report') => {
-	if (!validateReportV1Ajv(report)) {
-		const { errors } = validateReportV1Ajv;
-
-		throw new Error(formatErrorAjv(dataVar, errors));
-	}
-};
-
 const getReportVersion = (report) => {
 	const { reportVersion } = report;
 
@@ -24,6 +16,26 @@ const getReportVersion = (report) => {
 	}
 };
 
+const validateReport = (report, dataVar = 'report') => {
+	const reportVersion = getReportVersion(report);
+	let errors;
+
+	switch (reportVersion) {
+		case 1:
+			if (!validateReportV1Ajv(report)) {
+				errors = validateReportV1Ajv.errors;
+			}
+
+			break;
+		default:
+			throw new Error(`Unknown report version '${reportVersion}'`);
+	}
+
+	if (errors && errors.length !== 0) {
+		throw new Error(formatErrorAjv(dataVar, errors));
+	}
+};
+
 const injectReportV1Context = (report, context, override) => {
 	const { summary } = report;
 
@@ -31,12 +43,7 @@ const injectReportV1Context = (report, context, override) => {
 		throw new Error('Report is missing needed property \'summary\'');
 	}
 
-	if (override) {
-		report.summary = {
-			...summary,
-			...flatten(context)
-		};
-	} else if (!validateReportV1ContextAjv(summary)) {
+	if (override || !validateReportV1ContextAjv(summary)) {
 		report.summary = {
 			...summary,
 			...flatten(context)

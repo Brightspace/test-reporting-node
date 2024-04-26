@@ -6,7 +6,7 @@ import { Report } from '../../src/helpers/report.cjs';
 
 use(chaiSubset);
 
-const dummyContext = {
+const testContext = {
 	github: {
 		organization: 'TestOrganization',
 		repository: 'test-repository',
@@ -19,7 +19,7 @@ const dummyContext = {
 		sha: '0000000000000000000000000000000000000000'
 	}
 };
-const partialReportMocha = {
+const testReportV1PartialMocha = {
 	reportVersion: 1,
 	summary: {
 		status: 'failed',
@@ -95,7 +95,7 @@ const partialReportMocha = {
 		retries: 3
 	}]
 };
-const partialReportPlaywright = {
+const testReportV1PartialPlaywright = {
 	reportVersion: 1,
 	summary: {
 		status: 'failed',
@@ -287,7 +287,7 @@ const partialReportPlaywright = {
 		retries: 2
 	}]
 };
-const partialReportWebTestRunner = {
+const testReportV1PartialWebTestRunner = {
 	reportVersion: 1,
 	summary: {
 		status: 'failed',
@@ -407,7 +407,7 @@ const partialReportWebTestRunner = {
 		retries: 0
 	}]
 };
-const partialReportTestCafe = {
+const testReportV1PartialTestCafe = {
 	reportVersion: 1,
 	summary: {
 		status: 'failed',
@@ -639,19 +639,19 @@ const partialReportTestCafe = {
 const reportTests = [{
 	name: 'mocha',
 	path: './d2l-test-report-mocha.json',
-	expected: partialReportMocha
+	expected: testReportV1PartialMocha
 }, {
 	name: 'playwright',
 	path: './d2l-test-report-playwright.json',
-	expected: partialReportPlaywright
+	expected: testReportV1PartialPlaywright
 }, {
 	name: '@web/test-runner',
 	path: './d2l-test-report-web-test-runner.json',
-	expected: partialReportWebTestRunner
+	expected: testReportV1PartialWebTestRunner
 }, {
 	name: 'testcafe',
 	path: './d2l-test-report-testcafe.json',
-	expected: partialReportTestCafe
+	expected: testReportV1PartialTestCafe
 }];
 
 describe('report validation', () => {
@@ -659,7 +659,7 @@ describe('report validation', () => {
 		describe(reportTest.name, () => {
 			it('schema', () => {
 				if (!hasContext()) {
-					new Report(reportTest.path, { context: dummyContext });
+					new Report(reportTest.path, { context: testContext });
 				} else {
 					new Report(reportTest.path);
 				}
@@ -669,7 +669,7 @@ describe('report validation', () => {
 				let report;
 
 				if (!hasContext()) {
-					report = new Report(reportTest.path, { context: dummyContext });
+					report = new Report(reportTest.path, { context: testContext });
 				} else {
 					report = new Report(reportTest.path);
 				}
