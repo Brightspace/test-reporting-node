@@ -41,12 +41,8 @@ jobs:
         with:
           github-token: ${{secrets.REPOSITORY_DISPATCH_TOKEN}}
           script: |
-            const result = await github.rest.repos.createDispatchEvent({
+            await github.rest.repos.createDispatchEvent({
               owner: 'Brightspace',
               repo: 'test-reporting-action',
               event_type: 'test-reporting-node-release'
             });
-            console.log(result);
-            if (results.status === 'rejected') {
-              throw new Error('Dispatch failed. See details above.');
-            }
