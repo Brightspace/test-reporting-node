@@ -3,10 +3,10 @@ import chaiSubset from 'chai-subset';
 import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { Report } from '../../src/helpers/report.cjs';
-import { testReportV1Partial as testReportV1PartialMocha } from './data/validation/test-report-mocha.js';
-import { testReportV1Partial as testReportV1PartialPlaywright } from './data/validation/test-report-playwright.js';
-import { testReportV1Partial as testReportV1PartialTestCafe } from './data/validation/test-report-testcafe.js';
-import { testReportV1Partial as testReportV1PartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
+import { testReportV2Partial as testReportV2PartialMocha } from './data/validation/test-report-mocha.js';
+import { testReportV2Partial as testReportV2PartialPlaywright } from './data/validation/test-report-playwright.js';
+import { testReportV2Partial as testReportV2PartialTestCafe } from './data/validation/test-report-testcafe.js';
+import { testReportV2Partial as testReportV2PartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
 
 use(chaiSubset);
 
@@ -26,19 +26,19 @@ const testContext = {
 const reportTests = [{
 	name: 'mocha',
 	path: './d2l-test-report-mocha.json',
-	expected: testReportV1PartialMocha
+	expected: testReportV2PartialMocha
 }, {
 	name: 'playwright',
 	path: './d2l-test-report-playwright.json',
-	expected: testReportV1PartialPlaywright
+	expected: testReportV2PartialPlaywright
 }, {
 	name: '@web/test-runner',
 	path: './d2l-test-report-web-test-runner.json',
-	expected: testReportV1PartialWebTestRunner
+	expected: testReportV2PartialWebTestRunner
 }, {
 	name: 'testcafe',
 	path: './d2l-test-report-testcafe.json',
-	expected: testReportV1PartialTestCafe
+	expected: testReportV2PartialTestCafe
 }];
 
 describe('report validation', () => {
@@ -73,7 +73,7 @@ describe('report validation', () => {
 				const { summary, details } = report;
 
 				expect(summary.operatingSystem).to.eq(getOperatingSystemType());
-				expect(summary.totalDuration).to.be.above(0);
+				expect(summary.duration.total).to.be.above(0);
 
 				const summaryStarted = new Date(summary.started);
 
@@ -83,11 +83,11 @@ describe('report validation', () => {
 				for (const detail of details) {
 					const detailStarted = new Date(detail.started);
 
-					expect(detail.duration).to.be.at.least(0);
-					expect(detail.totalDuration).to.be.at.least(0);
-					expect(detail.totalDuration).to.be.at.least(detail.duration);
-					expect(detail.duration).to.be.at.most(summary.totalDuration);
-					expect(detail.totalDuration).to.be.at.most(summary.totalDuration);
+					expect(detail.duration.final).to.be.at.least(0);
+					expect(detail.duration.total).to.be.at.least(0);
+					expect(detail.duration.total).to.be.at.least(detail.duration.final);
+					expect(detail.duration.final).to.be.at.most(summary.duration.total);
+					expect(detail.duration.total).to.be.at.most(summary.duration.total);
 					expect(detailStarted).to.be.at.most(now);
 					expect(detailStarted).to.be.at.least(nowMinus30Minutes);
 					expect(detailStarted).to.be.at.least(summaryStarted);

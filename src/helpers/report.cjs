@@ -1,18 +1,29 @@
-const { formatErrorAjv, validateReportV1Ajv, validateReportV1ContextAjv, latestReportVersion } = require('./schema.cjs');
+const schema = require('./schema.cjs');
 const { flatten } = require('./object.cjs');
 const fs = require('node:fs');
 const { makeRelativeFilePath } = require('./system.cjs');
+const { omit } = require('lodash');
 const { resolve } = require('node:path');
 
-const getReportVersion = (report) => {
-	const { reportVersion } = report;
+const {
+	formatErrorAjv,
+	validateReportV1Ajv,
+	validateReportV2Ajv,
+	validateReportV1ContextAjv,
+	validateReportV2ContextAjv,
+	latestReportVersion
+} = schema;
 
-	switch (reportVersion) {
+const getReportVersion = (report) => {
+	const { reportVersion, version } = report;
+	const resolvedVersion = reportVersion ?? version;
+
+	switch (resolvedVersion) {
 		case null:
 		case undefined:
 			throw new Error('Unable to determine report version');
 		default:
-			return reportVersion;
+			return resolvedVersion;
 	}
 };
 
@@ -24,6 +35,12 @@ const validateReport = (report, dataVar = 'report') => {
 		case 1:
 			if (!validateReportV1Ajv(report)) {
 				errors = validateReportV1Ajv.errors;
+			}
+
+			break;
+		case 2:
+			if (!validateReportV2Ajv(report)) {
+				errors = validateReportV2Ajv.errors;
 			}
 
 			break;
@@ -53,12 +70,31 @@ const injectReportV1Context = (report, context, override) => {
 	return report;
 };
 
+const injectReportV2Context = (report, context, override) => {
+	const { summary } = report;
+
+	if (!summary) {
+		throw new Error('Report is missing needed property \'summary\'');
+	}
+
+	if (override || !validateReportV2ContextAjv(summary)) {
+		report.summary = {
+			...summary,
+			...context
+		};
+	}
+
+	return report;
+};
+
 const injectReportContext = (report, context, override) => {
 	const reportVersion = getReportVersion(report);
 
 	switch (reportVersion) {
 		case 1:
 			return injectReportV1Context(report, context, override);
+		case 2:
+			return injectReportV2Context(report, context, override);
 		default:
 			throw new Error(`Unknown report version '${reportVersion}'`);
 	}
@@ -94,15 +130,127 @@ const injectReportV1LmsInfo = (report, lmsInfo) => {
 	return report;
 };
 
+const injectReportV2LmsInfo = (report, lmsInfo) => {
+	const { summary } = report;
+
+	if (!summary) {
+		throw new Error('Report is missing needed property \'summary\'');
+	}
+
+	summary.lms = summary.lms ?? {};
+
+	const { buildNumber, instanceUrl } = lmsInfo;
+
+	if (buildNumber) {
+		if (!summary.lms.buildNumber) {
+			summary.lms.buildNumber = buildNumber;
+		} else {
+			throw new Error('LMS build number already present');
+		}
+	}
+
+	if (instanceUrl) {
+		if (!summary.lms.instanceUrl) {
+			summary.lms.instanceUrl = instanceUrl;
+		} else {
+			throw new Error('LMS instance URL already present');
+		}
+	}
+
+	report.summary = summary;
+
+	return report;
+};
+
 const injectReportLmsInfo = (report, lmsInfo) => {
 	const reportVersion = getReportVersion(report);
 
 	switch (reportVersion) {
 		case 1:
 			return injectReportV1LmsInfo(report, lmsInfo);
+		case 2:
+			return injectReportV2LmsInfo(report, lmsInfo);
 		default:
 			throw new Error(`Unknown report version '${reportVersion}'`);
 	}
+};
+
+const upgradeReportV1ToV2 = (report) => {
+	const { reportId, summary, details } = report;
+	const {
+		githubOrganization,
+		githubRepository,
+		githubWorkflow,
+		githubRunId,
+		githubRunAttempt,
+		gitBranch,
+		gitSha,
+		totalDuration,
+		countPassed,
+		countFailed,
+		countSkipped,
+		countFlaky
+	} = summary;
+	const summaryCommon = omit(
+		summary,
+		[
+			'githubOrganization',
+			'githubRepository',
+			'githubWorkflow',
+			'githubRunId',
+			'githubRunAttempt',
+			'gitBranch',
+			'gitSha',
+			'totalDuration',
+			'countPassed',
+			'countFailed',
+			'countSkipped',
+			'countFlaky'
+		]
+	);
+
+	return {
+		id: reportId,
+		version: 2,
+		summary: {
+			...summaryCommon,
+			github: {
+				organization: githubOrganization,
+				repository: githubRepository,
+				workflow: githubWorkflow,
+				runId: githubRunId,
+				runAttempt: githubRunAttempt
+			},
+			git: {
+				branch: gitBranch,
+				sha: gitSha
+			},
+			count: {
+				passed: countPassed,
+				failed: countFailed,
+				skipped: countSkipped,
+				flaky: countFlaky
+			},
+			duration: {
+				total: totalDuration
+			}
+		},
+		details: details.map((detail) => {
+			const { location, duration, totalDuration } = detail;
+			const detailCommon = omit(detail, ['totalDuration']);
+
+			return {
+				...detailCommon,
+				location: {
+					file: location
+				},
+				duration: {
+					total: totalDuration,
+					final: duration
+				}
+			};
+		})
+	};
 };
 
 const upgradeReport = (report) => {
@@ -110,6 +258,8 @@ const upgradeReport = (report) => {
 
 	switch (reportVersion) {
 		case 1:
+			return upgradeReportV1ToV2(report);
+		case 2:
 			return report;
 		default:
 			throw new Error(`Unknown report version: ${reportVersion}`);
@@ -163,7 +313,7 @@ class Report {
 	}
 
 	getId() {
-		return this._report.reportId;
+		return this._report.id;
 	}
 
 	getVersionOriginal() {
@@ -171,25 +321,13 @@ class Report {
 	}
 
 	getVersion() {
-		return this._report.reportVersion;
+		return this._report.version;
 	}
 
 	getContext() {
-		const { summary } = this._report;
+		const { summary: { github, git } } = this._report;
 
-		return {
-			github: {
-				organization: summary.githubOrganization,
-				repository: summary.githubRepository,
-				workflow: summary.githubWorkflow,
-				runId: summary.githubRunId,
-				runAttempt: summary.githubRunAttempt
-			},
-			git: {
-				branch: summary.gitBranch,
-				sha: summary.gitSha
-			}
-		};
+		return { github, git };
 	}
 
 	toJSON() {

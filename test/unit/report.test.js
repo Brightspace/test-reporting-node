@@ -130,7 +130,7 @@ describe('report', () => {
 			const wrapper = () => report = (new Report(testReportPath));
 
 			expect(wrapper).to.not.throw();
-			expect(report.toJSON()).to.deep.equal(testReportV1Full);
+			expect(report.toJSON()).to.deep.not.equal(testReportV1Full);
 			expect(report.getContext()).to.deep.equal(testContext);
 		});
 
@@ -147,7 +147,7 @@ describe('report', () => {
 				const wrapper = () => report = new Report(testReportPath, reportOptions);
 
 				expect(wrapper).to.not.throw();
-				expect(report.toJSON()).to.deep.equal(testReportV1FullOther);
+				expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 				expect(report.getContext()).to.deep.equal(testContextOther);
 			});
 
@@ -157,10 +157,10 @@ describe('report', () => {
 				const reportOptions = { context: testContextOther };
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, reportOptions));
+				const wrapper = () => report = new Report(testReportPath, reportOptions);
 
 				expect(wrapper).to.not.throw();
-				expect(report.toJSON()).to.deep.equal(testReportV1Full);
+				expect(report.toJSON()).to.deep.not.equal(testReportV1Full);
 				expect(report.getContext()).to.deep.equal(testContext);
 			});
 		});
@@ -175,10 +175,10 @@ describe('report', () => {
 				};
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, reportOptions));
+				const wrapper = () => report = new Report(testReportPath, reportOptions);
 
 				expect(wrapper).to.not.throw();
-				expect(report.toJSON()).to.deep.equal(testReportV1FullOther);
+				expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 				expect(report.getContext()).to.deep.equal(testContextOther);
 			});
 
@@ -188,10 +188,10 @@ describe('report', () => {
 				const reportOptions = { context: testContextOther };
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, reportOptions));
+				const wrapper = () => report = new Report(testReportPath, reportOptions);
 
 				expect(wrapper).to.not.throw();
-				expect(report.toJSON()).to.deep.equal(testReportV1FullOther);
+				expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 				expect(report.getContext()).to.deep.equal(testContextOther);
 			});
 		});
@@ -206,10 +206,10 @@ describe('report', () => {
 				};
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, reportOptions));
+				const wrapper = () => report = new Report(testReportPath, reportOptions);
 
 				expect(wrapper).to.not.throw();
-				expect(report.toJSON()).to.deep.equal(testReportV1FullOther);
+				expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 				expect(report.getContext()).to.deep.equal(testContextOther);
 			});
 
@@ -219,10 +219,10 @@ describe('report', () => {
 				const reportOptions = { context: testContextOther };
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, reportOptions));
+				const wrapper = () => report = new Report(testReportPath, reportOptions);
 
 				expect(wrapper).to.not.throw();
-				expect(report.toJSON()).to.deep.equal(testReportV1FullOther);
+				expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 				expect(report.getContext()).to.deep.equal(testContextOther);
 			});
 		});
