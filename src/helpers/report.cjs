@@ -189,7 +189,9 @@ const upgradeReportV1ToV2 = (report) => {
 		countPassed,
 		countFailed,
 		countSkipped,
-		countFlaky
+		countFlaky,
+		lmsBuildNumber,
+		lmsInstanceUrl
 	} = summary;
 	const summaryCommon = omit(
 		summary,
@@ -205,36 +207,50 @@ const upgradeReportV1ToV2 = (report) => {
 			'countPassed',
 			'countFailed',
 			'countSkipped',
-			'countFlaky'
+			'countFlaky',
+			'lmsBuildNumber',
+			'lmsInstanceUrl'
 		]
 	);
+
+	const summaryUpgraded = {
+		...summaryCommon,
+		github: {
+			organization: githubOrganization,
+			repository: githubRepository,
+			workflow: githubWorkflow,
+			runId: githubRunId,
+			runAttempt: githubRunAttempt
+		},
+		git: {
+			branch: gitBranch,
+			sha: gitSha
+		},
+		count: {
+			passed: countPassed,
+			failed: countFailed,
+			skipped: countSkipped,
+			flaky: countFlaky
+		},
+		duration: {
+			total: totalDuration
+		}
+	};
+
+	if (lmsBuildNumber) {
+		summaryUpgraded.lms = summaryUpgraded.lms ?? {};
+		summaryUpgraded.lms.buildNumber = lmsBuildNumber;
+	}
+
+	if (lmsInstanceUrl) {
+		summaryUpgraded.lms = summaryUpgraded.lms ?? {};
+		summaryUpgraded.lms.instanceUrl = lmsInstanceUrl;
+	}
 
 	return {
 		id: reportId,
 		version: 2,
-		summary: {
-			...summaryCommon,
-			github: {
-				organization: githubOrganization,
-				repository: githubRepository,
-				workflow: githubWorkflow,
-				runId: githubRunId,
-				runAttempt: githubRunAttempt
-			},
-			git: {
-				branch: gitBranch,
-				sha: gitSha
-			},
-			count: {
-				passed: countPassed,
-				failed: countFailed,
-				skipped: countSkipped,
-				flaky: countFlaky
-			},
-			duration: {
-				total: totalDuration
-			}
-		},
+		summary: summaryUpgraded,
 		details: details.map((detail) => {
 			const { location, duration, totalDuration } = detail;
 			const detailCommon = omit(detail, ['totalDuration']);
