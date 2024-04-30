@@ -66,6 +66,9 @@ describe('report validation', () => {
 
 				nowMinus30Minutes.setMinutes(now.getMinutes() - 30);
 
+				expect(report.getVersion()).to.eq(2);
+				expect(report.getVersionOriginal()).to.eq(2);
+
 				report = report.toJSON();
 
 				expect(report).to.containSubset(reportTest.expected);

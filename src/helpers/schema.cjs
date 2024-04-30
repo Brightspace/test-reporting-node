@@ -21,6 +21,13 @@ ajv.addSchema({
 	type: 'object',
 	unevaluatedProperties: true
 });
+ajv.addSchema({
+	$schema: 'https://json-schema.org/draft/2019-09/schema',
+	$id: '/test-reporting/schemas/report/v2/context/loose.json',
+	$ref: '/test-reporting/schemas/report/v2/context.json',
+	type: 'object',
+	unevaluatedProperties: true
+});
 
 const validateReportConfigurationV1Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v1.json');
 const validateReportV1ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');

@@ -76,7 +76,7 @@ export default class Reporter {
 		const detail = this._report
 			.getDetail(id)
 			.setName(name)
-			.setLocation(file)
+			.setLocationFile(file)
 			.setStarted(startTime)
 			.addDuration(Math.round(duration));
 
@@ -108,7 +108,7 @@ export default class Reporter {
 		const summary = this._report
 			.getSummary()
 			.setStarted(startTime)
-			.setTotalDuration(Math.round(duration));
+			.setDurationTotal(Math.round(duration));
 
 		if (status === 'passed') {
 			summary.setPassed();

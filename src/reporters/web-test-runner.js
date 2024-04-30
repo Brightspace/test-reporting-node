@@ -46,7 +46,7 @@ export function reporter(options = {}) {
 			const detail = report
 				.getDetail(id)
 				.setName(testName)
-				.setLocation(testFile)
+				.setLocationFile(testFile)
 				.setStarted(started)
 				.setBrowser(browser);
 
@@ -119,7 +119,7 @@ export function reporter(options = {}) {
 			const ended = new Date();
 			const duration = Math.abs(ended - started);
 
-			summary.setTotalDuration(duration);
+			summary.setDurationTotal(duration);
 
 			gatherTestInfo(sessions);
 

@@ -1,6 +1,5 @@
 const { getContext, hasContext } = require('./github.cjs');
 const { getOperatingSystemType, makeRelativeFilePath } = require('./system.cjs');
-const { flatten } = require('./object.cjs');
 const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
@@ -8,35 +7,43 @@ const { writeFileSync } = require('node:fs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
-	'reportId',
-	'reportVersion',
+	'id',
+	'version',
 	'summary',
 	'details',
-	'githubOrganization',
-	'githubRepository',
-	'githubWorkflow',
-	'githubRunId',
-	'githubRunAttempt',
-	'gitBranch',
-	'gitSha',
+	'github',
+	'organization',
+	'repository',
+	'workflow',
+	'runId',
+	'runAttempt',
+	'git',
+	'branch',
+	'sha',
 	'name',
 	'status',
-	'lmsBuildNumber',
-	'lmsInstanceUrl',
+	'lms',
+	'buildNumber',
+	'instanceUrl',
 	'location',
+	'file',
+	'line',
+	'column',
 	'browser',
 	'framework',
 	'operatingSystem',
 	'started',
-	'totalDuration',
 	'duration',
+	'total',
+	'final',
 	'tool',
 	'experience',
 	'type',
-	'countPassed',
-	'countFailed',
-	'countSkipped',
-	'countFlaky',
+	'count',
+	'passed',
+	'failed',
+	'skipped',
+	'flaky',
 	'retries'
 ];
 
@@ -60,6 +67,34 @@ class ReportBuilderBase {
 			this._data[key] = this._data[key] ?? value;
 		}
 	}
+
+	_accumulateProperty(key, value) {
+		if (this._data[key] != null) {
+			this._data[key] += value;
+		} else {
+			this._data[key] = value;
+		}
+	}
+
+	_setNestedProperty(parentKey, key, value, { override = false } = {}) {
+		this._data[parentKey] = this._data[parentKey] ?? {};
+
+		if (override) {
+			this._data[parentKey][key] = value;
+		} else {
+			this._data[parentKey][key] = this._data[parentKey][key] ?? value;
+		}
+	}
+
+	_accumulateNestedProperty(parentKey, key, value) {
+		this._data[parentKey] = this._data[parentKey] ?? {};
+
+		if (this._data[parentKey][key] != null) {
+			this._data[parentKey][key] += value;
+		} else {
+			this._data[parentKey][key] = value;
+		}
+	}
 }
 
 class ReportSummaryBuilder extends ReportBuilderBase {
@@ -74,12 +109,10 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 
 	addContext() {
 		if (hasContext()) {
-			const context = getContext();
+			const { github, git } = getContext();
 
-			this._data = {
-				...this._data,
-				...flatten(context)
-			};
+			this._setProperty('github', github, { override: true });
+			this._setProperty('git', git, { override: true });
 		} else {
 			this._logger.warning('D2L test report will not contain GitHub context details');
 		}
@@ -93,44 +126,56 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 		return this;
 	}
 
-	setTotalDuration(totalDuration, options) {
-		this._setProperty('totalDuration', totalDuration, options);
+	setDurationTotal(durationTotal, options) {
+		this._setNestedProperty('duration', 'total', durationTotal, options);
+
+		return this;
+	}
+
+	setStatus(status, options) {
+		this._setProperty('status', status, options);
 
 		return this;
 	}
 
 	setPassed(options) {
-		this._setProperty('status', 'passed', options);
+		this.setStatus('passed', options);
 
 		return this;
 	}
 
 	setFailed(options) {
-		this._setProperty('status', 'failed', options);
+		this.setStatus('failed', options);
 
 		return this;
 	}
 
-	setPassedCount(countPassed, options) {
-		this._setProperty('countPassed', countPassed, options);
+	setCount(status, count, options) {
+		this._setNestedProperty('count', status, count, options);
 
 		return this;
 	}
 
-	setFlakyCount(countFlaky, options) {
-		this._setProperty('countFlaky', countFlaky, options);
+	setCountPassed(count, options) {
+		this.setCount('passed', count, options);
 
 		return this;
 	}
 
-	setSkippedCount(countSkipped, options) {
-		this._setProperty('countSkipped', countSkipped, options);
+	setCountFlaky(count, options) {
+		this.setCount('flaky', count, options);
 
 		return this;
 	}
 
-	setFailedCount(countFailed, options) {
-		this._setProperty('countFailed', countFailed, options);
+	setCountSkipped(count, options) {
+		this.setCount('skipped', count, options);
+
+		return this;
+	}
+
+	setCountFailed(count, options) {
+		this.setCount('failed', count, options);
 
 		return this;
 	}
@@ -142,8 +187,8 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 		this._reportConfiguration = reportConfiguration;
 
-		this._setProperty('totalDuration', 0);
-		this._setProperty('duration', 0);
+		this._setNestedProperty('duration', 'total', 0);
+		this._setNestedProperty('duration', 'final', 0);
 		this._setProperty('retries', 0);
 	}
 
@@ -159,10 +204,10 @@ class ReportDetailBuilder extends ReportBuilderBase {
 		return this;
 	}
 
-	setLocation(filePath, options) {
+	setLocationFile(filePath, options) {
 		filePath = makeRelativeFilePath(filePath);
 
-		this._setProperty('location', filePath, options);
+		this._setNestedProperty('location', 'file', filePath, options);
 
 		const { type, tool, experience } = this._reportConfiguration.getTaxonomy(filePath);
 
@@ -173,26 +218,44 @@ class ReportDetailBuilder extends ReportBuilderBase {
 		return this;
 	}
 
+	setLocationLine(number, options) {
+		this._setNestedProperty('location', 'line', number, options);
+
+		return this;
+	}
+
+	setLocationColumn(number, options) {
+		this._setNestedProperty('location', 'column', number, options);
+
+		return this;
+	}
+
 	setBrowser(browser, options) {
 		this._setProperty('browser', browser, options);
 
 		return this;
 	}
 
+	setStatus(status, options) {
+		this._setProperty('status', status, options);
+
+		return this;
+	}
+
 	setPassed(options) {
-		this._setProperty('status', 'passed', options);
+		this.setStatus('passed', options);
 
 		return this;
 	}
 
 	setSkipped(options) {
-		this._setProperty('status', 'skipped', options);
+		this.setStatus('skipped', options);
 
 		return this;
 	}
 
 	setFailed(options) {
-		this._setProperty('status', 'failed', options);
+		this.setStatus('failed', options);
 
 		return this;
 	}
@@ -202,15 +265,14 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	addRetries(count) {
-		this._data.retries += count;
+		this._accumulateProperty('retries', count);
 
 		return this;
 	}
 
 	addDuration(duration) {
-		this._setProperty('duration', duration, { override: true });
-
-		this._data.totalDuration += duration;
+		this._setProperty('duration', 'final', duration, { override: true });
+		this._accumulateNestedProperty('duration', 'total', duration);
 
 		return this;
 	}
@@ -251,8 +313,8 @@ class ReportBuilder extends ReportBuilderBase {
 			};
 		}
 
-		this._setProperty('reportId', randomUUID());
-		this._setProperty('reportVersion', 1);
+		this._setProperty('id', randomUUID());
+		this._setProperty('version', 2);
 		this._setProperty('summary', new ReportSummaryBuilder(framework, this._logger));
 		this._setProperty('details', new Map());
 	}
@@ -315,10 +377,10 @@ class ReportBuilder extends ReportBuilderBase {
 		}
 
 		this.getSummary()
-			.setPassedCount(countPassed)
-			.setFlakyCount(countFlaky)
-			.setSkippedCount(countSkipped)
-			.setFailedCount(countFailed);
+			.setCountPassed(countPassed)
+			.setCountFlaky(countFlaky)
+			.setCountSkipped(countSkipped)
+			.setCountFailed(countFailed);
 
 		return this;
 	}

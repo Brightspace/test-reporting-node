@@ -69,7 +69,7 @@ class TestReportingMochaReporter extends Spec {
 
 		detail
 			.setName(name)
-			.setLocation(file)
+			.setLocationFile(file)
 			.setStarted((new Date()).toISOString());
 	}
 
@@ -119,7 +119,7 @@ class TestReportingMochaReporter extends Spec {
 		const { duration, failures } = stats;
 		const summary = this._report
 			.getSummary()
-			.setTotalDuration(duration);
+			.setDurationTotal(duration);
 
 		if (failures === 0) {
 			summary.setPassed();
