@@ -57,7 +57,7 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestBegin(test) {
-		const { file } = test;
+		const { file, _timeout } = test;
 
 		if (this._report.ignoreFilePath(file)) {
 			return;
@@ -70,7 +70,8 @@ class TestReportingMochaReporter extends Spec {
 		detail
 			.setName(name)
 			.setLocationFile(file)
-			.setStarted((new Date()).toISOString());
+			.setStarted((new Date()).toISOString())
+			.setTimeout(_timeout); // using internal property, not ideal
 	}
 
 	_onTestRetry(test) {

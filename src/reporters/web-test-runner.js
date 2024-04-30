@@ -38,6 +38,7 @@ export function reporter(options = {}) {
 		}
 
 		const browser = browserName.toLowerCase();
+		const { testsFinishTimeout } = testConfig;
 
 		for (const test of tests) {
 			const { skipped, passed, duration, name } = test;
@@ -48,7 +49,8 @@ export function reporter(options = {}) {
 				.setName(testName)
 				.setLocationFile(testFile)
 				.setStarted(started)
-				.setBrowser(browser);
+				.setBrowser(browser)
+				.setTimeout(testsFinishTimeout);
 
 			if (passed) {
 				detail.setPassed();
