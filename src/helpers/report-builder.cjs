@@ -44,33 +44,40 @@ const determineReportPath = (path) => {
 	return resolve(path ?? defaultReportPath);
 };
 
-class ReportSummaryBuilder {
-	constructor(framework, logger) {
-		this._logger = logger;
-		this._reportSummary = {
-			operatingSystem: getOperatingSystemType(),
-			framework
-		};
+class ReportBuilderBase {
+	constructor() {
+		this._data = {};
 	}
 
 	toJSON() {
-		return this._reportSummary;
+		return this._data;
 	}
 
 	_setProperty(key, value, { override = false } = {}) {
 		if (override) {
-			this._reportSummary[key] = value;
+			this._data[key] = value;
 		} else {
-			this._reportSummary[key] = this._reportSummary[key] ?? value;
+			this._data[key] = this._data[key] ?? value;
 		}
+	}
+}
+
+class ReportSummaryBuilder extends ReportBuilderBase {
+	constructor(framework, logger) {
+		super();
+
+		this._logger = logger;
+
+		this._setProperty('operatingSystem', getOperatingSystemType());
+		this._setProperty('framework', framework);
 	}
 
 	addContext() {
 		if (hasContext()) {
 			const context = getContext();
 
-			this._reportSummary = {
-				...this._reportSummary,
+			this._data = {
+				...this._data,
 				...flatten(context)
 			};
 		} else {
@@ -129,26 +136,15 @@ class ReportSummaryBuilder {
 	}
 }
 
-class ReportDetailBuilder {
+class ReportDetailBuilder extends ReportBuilderBase {
 	constructor(reportConfiguration) {
+		super();
+
 		this._reportConfiguration = reportConfiguration;
-		this._reportDetail = {
-			totalDuration: 0,
-			duration: 0,
-			retries: 0
-		};
-	}
 
-	_setProperty(key, value, { override = false } = {}) {
-		if (override) {
-			this._reportDetail[key] = value;
-		} else {
-			this._reportDetail[key] = this._reportDetail[key] ?? value;
-		}
-	}
-
-	toJSON() {
-		return this._reportDetail;
+		this._setProperty('totalDuration', 0);
+		this._setProperty('duration', 0);
+		this._setProperty('retries', 0);
 	}
 
 	setStarted(started, options) {
@@ -206,7 +202,7 @@ class ReportDetailBuilder {
 	}
 
 	addRetries(count) {
-		this._reportDetail.retries += count;
+		this._data.retries += count;
 
 		return this;
 	}
@@ -214,18 +210,26 @@ class ReportDetailBuilder {
 	addDuration(duration) {
 		this._setProperty('duration', duration, { override: true });
 
-		this._reportDetail.totalDuration += duration;
+		this._data.totalDuration += duration;
 
 		return this;
 	}
 }
 
-class ReportBuilder {
+class ReportBuilder extends ReportBuilderBase {
 	constructor(framework, logger, options) {
-		const { reportPath, reportConfigurationPath, reportWriter, verbose = false } = options;
+		super();
+
+		const {
+			reportPath,
+			reportConfigurationPath,
+			reportWriter,
+			verbose = false
+		} = options;
 
 		this._logger = logger;
 		this._verbose = verbose;
+		this._reportConfiguration = new ReportConfiguration(reportConfigurationPath);
 
 		if (reportWriter) {
 			if (reportPath) {
@@ -247,13 +251,10 @@ class ReportBuilder {
 			};
 		}
 
-		this._reportConfiguration = new ReportConfiguration(reportConfigurationPath);
-		this._report = {
-			reportId: randomUUID(),
-			reportVersion: 1,
-			summary: new ReportSummaryBuilder(framework, this._logger),
-			details: new Map()
-		};
+		this._setProperty('reportId', randomUUID());
+		this._setProperty('reportVersion', 1);
+		this._setProperty('summary', new ReportSummaryBuilder(framework, this._logger));
+		this._setProperty('details', new Map());
 	}
 
 	ignoreFilePath(filePath) {
@@ -261,11 +262,11 @@ class ReportBuilder {
 	}
 
 	getSummary() {
-		return this._report.summary;
+		return this._data.summary;
 	}
 
 	getDetail(id) {
-		const { details } = this._report;
+		const { details } = this._data;
 
 		if (!details.has(id)) {
 			details.set(id, new ReportDetailBuilder(this._reportConfiguration));
@@ -280,7 +281,7 @@ class ReportBuilder {
 		let countSkipped = 0;
 		let countFlaky = 0;
 
-		for (const [, detail] of this._report.details) {
+		for (const [, detail] of this._data.details) {
 			const { status, retries } = detail.toJSON();
 
 			if (status === 'passed') {
@@ -323,11 +324,12 @@ class ReportBuilder {
 	}
 
 	toJSON() {
+		const data = super.toJSON();
+
 		return {
-			reportId: this._report.reportId,
-			reportVersion: this._report.reportVersion,
-			summary: this._report.summary.toJSON(),
-			details: [...this._report.details].map(([, detail]) => detail.toJSON())
+			...data,
+			summary: data.summary.toJSON(),
+			details: [...data.details].map(([, detail]) => detail.toJSON())
 		};
 	}
 
