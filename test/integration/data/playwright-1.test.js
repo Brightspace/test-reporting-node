@@ -9,7 +9,7 @@ test.describe('reporter tests 1', () => {
 
 	test.beforeEach(async() => { await delay(1000); });
 
-	test('test', () => {});
+	test('test', async() => { await delay(); });
 
 	test.skip('skipped test', () => {});
 
@@ -20,6 +20,8 @@ test.describe('reporter tests 1', () => {
 
 			throw new Error('flaky test failure');
 		}
+
+		await delay();
 	});
 
 	test('failed test', () => { throw new Error('fail'); });

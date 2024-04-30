@@ -7,7 +7,7 @@ const counts = new Map();
 
 fixture('fixture 2').page('http://127.0.0.1:8080');
 
-test('test', () => {});
+test('test', async() => { await delay(); });
 
 test.skip('skipped test', () => {});
 
@@ -25,6 +25,8 @@ test('flaky test', async(testController) => {
 
 		throw new Error('flaky test failure');
 	}
+
+	await delay();
 });
 
 test('failed test', () => { throw new Error('fail'); });

@@ -9,7 +9,7 @@ describe('reporter tests 1', () => {
 
 	beforeEach(async() => { await delay(1000); });
 
-	it('test', () => {});
+	it('test', async() => { await delay(); });
 
 	it.skip('skipped test', () => {});
 
@@ -21,6 +21,8 @@ describe('reporter tests 1', () => {
 
 			throw new Error('flaky test failure');
 		}
+
+		await delay();
 	});
 
 	it('failed test', () => { throw new Error('fail'); });
