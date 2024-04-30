@@ -1,13 +1,13 @@
 import { test } from '@playwright/test';
 
-const delay = (ms = 100) => {
+const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 test.describe('reporter tests 3', () => {
-	test.beforeAll(async() => { await delay(1000); });
+	test.beforeAll(async() => { await delay(250); });
 
-	test.beforeEach(async() => { await delay(1000); });
+	test.beforeEach(async() => { await delay(250); });
 
 	test('test', async() => { await delay(); });
 
@@ -26,7 +26,7 @@ test.describe('reporter tests 3', () => {
 
 	test('failed test', () => { throw new Error('fail'); });
 
-	test.afterEach(async() => { await delay(1000); });
+	test.afterEach(async() => { await delay(250); });
 
-	test.afterAll(async() => { await delay(1000); });
+	test.afterAll(async() => { await delay(250); });
 });

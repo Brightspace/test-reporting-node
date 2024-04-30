@@ -187,8 +187,6 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 		this._reportConfiguration = reportConfiguration;
 
-		this._setNestedProperty('duration', 'total', 0);
-		this._setNestedProperty('duration', 'final', 0);
 		this._setProperty('retries', 0);
 	}
 
@@ -273,6 +271,18 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	addDuration(duration) {
 		this._setNestedProperty('duration', 'final', duration, { override: true });
 		this._accumulateNestedProperty('duration', 'total', duration);
+
+		return this;
+	}
+
+	setDurationTotal(duration, options) {
+		this._setNestedProperty('duration', 'total', duration, options);
+
+		return this;
+	}
+
+	setDurationFinal(duration, options) {
+		this._setNestedProperty('duration', 'final', duration, options);
 
 		return this;
 	}
