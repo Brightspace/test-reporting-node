@@ -189,7 +189,26 @@
             "minimum": 0
           },
           "error": {
-            "$ref": "#/$defs/nonEmptyUnpaddedString"
+            "type": "object",
+            "properties": {
+              "message": {
+                "$ref": "#/$defs/nonEmptyUnpaddedString"
+              },
+              "file": {
+                "$ref": "#/$defs/nonEmptyUnpaddedString"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "column": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "message"
+            ]
           }
         },
         "required": [
