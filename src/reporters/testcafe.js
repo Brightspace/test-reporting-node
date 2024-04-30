@@ -105,7 +105,7 @@ export default function() {
 				const detail = report
 					.getDetail(id)
 					.setName(testName)
-					.setLocation(this._fixturePath)
+					.setLocationFile(this._fixturePath)
 					.setStarted(startTime.toISOString())
 					.setBrowser(browser)
 					.addRetries(retries)
@@ -129,7 +129,7 @@ export default function() {
 			const duration = endTime - this._summaryStartTime;
 			const summary = report
 				.getSummary()
-				.setTotalDuration(duration);
+				.setDurationTotal(duration);
 			const { failedCount } = result;
 
 			if (failedCount === 0) {
