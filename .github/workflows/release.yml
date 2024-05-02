@@ -41,8 +41,18 @@ jobs:
         with:
           github-token: ${{secrets.REPOSITORY_DISPATCH_TOKEN}}
           script: |
-            await github.rest.repos.createDispatchEvent({
-              owner: 'Brightspace',
-              repo: 'test-reporting-action',
-              event_type: 'test-reporting-node-release'
-            });
+            const targets = [
+              'test-reporting-action',
+              'test-actions'
+            ];
+            const results = await Promise.allSettled(targets.map(target =>
+              github.rest.repos.createDispatchEvent({
+                owner: 'Brightspace',
+                repo: target,
+                event_type: 'test-reporting-node-release',
+              })
+            ));
+            console.log(results);
+            if (results.some(r => r.status === 'rejected')) {
+              throw new Error('Not all dispatches succeeded. See details above.');
+            }
