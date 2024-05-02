@@ -65,9 +65,9 @@ class TestReportingMochaReporter extends Spec {
 
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
-		const detail = this._report.getDetail(id);
 
-		detail
+		this._report
+			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
 			.setStarted((new Date()).toISOString())
@@ -84,9 +84,9 @@ class TestReportingMochaReporter extends Spec {
 		const { duration } = test;
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
-		const detail = this._report.getDetail(id);
 
-		detail
+		this._report
+			.getDetail(id)
 			.incrementRetries()
 			.addDuration(duration);
 	}
