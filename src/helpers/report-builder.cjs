@@ -139,15 +139,11 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 	}
 
 	setPassed(options) {
-		this.setStatus('passed', options);
-
-		return this;
+		return this.setStatus('passed', options);
 	}
 
 	setFailed(options) {
-		this.setStatus('failed', options);
-
-		return this;
+		return this.setStatus('failed', options);
 	}
 
 	setCount(status, count, options) {
@@ -157,27 +153,19 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 	}
 
 	setCountPassed(count, options) {
-		this.setCount('passed', count, options);
-
-		return this;
+		return this.setCount('passed', count, options);
 	}
 
 	setCountFlaky(count, options) {
-		this.setCount('flaky', count, options);
-
-		return this;
+		return this.setCount('flaky', count, options);
 	}
 
 	setCountSkipped(count, options) {
-		this.setCount('skipped', count, options);
-
-		return this;
+		return this.setCount('skipped', count, options);
 	}
 
 	setCountFailed(count, options) {
-		this.setCount('failed', count, options);
-
-		return this;
+		return this.setCount('failed', count, options);
 	}
 }
 
@@ -241,21 +229,15 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	setPassed(options) {
-		this.setStatus('passed', options);
-
-		return this;
+		return this.setStatus('passed', options);
 	}
 
 	setSkipped(options) {
-		this.setStatus('skipped', options);
-
-		return this;
+		return this.setStatus('skipped', options);
 	}
 
 	setFailed(options) {
-		this.setStatus('failed', options);
-
-		return this;
+		return this.setStatus('failed', options);
 	}
 
 	incrementRetries() {
@@ -269,10 +251,9 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	addDuration(duration) {
-		this._setNestedProperty('duration', 'final', duration, { override: true });
 		this._accumulateNestedProperty('duration', 'total', duration);
 
-		return this;
+		return this.setDurationFinal(duration, { override: true });
 	}
 
 	setDurationTotal(duration, options) {
