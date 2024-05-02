@@ -271,7 +271,7 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	addDuration(duration) {
-		this._setProperty('duration', 'final', duration, { override: true });
+		this._setNestedProperty('duration', 'final', duration, { override: true });
 		this._accumulateNestedProperty('duration', 'total', duration);
 
 		return this;

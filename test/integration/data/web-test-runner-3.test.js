@@ -7,7 +7,7 @@ describe('reporter tests 3', () => {
 
 	beforeEach(async() => { await delay(1000); });
 
-	it('test', () => {});
+	it('test', async() => { await delay(); });
 
 	it.skip('skipped test', () => {});
 
