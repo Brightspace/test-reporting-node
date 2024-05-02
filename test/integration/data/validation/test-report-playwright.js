@@ -195,13 +195,23 @@ export const testReportV2Partial = {
 	summary: {
 		status: 'failed',
 		framework: 'playwright',
-		count: { passed: 5, failed: 5, skipped: 5, flaky: 5 }
+		count: {
+			passed: 5,
+			failed: 5,
+			skipped: 5,
+			flaky: 5
+		}
 	},
 	details: [{
 		name: '[chromium] > reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 14,
+			column: 7
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -209,8 +219,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 14,
+			column: 7
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -218,8 +233,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 14,
+			column: 7
+		},
 		browser: 'firefox',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -227,8 +247,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 1 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 12,
+			column: 2
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -236,8 +261,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 2 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 12,
+			column: 2
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -245,8 +275,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 1 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 27,
+			column: 2
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -254,8 +289,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter tests 2 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 12,
+			column: 2
+		},
 		browser: 'firefox',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -263,8 +303,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 14,
+			column: 7
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -272,8 +317,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 27,
+			column: 2
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -281,8 +331,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 27,
+			column: 2
+		},
 		browser: 'firefox',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -290,8 +345,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 1 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 12,
+			column: 2
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -299,8 +359,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 1 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 27,
+			column: 2
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -308,8 +373,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 1 > flaky test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 17,
+			column: 2
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -317,8 +387,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter tests 2 > flaky test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 17,
+			column: 2
+		},
 		browser: 'chromium',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -326,8 +401,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 1 > flaky test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-1.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-1.test.js',
+			line: 17,
+			column: 2
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Playwright 1 Test Reporting',
 		experience: 'Playwright 1 Test Framework',
 		type: 'integration',
@@ -335,8 +415,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 14,
+			column: 7
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -344,8 +429,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter tests 2 > flaky test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 17,
+			column: 2
+		},
 		browser: 'firefox',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -353,8 +443,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 2 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 12,
+			column: 2
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -362,8 +457,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 27,
+			column: 2
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',
@@ -371,8 +471,13 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter tests 2 > flaky test',
 		status: 'passed',
-		location: { file: 'test/integration/data/playwright-2.test.js' },
+		location: {
+			file: 'test/integration/data/playwright-2.test.js',
+			line: 17,
+			column: 2
+		},
 		browser: 'webkit',
+		timeout: 30000,
 		tool: 'Test Reporting',
 		experience: 'Playwright 2 Test Framework',
 		type: 'visual diff',

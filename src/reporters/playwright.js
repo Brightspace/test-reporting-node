@@ -63,7 +63,7 @@ export default class Reporter {
 	}
 
 	onTestEnd(test, result) {
-		const { location: { file } } = test;
+		const { timeout, location: { file, line, column } } = test;
 
 		if (this._report.ignoreFilePath(file)) {
 			return;
@@ -77,7 +77,10 @@ export default class Reporter {
 			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
+			.setLocationLine(line)
+			.setLocationColumn(column)
 			.setStarted(startTime)
+			.setTimeout(Math.round(timeout))
 			.addDuration(Math.round(duration));
 
 		if (retry !== 0) {

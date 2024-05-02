@@ -123,13 +123,21 @@ export const testReportV2Partial = {
 	summary: {
 		status: 'failed',
 		framework: '@web/test-runner',
-		count: { passed: 4, failed: 4, skipped: 4, flaky: 0 }
+		count: {
+			passed: 4,
+			failed: 4,
+			skipped: 4,
+			flaky: 0
+		}
 	},
 	details: [{
 		name: 'reporter tests 1 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/web-test-runner-1.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-1.test.js'
+		},
 		browser: 'chrome',
+		timeout: 120000,
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -137,8 +145,11 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/web-test-runner-1.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-1.test.js'
+		},
 		browser: 'chrome',
+		timeout: 120000,
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -146,8 +157,11 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter tests 1 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/web-test-runner-1.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-1.test.js'
+		},
 		browser: 'chrome',
+		timeout: 120000,
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -155,8 +169,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter tests 2 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/web-test-runner-2.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-2.test.js'
+		},
 		browser: 'chromium',
+		timeout: 120000,
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -164,8 +181,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/web-test-runner-2.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-2.test.js'
+		},
 		browser: 'chromium',
+		timeout: 120000,
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -173,8 +193,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/web-test-runner-2.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-2.test.js'
+		},
 		browser: 'chromium',
+		timeout: 120000,
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -182,8 +205,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter tests 2 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/web-test-runner-2.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-2.test.js'
+		},
 		browser: 'firefox',
+		timeout: 120000,
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -191,8 +217,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter tests 2 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/web-test-runner-2.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-2.test.js'
+		},
 		browser: 'firefox',
+		timeout: 120000,
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -200,8 +229,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter tests 2 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/web-test-runner-2.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-2.test.js'
+		},
 		browser: 'firefox',
+		timeout: 120000,
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
@@ -209,8 +241,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter tests 1 > test',
 		status: 'passed',
-		location: { file: 'test/integration/data/web-test-runner-1.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-1.test.js'
+		},
 		browser: 'webkit',
+		timeout: 120000,
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -218,8 +253,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter tests 1 > skipped test',
 		status: 'skipped',
-		location: { file: 'test/integration/data/web-test-runner-1.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-1.test.js'
+		},
 		browser: 'webkit',
+		timeout: 120000,
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
@@ -227,8 +265,11 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter tests 1 > failed test',
 		status: 'failed',
-		location: { file: 'test/integration/data/web-test-runner-1.test.js' },
+		location: {
+			file: 'test/integration/data/web-test-runner-1.test.js'
+		},
 		browser: 'webkit',
+		timeout: 120000,
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',

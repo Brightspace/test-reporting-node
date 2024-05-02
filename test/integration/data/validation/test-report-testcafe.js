@@ -231,7 +231,12 @@ export const testReportV2Partial = {
 	summary: {
 		status: 'failed',
 		framework: 'testcafe',
-		count: { passed: 6, failed: 6, skipped: 6, flaky: 6 }
+		count: {
+			passed: 6,
+			failed: 6,
+			skipped: 6,
+			flaky: 6
+		}
 	},
 	details: [{
 		name: 'fixture 1 > test',
