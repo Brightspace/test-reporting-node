@@ -60,6 +60,10 @@ export function reporter(options = {}) {
 
 			if (duration !== undefined) {
 				detail.addDuration(duration);
+			} else {
+				detail
+					.setDurationFinal(0)
+					.setDurationTotal(0);
 			}
 		}
 	};

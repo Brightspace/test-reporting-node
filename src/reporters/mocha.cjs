@@ -103,7 +103,10 @@ class TestReportingMochaReporter extends Spec {
 		const detail = this._report.getDetail(id);
 
 		if (state === 'pending') {
-			detail.setSkipped();
+			detail
+				.setSkipped()
+				.setDurationFinal(0)
+				.setDurationTotal(0);
 		} else {
 			detail.addDuration(duration);
 
