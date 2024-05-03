@@ -70,12 +70,10 @@ jobs:
         with:
           script: |
             const { summary } = core;
-
             summary.clear();
             summary.addHeading('Coverage report', 3);
             summary.addLink('Report', process.env.COVERAGE_REPORT_URL);
             summary.addHeading('Generated reports', 3);
-
             const reporters = [{
               name: 'mocha',
               path: './d2l-test-report-mocha.json'
@@ -89,18 +87,13 @@ jobs:
               name: 'testcafe',
               path: './d2l-test-report-testcafe.json'
             }];
-
             for (const { name, path } of reporters) {
               let report = require(path);
-
               report = JSON.stringify(report, null, 2);
               report = `\n\n\`\`\`json\n${report}\n\`\`\`\n\n`;
-
               summary.addDetails(name, report);
             }
-
             summary.write({ overwrite: true });
-
             core.setOutput('report', summary.stringify());
         env:
           COVERAGE_REPORT_URL: ${{steps.coverage-report.outputs.artifact-url}}
