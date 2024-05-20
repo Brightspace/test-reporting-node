@@ -65,7 +65,7 @@
     "http-server": "^14",
     "npm-run-all": "^4",
     "playwright": "^1.43.1",
-    "sinon": "^17",
+    "sinon": "^18",
     "start-server-and-test": "^2",
     "testcafe": "^3",
     "testcafe-reporter-custom": "^1",
