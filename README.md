@@ -166,6 +166,15 @@ will end up lowercase in the report.
 }
 ```
 
+## Report Format
+
+For details on what the schema that the various custom reporters output looks
+like see [Report Format](./docs/report-format.md).
+
+> [!NOTE]
+  The report format is required in order to upload items to the back-end using
+  the corresponding [GitHub Action].
+
 ## Developing
 
 After cloning the repository make sure to install dependencies.
