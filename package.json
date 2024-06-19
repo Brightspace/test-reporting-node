@@ -49,7 +49,7 @@
     "lodash": "^4",
     "minimatch": "^9",
     "mocha": "^10",
-    "playwright-core": "^1.43.1"
+    "playwright-core": "^1.44.1"
   },
   "devDependencies": {
     "@playwright/test": "^1",
@@ -64,7 +64,7 @@
     "eslint-config-brightspace": "^1",
     "http-server": "^14",
     "npm-run-all": "^4",
-    "playwright": "^1.43.1",
+    "playwright": "^1.44.1",
     "sinon": "^18",
     "start-server-and-test": "^2",
     "testcafe": "^3",
