@@ -12,8 +12,7 @@
     "./helpers/report-configuration.js": "./src/helpers/report-configuration.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/playwright.js": "./src/reporters/playwright.js",
-    "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js",
-    "./reporters/testcafe.js": "./src/reporters/testcafe.js"
+    "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js"
   },
   "publishConfig": {
     "access": "public",
@@ -28,11 +27,10 @@
     "test": "run-s lint test:all",
     "test:all": "c8 run-s test:unit test:integration",
     "test:unit": "mocha \"test/unit/**/*.test.js\"",
-    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner test:integration:testcafe && mocha test/integration/report-validation.test.js",
+    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner && mocha test/integration/report-validation.test.js",
     "test:integration:mocha": "mocha --config test/integration/data/configs/mocha.cjs || exit 0",
     "test:integration:playwright": "playwright test --config test/integration/data/configs/playwright.js || exit 0",
-    "test:integration:web-test-runner": "wtr --config test/integration/data/configs/web-test-runner.js || exit 0",
-    "test:integration:testcafe": "start-server-and-test \"http-server --silent\" 8080 \"testcafe --config-file test/integration/data/configs/testcafe.cjs || exit 0\""
+    "test:integration:web-test-runner": "wtr --config test/integration/data/configs/web-test-runner.js || exit 0"
   },
   "engines": {
     "node": ">=20"
@@ -66,9 +64,6 @@
     "npm-run-all": "^4",
     "playwright": "^1.44.1",
     "sinon": "^18",
-    "start-server-and-test": "^2",
-    "testcafe": "^3",
-    "testcafe-reporter-custom": "^1",
-    "typescript": "^5"
+    "start-server-and-test": "^2"
   }
 }

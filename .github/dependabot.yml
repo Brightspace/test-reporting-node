@@ -16,11 +16,6 @@ updates:
       - dependency-name: eslint
         versions: '>= 9'
     groups:
-      testcafe:
-        dependency-type: production
-        patterns:
-          - testcafe
-          - testcafe-*
       eslint:
         dependency-type: development
         patterns:

@@ -5,7 +5,6 @@ import { hasContext } from '../../src/helpers/github.cjs';
 import { Report } from '../../src/helpers/report.cjs';
 import { testReportV2Partial as testReportV2PartialMocha } from './data/validation/test-report-mocha.js';
 import { testReportV2Partial as testReportV2PartialPlaywright } from './data/validation/test-report-playwright.js';
-import { testReportV2Partial as testReportV2PartialTestCafe } from './data/validation/test-report-testcafe.js';
 import { testReportV2Partial as testReportV2PartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
 
 use(chaiSubset);
@@ -35,10 +34,6 @@ const reportTests = [{
 	name: '@web/test-runner',
 	path: './d2l-test-report-web-test-runner.json',
 	expected: testReportV2PartialWebTestRunner
-}, {
-	name: 'testcafe',
-	path: './d2l-test-report-testcafe.json',
-	expected: testReportV2PartialTestCafe
 }];
 
 describe('report validation', () => {
