@@ -45,7 +45,7 @@
     "ajv-formats": "^3",
     "chalk": "^5",
     "lodash": "^4",
-    "minimatch": "^9",
+    "minimatch": "^10",
     "mocha": "^10",
     "playwright-core": "^1.44.1"
   },
