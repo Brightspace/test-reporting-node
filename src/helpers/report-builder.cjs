@@ -196,6 +196,10 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 		this._setNestedProperty('location', 'file', filePath, options);
 
+		if (!this._reportConfiguration) {
+			return this;
+		}
+
 		const { type, tool, experience } = this._reportConfiguration.getTaxonomy(filePath);
 
 		this._setProperty('type', type, options);
@@ -318,6 +322,10 @@ class ReportBuilder extends ReportBuilderBase {
 	}
 
 	ignoreFilePath(filePath) {
+		if (!this._reportConfiguration) {
+			return false;
+		}
+
 		return this._reportConfiguration.ignoreFilePath(filePath);
 	}
 
