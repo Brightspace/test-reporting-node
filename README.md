@@ -135,9 +135,13 @@ provided in this package.
 Below are examples of how to create the config file. Note that the `type` field
 will end up lowercase in the report.
 
+Please see [Automated Testing Definitions] on confluence for the list of
+test types that should be used when creating the D2L test reporting
+configuration file.
+
 ```json
 {
-  "type": "Visual Diff",
+  "type": "UI Visual Diff",
   "experience": "Experience",
   "tool": "Tool",
 }
@@ -145,7 +149,7 @@ will end up lowercase in the report.
 
 ```json
 {
-  "type": "UI",
+  "type": "UI E2E",
   "overrides": [
     {
       "pattern": "tests/account-settings/**/*",
@@ -237,3 +241,4 @@ npm run test:integration
 [`@web/test-runner`]: https://modern-web.dev/docs/test-runner/overview
 [`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
 [GitHub Action]: https://github.com/Brightspace/test-reporting-action
+[Automated Testing Definitions]: https://desire2learn.atlassian.net/wiki/spaces/QE/pages/4354408450/Automated+Testing+Definitions
