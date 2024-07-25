@@ -55,7 +55,15 @@ export default class Reporter {
 		}
 
 		this._logger = new PlaywrightLogger();
-		this._report = new ReportBuilder('playwright', this._logger, this._options);
+
+		try {
+			this._report = new ReportBuilder('playwright', this._logger, this._options);
+		} catch ({ message }) {
+			this._logger.error('Failed to initialize D2L test report builder, report will not be generated');
+			this._logger.error(message);
+
+			return;
+		}
 
 		this._report
 			.getSummary()
@@ -63,6 +71,10 @@ export default class Reporter {
 	}
 
 	onTestEnd(test, result) {
+		if (!this._report || !this._hasTests) {
+			return;
+		}
+
 		const { timeout, location: { file, line, column } } = test;
 
 		if (this._report.ignoreFilePath(file)) {
@@ -103,7 +115,7 @@ export default class Reporter {
 	}
 
 	onEnd(result) {
-		if (!this._hasTests) {
+		if (!this._report || !this._hasTests) {
 			return;
 		}
 
@@ -123,7 +135,7 @@ export default class Reporter {
 	}
 
 	async onExit() {
-		if (!this._hasTests) {
+		if (!this._report || !this._hasTests) {
 			return;
 		}
 
