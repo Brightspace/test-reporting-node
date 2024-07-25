@@ -34,7 +34,17 @@ class TestReportingMochaReporter extends Spec {
 		const { reporterOptions = {} } = options;
 
 		this._logger = new MochaLogger();
-		this._report = new ReportBuilder('mocha', this._logger, reporterOptions);
+
+		try {
+			const report = new ReportBuilder('mocha', this._logger, reporterOptions);
+
+			this._report = report;
+		} catch ({ message }) {
+			this._logger.error('Failed to initialize D2L test report builder, report will not be generated');
+			this._logger.error(message);
+
+			return;
+		}
 
 		runner
 			.once(EVENT_RUN_BEGIN, () => this._onRunBegin(stats))

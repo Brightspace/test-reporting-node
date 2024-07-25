@@ -19,12 +19,27 @@ const makeDetailId = (sessionId, file, name) => {
 	return `${sessionId}/${file}/${name}`;
 };
 
+const nullReporter = {
+	start() {},
+	stop() {}
+};
+
 export function reporter(options = {}) {
 	let overallStarted;
 	let testConfig;
 	const sessionStarts = new Map();
 	const logger = new WebTestRunnerLogger();
-	const report = new ReportBuilder('@web/test-runner', logger, options);
+	let report;
+
+	try {
+		report = new ReportBuilder('@web/test-runner', logger, options);
+	} catch ({ message }) {
+		logger.error('Failed to initialize D2L test report builder, report will not be generated');
+		logger.error(message);
+
+		return nullReporter;
+	}
+
 	const summary = report
 		.getSummary()
 		.addContext();
