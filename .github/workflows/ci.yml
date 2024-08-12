@@ -69,10 +69,12 @@ jobs:
         uses: Brightspace/third-party-actions@actions/github-script
         with:
           script: |
+            const { env } = await import('node:process');
+            const { COVERAGE_REPORT_URL: coverageReportUrl } = env;
             const { summary } = core;
             summary.clear();
             summary.addHeading('Coverage report', 3);
-            summary.addLink('Report', process.env.COVERAGE_REPORT_URL);
+            summary.addLink('Report', coverageReportUrl);
             summary.addHeading('Generated reports', 3);
             const reporters = [{
               name: 'mocha',
