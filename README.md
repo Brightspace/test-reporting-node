@@ -32,7 +32,7 @@ this package.
 ```js
 module.exports = {
   spec: 'test/*.test.js',
-  reporter: 'd2l-test-reporting/reporters/mocha.cjs',
+  reporter: 'd2l-test-reporting/reporters/mocha.js',
   reporterOptions: [
     'reportPath=./d2l-test-report.json', // optional
     'reportConfigurationPath=./d2l-test-reporting.config.json' // optional
