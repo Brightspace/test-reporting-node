@@ -9,6 +9,10 @@ Helper package for generating reports for use with the **D2L test reporting
 framework**. This package is meant to be used in conjunction with this [GitHub
 Action].
 
+> [!NOTE]
+> If you have any question, concerns or just want to chat feel free to reach out
+> in [#test-reporting] (D2L employee accessible only).
+
 ## Installation
 
 ```console
