@@ -9,6 +9,10 @@ Helper package for generating reports for use with the **D2L test reporting
 framework**. This package is meant to be used in conjunction with this [GitHub
 Action].
 
+> [!NOTE]
+> If you have any questions, concerns or just want to chat feel free to reach
+> out in [#test-reporting] (D2L employee accessible only).
+
 ## Installation
 
 ```console
@@ -242,3 +246,4 @@ npm run test:integration
 [`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
 [GitHub Action]: https://github.com/Brightspace/test-reporting-action
 [Automated Testing Definitions]: https://desire2learn.atlassian.net/wiki/spaces/QE/pages/4354408450/Automated+Testing+Definitions
+[#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
