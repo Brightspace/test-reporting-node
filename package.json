@@ -14,6 +14,11 @@
     "./reporters/playwright.js": "./src/reporters/playwright.js",
     "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js"
   },
+  "keywords": [
+    "d2l",
+    "test",
+    "reporting"
+  ],
   "publishConfig": {
     "access": "public",
     "provenance": true
