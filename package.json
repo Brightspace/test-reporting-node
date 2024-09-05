@@ -65,10 +65,8 @@
     "d2l-license-checker": "^4",
     "eslint": "^8",
     "eslint-config-brightspace": "^1",
-    "http-server": "^14",
     "npm-run-all": "^4",
     "playwright": "^1.44.1",
-    "sinon": "^18",
-    "start-server-and-test": "^2"
+    "sinon": "^18"
   }
 }
