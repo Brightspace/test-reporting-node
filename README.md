@@ -227,6 +227,14 @@ npm run test:unit
 npm run test:integration
 ```
 
+### Versioning and Releasing
+
+This repo is configured to use `semantic-release`. Commits prefixed with `fix:`
+and `feat:` will trigger patch and minor releases when merged to `main`.
+
+To learn how to create major releases and release from maintenance branches,
+refer to the [semantic-release GitHub Action] documentation.
+
 <!-- links -->
 [License Badge]: https://img.shields.io/github/license/Brightspace/test-reporting-node?label=License
 [License File]: ./LICENSE
@@ -247,3 +255,4 @@ npm run test:integration
 [GitHub Action]: https://github.com/Brightspace/test-reporting-action
 [Automated Testing Definitions]: https://desire2learn.atlassian.net/wiki/spaces/QE/pages/4354408450/Automated+Testing+Definitions
 [#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
+[semantic-release GitHub Action]: https://github.com/BrightspaceUI/actions/tree/main/semantic-release
