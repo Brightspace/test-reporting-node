@@ -4,17 +4,17 @@ const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-test.describe('reporter tests 2', () => {
+test.describe('reporter 2', () => {
 	test.beforeAll(async() => { await delay(250); });
 
 	test.beforeEach(async() => { await delay(250); });
 
-	test('test', async() => { await delay(); });
+	test('passed', async() => { await delay(); });
 
-	test.skip('skipped test', () => {});
+	test.skip('skipped', () => {});
 
 	// eslint-disable-next-line no-empty-pattern
-	test('flaky test', async({}, testInfo) => {
+	test('flaky', async({}, testInfo) => {
 		if (testInfo.retry < 2) {
 			await delay();
 
@@ -24,7 +24,7 @@ test.describe('reporter tests 2', () => {
 		await delay();
 	});
 
-	test('failed test', () => { throw new Error('fail'); });
+	test('failed', () => { throw new Error('fail'); });
 
 	test.afterEach(async() => { await delay(250); });
 

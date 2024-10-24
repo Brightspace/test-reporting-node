@@ -52,7 +52,7 @@
     "lodash": "^4",
     "minimatch": "^10",
     "mocha": "^10",
-    "playwright-core": "^1.44.1"
+    "playwright-core": "^1.48"
   },
   "devDependencies": {
     "@playwright/test": "^1",
@@ -65,8 +65,10 @@
     "d2l-license-checker": "^4",
     "eslint": "^8",
     "eslint-config-brightspace": "^1",
+    "eslint-plugin-mocha": "^10",
+    "eslint-plugin-playwright": "^2",
     "npm-run-all": "^4",
-    "playwright": "^1.44.1",
+    "playwright": "^1.48",
     "sinon": "^19"
   }
 }

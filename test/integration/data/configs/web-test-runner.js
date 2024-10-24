@@ -11,10 +11,13 @@ export default {
 			verbose: true
 		})
 	],
-	files: './test/integration/data/web-test-runner-1.test.js',
+	files: [
+		'./test/integration/data/tests/web-test-runner/reporter-1.test.js',
+		'./test/integration/data/tests/web-test-runner/reporter-3.test.js'
+	],
 	groups: [{
 		name: 'group 1',
-		files: './test/integration/data/web-test-runner-2.test.js',
+		files: './test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browsers: [
 			puppeteerLauncher({ launchOptions: { headless: 'new' } }),
 			playwrightLauncher({ product: 'firefox' })

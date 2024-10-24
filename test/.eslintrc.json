@@ -1,3 +1,18 @@
 {
-  "extends": "brightspace/testing-config"
+  "plugins": [
+    "mocha"
+  ],
+  "extends": [
+    "brightspace/testing-config",
+    "plugin:mocha/recommended"
+  ],
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    // fails if `.only` is used
+    "mocha/no-exclusive-tests": "error",
+    "mocha/no-mocha-arrows": "off",
+    "no-console": "off"
+  }
 }
