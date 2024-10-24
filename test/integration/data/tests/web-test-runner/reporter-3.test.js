@@ -2,16 +2,16 @@ const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-describe('reporter tests 3', () => {
+describe('reporter 3', () => {
 	before(async() => { await delay(250); });
 
 	beforeEach(async() => { await delay(250); });
 
-	it('test', async() => { await delay(); });
+	it('passed', async() => { await delay(); });
 
-	it.skip('skipped test', () => {});
+	it.skip('skipped', () => {});
 
-	it('failed test', () => { throw new Error('fail'); });
+	it('failed', () => { throw new Error('fail'); });
 
 	afterEach(async() => { await delay(250); });
 

@@ -9,108 +9,108 @@ export const testReportV1Partial = {
 		countFlaky: 0
 	},
 	details: [{
-		name: 'reporter tests 1 > test',
+		name: 'reporter 1 > passed',
 		status: 'passed',
-		location: 'test/integration/data/web-test-runner-1.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-1.test.js',
 		browser: 'chrome',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
 		retries: 0
 	}, {
-		name: 'reporter tests 1 > skipped test',
+		name: 'reporter 1 > skipped',
 		status: 'skipped',
-		location: 'test/integration/data/web-test-runner-1.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-1.test.js',
 		browser: 'chrome',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
 		retries: 0
 	}, {
-		name: 'reporter tests 1 > failed test',
+		name: 'reporter 1 > failed',
 		status: 'failed',
-		location: 'test/integration/data/web-test-runner-1.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-1.test.js',
 		browser: 'chrome',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > test',
+		name: '[group 1] > reporter 2 > passed',
 		status: 'passed',
-		location: 'test/integration/data/web-test-runner-2.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > skipped test',
+		name: '[group 1] > reporter 2 > skipped',
 		status: 'skipped',
-		location: 'test/integration/data/web-test-runner-2.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > failed test',
+		name: '[group 1] > reporter 2 > failed',
 		status: 'failed',
-		location: 'test/integration/data/web-test-runner-2.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browser: 'chromium',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > test',
+		name: '[group 1] > reporter 2 > passed',
 		status: 'passed',
-		location: 'test/integration/data/web-test-runner-2.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > skipped test',
+		name: '[group 1] > reporter 2 > skipped',
 		status: 'skipped',
-		location: 'test/integration/data/web-test-runner-2.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > failed test',
+		name: '[group 1] > reporter 2 > failed',
 		status: 'failed',
-		location: 'test/integration/data/web-test-runner-2.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browser: 'firefox',
 		tool: 'Test Reporting',
 		experience: 'WebTestRunner 2 Test Framework',
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 2] > reporter tests 1 > test',
+		name: '[group 2] > reporter 1 > passed',
 		status: 'passed',
-		location: 'test/integration/data/web-test-runner-1.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-1.test.js',
 		browser: 'webkit',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
 		retries: 0
 	}, {
-		name: '[group 2] > reporter tests 1 > skipped test',
+		name: '[group 2] > reporter 1 > skipped',
 		status: 'skipped',
-		location: 'test/integration/data/web-test-runner-1.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-1.test.js',
 		browser: 'webkit',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
 		type: 'integration',
 		retries: 0
 	}, {
-		name: '[group 2] > reporter tests 1 > failed test',
+		name: '[group 2] > reporter 1 > failed',
 		status: 'failed',
-		location: 'test/integration/data/web-test-runner-1.test.js',
+		location: 'test/integration/data/tests/web-test-runner/reporter-1.test.js',
 		browser: 'webkit',
 		tool: 'WebTestRunner 1 Test Reporting',
 		experience: 'WebTestRunner 1 Test Framework',
@@ -131,10 +131,10 @@ export const testReportV2Partial = {
 		}
 	},
 	details: [{
-		name: 'reporter tests 1 > test',
+		name: 'reporter 1 > passed',
 		status: 'passed',
 		location: {
-			file: 'test/integration/data/web-test-runner-1.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js'
 		},
 		browser: 'chrome',
 		timeout: 120000,
@@ -143,10 +143,10 @@ export const testReportV2Partial = {
 		type: 'integration',
 		retries: 0
 	}, {
-		name: 'reporter tests 1 > skipped test',
+		name: 'reporter 1 > skipped',
 		status: 'skipped',
 		location: {
-			file: 'test/integration/data/web-test-runner-1.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js'
 		},
 		browser: 'chrome',
 		timeout: 120000,
@@ -155,10 +155,10 @@ export const testReportV2Partial = {
 		type: 'integration',
 		retries: 0
 	}, {
-		name: 'reporter tests 1 > failed test',
+		name: 'reporter 1 > failed',
 		status: 'failed',
 		location: {
-			file: 'test/integration/data/web-test-runner-1.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js'
 		},
 		browser: 'chrome',
 		timeout: 120000,
@@ -167,10 +167,10 @@ export const testReportV2Partial = {
 		type: 'integration',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > test',
+		name: '[group 1] > reporter 2 > passed',
 		status: 'passed',
 		location: {
-			file: 'test/integration/data/web-test-runner-2.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js'
 		},
 		browser: 'chromium',
 		timeout: 120000,
@@ -179,10 +179,10 @@ export const testReportV2Partial = {
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > skipped test',
+		name: '[group 1] > reporter 2 > skipped',
 		status: 'skipped',
 		location: {
-			file: 'test/integration/data/web-test-runner-2.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js'
 		},
 		browser: 'chromium',
 		timeout: 120000,
@@ -191,10 +191,10 @@ export const testReportV2Partial = {
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > failed test',
+		name: '[group 1] > reporter 2 > failed',
 		status: 'failed',
 		location: {
-			file: 'test/integration/data/web-test-runner-2.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js'
 		},
 		browser: 'chromium',
 		timeout: 120000,
@@ -203,10 +203,10 @@ export const testReportV2Partial = {
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > test',
+		name: '[group 1] > reporter 2 > passed',
 		status: 'passed',
 		location: {
-			file: 'test/integration/data/web-test-runner-2.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js'
 		},
 		browser: 'firefox',
 		timeout: 120000,
@@ -215,10 +215,10 @@ export const testReportV2Partial = {
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > skipped test',
+		name: '[group 1] > reporter 2 > skipped',
 		status: 'skipped',
 		location: {
-			file: 'test/integration/data/web-test-runner-2.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js'
 		},
 		browser: 'firefox',
 		timeout: 120000,
@@ -227,10 +227,10 @@ export const testReportV2Partial = {
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 1] > reporter tests 2 > failed test',
+		name: '[group 1] > reporter 2 > failed',
 		status: 'failed',
 		location: {
-			file: 'test/integration/data/web-test-runner-2.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js'
 		},
 		browser: 'firefox',
 		timeout: 120000,
@@ -239,10 +239,10 @@ export const testReportV2Partial = {
 		type: 'accessibility',
 		retries: 0
 	}, {
-		name: '[group 2] > reporter tests 1 > test',
+		name: '[group 2] > reporter 1 > passed',
 		status: 'passed',
 		location: {
-			file: 'test/integration/data/web-test-runner-1.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js'
 		},
 		browser: 'webkit',
 		timeout: 120000,
@@ -251,10 +251,10 @@ export const testReportV2Partial = {
 		type: 'integration',
 		retries: 0
 	}, {
-		name: '[group 2] > reporter tests 1 > skipped test',
+		name: '[group 2] > reporter 1 > skipped',
 		status: 'skipped',
 		location: {
-			file: 'test/integration/data/web-test-runner-1.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js'
 		},
 		browser: 'webkit',
 		timeout: 120000,
@@ -263,10 +263,10 @@ export const testReportV2Partial = {
 		type: 'integration',
 		retries: 0
 	}, {
-		name: '[group 2] > reporter tests 1 > failed test',
+		name: '[group 2] > reporter 1 > failed',
 		status: 'failed',
 		location: {
-			file: 'test/integration/data/web-test-runner-1.test.js'
+			file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js'
 		},
 		browser: 'webkit',
 		timeout: 120000,

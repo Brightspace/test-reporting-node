@@ -16,24 +16,24 @@ export default defineConfig({
 	],
 	retries: 3,
 	fullyParallel: true,
-	testDir: '../',
-	testMatch: 'playwright-*.test.js',
+	testDir: '../tests/playwright/',
+	testMatch: '*.test.js',
 	use: deviceTypeChrome,
-	globalSetup: '../playwright.global.setup.js',
-	globalTeardown: '../playwright.global.teardown.js',
+	globalSetup: '../tests/playwright/global.setup.js',
+	globalTeardown: '../tests/playwright/global.teardown.js',
 	projects: [{
 		name: 'setup',
-		testMatch: 'playwright.setup.js',
+		testMatch: 'setup.js',
 		teardown: 'teardown'
 	}, {
 		name: 'teardown',
-		testMatch: 'playwright.teardown.js'
+		testMatch: 'teardown.js'
 	}, {
 		name: 'chromium',
 		dependencies: ['setup']
 	}, {
 		name: 'firefox',
-		testMatch: 'playwright-2.test.js',
+		testMatch: 'reporter-2.test.js',
 		use: deviceTypeFirefox,
 		dependencies: ['setup'],
 		metadata: {
