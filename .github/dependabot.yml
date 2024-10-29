@@ -19,6 +19,7 @@ updates:
         patterns:
           - eslint
           - eslint-*
+          - '@eslint/*'
       chai:
         dependency-type: development
         patterns:

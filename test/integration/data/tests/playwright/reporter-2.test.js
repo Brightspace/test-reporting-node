@@ -13,7 +13,6 @@ test.describe('reporter 2', () => {
 
 	test.skip('skipped', () => {});
 
-	// eslint-disable-next-line no-empty-pattern
 	test('flaky', async({}, testInfo) => {
 		if (testInfo.retry < 2) {
 			await delay();
