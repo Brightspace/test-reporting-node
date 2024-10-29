@@ -13,8 +13,6 @@ updates:
     ignore:
       - dependency-name: '*'
         update-types: ['version-update:semver-patch']
-      - dependency-name: eslint
-        versions: '>= 9'
     groups:
       eslint:
         dependency-type: development
