@@ -1,5 +1,0 @@
-{
-  "rules": {
-    "mocha/no-skipped-tests": "off"
-  }
-}
