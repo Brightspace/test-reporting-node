@@ -81,7 +81,7 @@ export default class Reporter {
 			return;
 		}
 
-		const { id } = test;
+		const { id, expectedStatus } = test;
 		const { startTime, retry, status, duration } = result;
 		const project = test.parent.project();
 		const name = makeTestName(test);
@@ -94,8 +94,10 @@ export default class Reporter {
 			.setStarted(startTime)
 			.setTimeout(Math.round(timeout))
 			.addDuration(Math.round(duration));
+		const isRetry = retry !== 0;
+		const overrideStatus = isRetry;
 
-		if (retry !== 0) {
+		if (isRetry) {
 			detail.incrementRetries();
 		}
 
@@ -105,12 +107,30 @@ export default class Reporter {
 			detail.setBrowser(browser);
 		}
 
-		if (status === 'passed') {
-			detail.setPassed({ override: true });
-		} else if (status === 'skipped') {
-			detail.setSkipped({ override: true });
+		if (expectedStatus === 'passed') {
+			if (status === 'passed') {
+				detail.setPassed({ override: overrideStatus });
+			} else if (status === 'skipped') {
+				detail.setSkipped({ override: overrideStatus });
+			} else {
+				detail.setFailed({ override: overrideStatus });
+			}
+		} else if (expectedStatus === 'failed') {
+			if (status === 'failed') {
+				detail.setPassed({ override: overrideStatus });
+			} else if (status === 'skipped') {
+				detail.setSkipped({ override: overrideStatus });
+			} else {
+				detail.setFailed({ override: overrideStatus });
+			}
+		} else if (expectedStatus === 'skipped') {
+			if (status === 'skipped') {
+				detail.setSkipped({ override: overrideStatus });
+			} else {
+				detail.setFailed({ override: overrideStatus });
+			}
 		} else {
-			detail.setFailed({ override: true });
+			detail.setFailed({ override: overrideStatus });
 		}
 	}
 
