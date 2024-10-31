@@ -81,10 +81,17 @@ describe('report validation', () => {
 				for (const detail of details) {
 					const detailStarted = new Date(detail.started);
 
-					expect(detail.duration.total).to.be.at.least(0);
-
 					if (['passed', 'flaky'].includes(detail.status)) {
+						expect(detail.duration.total).to.be.gt(0);
 						expect(detail.duration.final).to.be.gt(0);
+					} else if (detail.status === 'skipped') {
+						if (detail.name.includes('dynamic')) {
+							expect(detail.duration.final).to.be.gt(0);
+							expect(detail.duration.total).to.be.gt(0);
+						} else {
+							expect(detail.duration.final).to.eq(0);
+							expect(detail.duration.total).to.eq(0);
+						}
 					} else {
 						expect(detail.duration.final).to.be.at.least(0);
 					}
