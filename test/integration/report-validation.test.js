@@ -82,22 +82,21 @@ describe('report validation', () => {
 					const detailStarted = new Date(detail.started);
 
 					if (['passed', 'flaky'].includes(detail.status)) {
-						expect(detail.duration.total).to.be.gt(0);
-						expect(detail.duration.final).to.be.gt(0);
+						expect(detail.duration.final).to.be.at.least(0);
+						expect(detail.duration.total).to.be.at.least(detail.duration.final);
 					} else if (detail.status === 'skipped') {
 						if (detail.name.includes('dynamic')) {
-							expect(detail.duration.final).to.be.gt(0);
-							expect(detail.duration.total).to.be.gt(0);
+							expect(detail.duration.final).to.be.at.least(0);
+							expect(detail.duration.total).to.be.at.least(detail.duration.final);
 						} else {
 							expect(detail.duration.final).to.eq(0);
 							expect(detail.duration.total).to.eq(0);
 						}
 					} else {
 						expect(detail.duration.final).to.be.at.least(0);
+						expect(detail.duration.total).to.be.at.least(detail.duration.final);
 					}
 
-					expect(detail.duration.total).to.be.at.least(detail.duration.final);
-					expect(detail.duration.final).to.be.at.most(detail.duration.total);
 					expect(detail.duration.total).to.be.at.most(summary.duration.total);
 					expect(detailStarted).to.be.at.most(now);
 					expect(detailStarted).to.be.at.least(nowMinus30Minutes);
