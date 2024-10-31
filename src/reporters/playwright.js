@@ -95,7 +95,6 @@ export default class Reporter {
 			.setTimeout(Math.round(timeout))
 			.addDuration(Math.round(duration));
 		const isRetry = retry !== 0;
-		const overrideStatus = isRetry;
 
 		if (isRetry) {
 			detail.incrementRetries();
@@ -107,30 +106,12 @@ export default class Reporter {
 			detail.setBrowser(browser);
 		}
 
-		if (expectedStatus === 'passed') {
-			if (status === 'passed') {
-				detail.setPassed({ override: overrideStatus });
-			} else if (status === 'skipped') {
-				detail.setSkipped({ override: overrideStatus });
-			} else {
-				detail.setFailed({ override: overrideStatus });
-			}
-		} else if (expectedStatus === 'failed') {
-			if (status === 'failed') {
-				detail.setPassed({ override: overrideStatus });
-			} else if (status === 'skipped') {
-				detail.setSkipped({ override: overrideStatus });
-			} else {
-				detail.setFailed({ override: overrideStatus });
-			}
-		} else if (expectedStatus === 'skipped') {
-			if (status === 'skipped') {
-				detail.setSkipped({ override: overrideStatus });
-			} else {
-				detail.setFailed({ override: overrideStatus });
-			}
+		if (status === 'skipped') {
+			detail.setSkipped({ override: isRetry });
+		} else if (expectedStatus !== status) {
+			detail.setFailed({ override: isRetry });
 		} else {
-			detail.setFailed({ override: overrideStatus });
+			detail.setPassed({ override: isRetry });
 		}
 	}
 
