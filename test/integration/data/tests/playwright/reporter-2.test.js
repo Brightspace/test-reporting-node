@@ -11,7 +11,17 @@ test.describe('reporter 2', () => {
 
 	test('passed', async() => { await delay(); });
 
-	test.skip('skipped', () => {});
+	test.skip('skipped static', () => {});
+
+	test.fixme('skipped static, fixme', () => {});
+
+	test('skipped dynamic', ({}, testInfo) => {
+		testInfo.skip();
+	});
+
+	test('skipped dynamic, fixme', ({}, testInfo) => {
+		testInfo.fixme();
+	});
 
 	test('flaky', async({}, testInfo) => {
 		if (testInfo.retry < 2) {
@@ -24,6 +34,26 @@ test.describe('reporter 2', () => {
 	});
 
 	test('failed', () => { throw new Error('fail'); });
+
+	test.fail('failed static expected', () => { throw new Error('fail'); });
+
+	test('failed dynamic expected', ({}, testInfo) => {
+		testInfo.fail();
+
+		throw new Error('fail');
+	});
+
+	test.fail('failed static expected, skipped dynamic', ({}, testInfo) => {
+		testInfo.skip();
+
+		throw new Error('fail');
+	});
+
+	test.fail('failed static expected, skipped dynamic, fixme', ({}, testInfo) => {
+		testInfo.fixme();
+
+		throw new Error('fail');
+	});
 
 	test.afterEach(async() => { await delay(250); });
 
