@@ -135,7 +135,7 @@ export default class Reporter {
 		this._report.finalize();
 	}
 
-	async onExit() {
+	onExit() {
 		if (!this._report || !this._hasTests) {
 			return;
 		}
