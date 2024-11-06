@@ -24,6 +24,7 @@
     "provenance": true
   },
   "scripts": {
+    "prepack": "sed -ri 's/\\[!([A-Z]+)\\]/**\\1**:/g' README.md",
     "license-check": "d2l-license-checker -p",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint",
