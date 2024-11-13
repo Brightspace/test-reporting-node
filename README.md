@@ -31,7 +31,8 @@ so we can look into adding it to our set of reporters.
 
 Please consult the [official documentation for Mocha] to see how
 to use reporters. Below is an example of how to add the reporter provided by
-this package.
+this package. It assumes you are using the default `.mocharc.js` file for
+configuration.
 
 ```js
 module.exports = {
@@ -56,7 +57,8 @@ module.exports = {
 
 Please consult the [official documentation for Playwright] to see how
 to use reporters. Below is an example of how to add the reporter provided by
-this package.
+this package. It assumes you are using the default `playwright.config.js`
+file for configuration.
 
 ```js
 import { defineConfig, devices } from '@playwright/test';
@@ -100,7 +102,8 @@ export default defineConfig({
 
 Please consult the [official documentation for `@web/test-runner`] to see how
 to use reporters. Below is an example of how to add the reporter provided by
-this package.
+this package. It assumes you are using the default `web-test-runner.config.js`
+file for configuration.
 
 ```js
 import { defaultReporter } from '@web/test-runner';
