@@ -4,6 +4,7 @@ const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 const { writeFileSync } = require('node:fs');
+const { escapeSpecialCharacters } = require('./strings.cjs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -186,7 +187,7 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	setName(name, options) {
-		this._setProperty('name', name, options);
+		this._setProperty('name', escapeSpecialCharacters(name), options);
 
 		return this;
 	}
