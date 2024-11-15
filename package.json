@@ -1,6 +1,6 @@
 {
   "name": "d2l-test-reporting",
-  "version": "4.0.11",
+  "version": "4.0.12",
   "description": "Helper package for generating reports for use with the D2L test reporting framework",
   "author": "D2L Corporation",
   "license": "Apache-2.0",
