@@ -13,6 +13,8 @@ describe('reporter 1', () => {
 
 	it('failed', () => { throw new Error('fail'); });
 
+	it('special/characters "(\n\r\t\b\f)"', async() => { await delay(); });
+
 	afterEach(async() => { await delay(250); });
 
 	after(async() => { await delay(250); });
