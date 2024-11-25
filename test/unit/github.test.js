@@ -1,5 +1,3 @@
-/* global process */
-
 import { getContext, hasContext } from '../../src/helpers/github.cjs';
 import { createSandbox } from 'sinon';
 import { expect } from 'chai';

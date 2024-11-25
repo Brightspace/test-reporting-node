@@ -1,6 +1,7 @@
 import { addExtensions, nodeConfig, setDirectoryConfigs, testingConfig } from 'eslint-config-brightspace';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import globals from 'globals';
 import { includeIgnoreFile } from '@eslint/compat';
 import jsonPlugin from 'eslint-plugin-json';
 import mochaPlugin from 'eslint-plugin-mocha';
@@ -48,6 +49,14 @@ export default [
 			'playwright/expect-expect': 'off',
 			'playwright/no-skipped-test': 'off',
 			'playwright/no-conditional-in-test': 'off'
+		}
+	},
+	{
+		files: ['test/unit/**/*.js'],
+		languageOptions: {
+			globals: {
+				...globals.node
+			}
 		}
 	},
 	jsonPlugin.configs['recommended'],
