@@ -1,3 +1,5 @@
+'use strict';
+
 const hasContext = () => {
 	const { env: { GITHUB_ACTIONS } } = process;
 

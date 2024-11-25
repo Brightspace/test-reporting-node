@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	spec: 'test/integration/data/tests/mocha/*.test.js',
 	retries: 3,

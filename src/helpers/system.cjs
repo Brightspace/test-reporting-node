@@ -1,3 +1,5 @@
+'use strict';
+
 const { relative, sep: platformSeparator } = require('node:path');
 const { join } = require('node:path/posix');
 const { type } = require('node:os');
