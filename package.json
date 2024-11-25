@@ -54,12 +54,10 @@
     "lodash": "^4",
     "minimatch": "^10",
     "mocha": "^10",
-    "playwright-core": "^1.48"
+    "playwright-core": "^1.49"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
-    "@eslint/eslintrc": "^3",
-    "@eslint/js": "^9",
     "@playwright/test": "^1",
     "@web/test-runner": "^0.19",
     "@web/test-runner-playwright": "^0.11",
@@ -70,11 +68,13 @@
     "d2l-license-checker": "^4",
     "editorconfig-checker": "^6",
     "eslint": "^9",
-    "eslint-config-brightspace": "^1",
+    "eslint-config-brightspace": "^2",
+    "eslint-plugin-json": "^4",
     "eslint-plugin-mocha": "^10",
     "eslint-plugin-playwright": "^2",
+    "globals": "^15",
     "npm-run-all": "^4",
-    "playwright": "^1.48",
+    "playwright": "^1.49",
     "sinon": "^19"
   }
 }

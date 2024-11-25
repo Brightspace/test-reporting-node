@@ -1,3 +1,5 @@
+'use strict';
+
 const schema = require('./schema.cjs');
 const { flatten } = require('./object.cjs');
 const fs = require('node:fs');

@@ -1,61 +1,68 @@
-import path from 'node:path';
+import { addExtensions, nodeConfig, setDirectoryConfigs, testingConfig } from 'eslint-config-brightspace';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
 import { includeIgnoreFile } from '@eslint/compat';
+import jsonPlugin from 'eslint-plugin-json';
+import mochaPlugin from 'eslint-plugin-mocha';
+import playwrightPlugin from 'eslint-plugin-playwright';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const gitignorePath = path.resolve(__dirname, '.gitignore');
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all
-});
+const __dirname = dirname(__filename);
+const gitignorePath = resolve(__dirname, '.gitignore');
+const nodeConfigExtended = addExtensions(nodeConfig, ['.js', '.cjs']);
 
 export default [
 	includeIgnoreFile(gitignorePath),
-	...compat.extends('brightspace/node-config').map((config) => ({
-		...config,
-		files: ['**/*.js', '**/*.cjs'],
-		rules: {
-			...config.rules,
-			'comma-dangle': 'error'
+	...setDirectoryConfigs(
+		nodeConfigExtended,
+		{
+			'test/': testingConfig,
+			'test/integration/data/': nodeConfigExtended,
+			'test/integration/data/tests/mocha/': testingConfig,
+			'test/integration/data/tests/web-test-runner/': testingConfig
 		}
-	})),
-	...compat.extends(
-		'brightspace/testing-config',
-		'plugin:mocha/recommended'
-	).map((config) => ({
-		...config,
-		files: ['test/**/*.test.js'],
+	),
+	{
+		...mochaPlugin.configs.flat.recommended,
+		files: ['test/unit/**/*.test.js'],
 		rules: {
-			...config.rules,
+			...mochaPlugin.configs.flat.recommended.rules,
 			'mocha/no-exclusive-tests': 'error',
 			'mocha/no-mocha-arrows': 'off'
 		}
-	})),
-	...compat.extends(
-		'brightspace/testing-config',
-		'plugin:mocha/recommended'
-	).map((config) => ({
-		...config,
-		files: ['test/integration/data/tests/**/*.test.js'],
+	},
+	{
+		...mochaPlugin.configs.flat.recommended,
+		files: ['test/integration/data/tests/{mocha,web-test-runner}/*.test.js'],
 		rules: {
-			...config.rules,
+			...mochaPlugin.configs.flat.recommended.rules,
 			'mocha/no-mocha-arrows': 'off',
-			'mocha/no-skipped-tests': 'off',
-			'no-console': 'off'
+			'mocha/no-skipped-tests': 'off'
 		}
-	})),
-	...compat.extends('plugin:playwright/recommended').map((config) => ({
-		...config,
+	},
+	{
+		...playwrightPlugin.configs['flat/recommended'],
 		files: ['test/integration/data/tests/playwright/*.js'],
 		rules: {
-			...config.rules,
+			...playwrightPlugin.configs['flat/recommended'].rules,
 			'playwright/expect-expect': 'off',
-			'playwright/no-conditional-in-test': 'off',
-			'playwright/no-skipped-test': 'off'
+			'playwright/no-skipped-test': 'off',
+			'playwright/no-conditional-in-test': 'off'
 		}
-	}))
+	},
+	{
+		files: ['test/unit/**/*.js'],
+		languageOptions: {
+			globals: {
+				...globals.node
+			}
+		}
+	},
+	jsonPlugin.configs['recommended'],
+	{
+		rules: {
+			'comma-dangle': 'error'
+		}
+	}
 ];
