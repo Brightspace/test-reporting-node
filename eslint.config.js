@@ -9,43 +9,46 @@ import playwrightPlugin from 'eslint-plugin-playwright';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const nodeConfigs = addExtensions(nodeConfig, ['.js', '.cjs']);
+const playwrightConfig = playwrightPlugin.configs['flat/recommended'];
+const mochaConfig = mochaPlugin.configs.flat.recommended;
+const jsonConfig = jsonPlugin.configs['recommended'];
 const gitignorePath = resolve(__dirname, '.gitignore');
-const nodeConfigExtended = addExtensions(nodeConfig, ['.js', '.cjs']);
 
 export default [
 	includeIgnoreFile(gitignorePath),
 	...setDirectoryConfigs(
-		nodeConfigExtended,
+		nodeConfigs,
 		{
 			'test/': testingConfig,
-			'test/integration/data/': nodeConfigExtended,
+			'test/integration/data/': nodeConfigs,
 			'test/integration/data/tests/mocha/': testingConfig,
 			'test/integration/data/tests/web-test-runner/': testingConfig
 		}
 	),
 	{
-		...mochaPlugin.configs.flat.recommended,
+		...mochaConfig,
 		files: ['test/unit/**/*.test.js'],
 		rules: {
-			...mochaPlugin.configs.flat.recommended.rules,
+			...mochaConfig.rules,
 			'mocha/no-exclusive-tests': 'error',
 			'mocha/no-mocha-arrows': 'off'
 		}
 	},
 	{
-		...mochaPlugin.configs.flat.recommended,
+		...mochaConfig,
 		files: ['test/integration/data/tests/{mocha,web-test-runner}/*.test.js'],
 		rules: {
-			...mochaPlugin.configs.flat.recommended.rules,
+			...mochaConfig.rules,
 			'mocha/no-mocha-arrows': 'off',
 			'mocha/no-skipped-tests': 'off'
 		}
 	},
 	{
-		...playwrightPlugin.configs['flat/recommended'],
+		...playwrightConfig,
 		files: ['test/integration/data/tests/playwright/*.js'],
 		rules: {
-			...playwrightPlugin.configs['flat/recommended'].rules,
+			...playwrightConfig.rules,
 			'playwright/expect-expect': 'off',
 			'playwright/no-skipped-test': 'off',
 			'playwright/no-conditional-in-test': 'off'
@@ -59,7 +62,7 @@ export default [
 			}
 		}
 	},
-	jsonPlugin.configs['recommended'],
+	jsonConfig,
 	{
 		rules: {
 			'comma-dangle': 'error'
