@@ -1,5 +1,3 @@
-'use strict';
-
 const Ajv = require('ajv/dist/2019');
 const addFormats = require('ajv-formats');
 

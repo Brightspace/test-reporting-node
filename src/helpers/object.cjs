@@ -1,5 +1,3 @@
-'use strict';
-
 const flatten = (obj) => {
 	const result = {};
 

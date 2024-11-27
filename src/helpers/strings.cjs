@@ -1,5 +1,3 @@
-'use strict';
-
 const escapeSpecialCharacters = (str) => {
 	return str
 		.replace(/[\\]/g, '\\\\')

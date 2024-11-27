@@ -1,5 +1,3 @@
-'use strict';
-
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
 

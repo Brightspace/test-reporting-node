@@ -1,5 +1,3 @@
-'use strict';
-
 const { getContext, hasContext } = require('./github.cjs');
 const { getOperatingSystemType, makeRelativeFilePath } = require('./system.cjs');
 const { randomUUID } = require('node:crypto');
