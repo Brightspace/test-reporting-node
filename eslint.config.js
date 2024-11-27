@@ -10,6 +10,7 @@ import playwrightPlugin from 'eslint-plugin-playwright';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const gitignorePath = resolve(__dirname, '.gitignore');
+const fileExtensions = ['.js', '.cjs'];
 const importConfigs = [
 	importPlugin.flatConfigs.recommended,
 	{
@@ -32,37 +33,48 @@ const commandDangleConfig = {
 		'comma-dangle': 'error'
 	}
 };
-const globalConfigs = [
-	...addExtensions(nodeConfig, ['.js', '.cjs']),
-	...importConfigs,
-	commandDangleConfig
-];
-const playwrightConfigs = [
-	...globalConfigs,
-	playwrightPlugin.configs['flat/recommended'],
-	{
-		rules: {
-			'playwright/expect-expect': 'off',
-			'playwright/no-skipped-test': 'off',
-			'playwright/no-conditional-in-test': 'off'
+const globalConfigs = addExtensions(
+	[
+		...nodeConfig,
+		...importConfigs,
+		commandDangleConfig
+	],
+	fileExtensions
+);
+const playwrightConfigs = addExtensions(
+	[
+		...globalConfigs,
+		playwrightPlugin.configs['flat/recommended'],
+		{
+			rules: {
+				'playwright/expect-expect': 'off',
+				'playwright/no-skipped-test': 'off',
+				'playwright/no-conditional-in-test': 'off'
+			}
 		}
-	}
-];
-const mochaConfigs = [
-	...globalConfigs,
-	mochaPlugin.configs.flat.recommended,
-	{
-		rules: {
-			'mocha/no-exclusive-tests': 'error',
-			'mocha/no-mocha-arrows': 'off'
+	],
+	fileExtensions
+);
+const mochaConfigs = addExtensions(
+	[
+		...globalConfigs,
+		mochaPlugin.configs.flat.recommended,
+		{
+			rules: {
+				'mocha/no-exclusive-tests': 'error',
+				'mocha/no-mocha-arrows': 'off'
+			}
 		}
-	}
-];
-const webTestRunnerConfigs = [
-	...testingConfig,
-	commandDangleConfig
-];
-
+	],
+	fileExtensions
+);
+const webTestRunnerConfigs = addExtensions(
+	[
+		...testingConfig,
+		commandDangleConfig
+	],
+	fileExtensions
+);
 const jsonConfig = jsonPlugin.configs['recommended'];
 
 export default [
@@ -70,10 +82,10 @@ export default [
 	...setDirectoryConfigs(
 		globalConfigs,
 		{
-			'test/unit/': mochaConfigs,
-			'test/integration/': mochaConfigs,
-			'test/integration/data/': globalConfigs,
-			'test/integration/data/tests/mocha/': [
+			'test/unit': mochaConfigs,
+			'test/integration': mochaConfigs,
+			'test/integration/data': globalConfigs,
+			'test/integration/data/tests/mocha': [
 				...mochaConfigs,
 				{
 					rules: {
@@ -82,8 +94,8 @@ export default [
 					}
 				}
 			],
-			'test/integration/data/tests/playwright/': playwrightConfigs,
-			'test/integration/data/tests/web-test-runner/': webTestRunnerConfigs
+			'test/integration/data/tests/playwright': playwrightConfigs,
+			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs
 
 		}
 	),
