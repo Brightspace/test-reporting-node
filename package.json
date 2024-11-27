@@ -69,10 +69,10 @@
     "editorconfig-checker": "^6",
     "eslint": "^9",
     "eslint-config-brightspace": "^2",
+    "eslint-plugin-import": "^2",
     "eslint-plugin-json": "^4",
     "eslint-plugin-mocha": "^10",
     "eslint-plugin-playwright": "^2",
-    "globals": "^15",
     "npm-run-all": "^4",
     "playwright": "^1.49",
     "sinon": "^19"

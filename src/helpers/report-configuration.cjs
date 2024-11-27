@@ -1,5 +1,3 @@
-'use strict';
-
 const { readFileSync } = require('node:fs');
 const { resolve } = require('node:path');
 const { formatErrorAjv, validateReportConfigurationV1Ajv } = require('./schema.cjs');
