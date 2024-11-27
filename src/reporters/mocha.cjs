@@ -1,4 +1,5 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
+const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
 
 const { consoleLog, color } = Base;
@@ -19,7 +20,10 @@ class MochaLogger {
 }
 
 const makeDetailName = (test) => {
-	return test.titlePath().join(' > ');
+	return test
+		.titlePath()
+		.map(titlePart => escapeSpecialCharacters(titlePart).trim())
+		.join(' > ');
 };
 
 const makeDetailId = (file, name) => {

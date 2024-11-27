@@ -4,7 +4,6 @@ const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 const { writeFileSync } = require('node:fs');
-const { escapeSpecialCharacters } = require('./strings.cjs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -58,7 +57,7 @@ class ReportBuilderBase {
 		this._data = {};
 	}
 
-	toJSON() {
+	get data() {
 		return this._data;
 	}
 
@@ -187,7 +186,7 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	setName(name, options) {
-		this._setProperty('name', escapeSpecialCharacters(name), options);
+		this._setProperty('name', name, options);
 
 		return this;
 	}
@@ -350,8 +349,8 @@ class ReportBuilder extends ReportBuilderBase {
 		let countSkipped = 0;
 		let countFlaky = 0;
 
-		for (const [, detail] of this._data.details) {
-			const { status, retries } = detail.toJSON();
+		for (const [, { data: detail }] of this._data.details) {
+			const { status, retries } = detail;
 
 			if (status === 'passed') {
 				if (retries !== 0) {
@@ -366,7 +365,7 @@ class ReportBuilder extends ReportBuilderBase {
 			}
 
 			if (this._verbose) {
-				const { name, location, type, tool, experience } = detail.toJSON();
+				const { name, location, type, tool, experience } = detail;
 				const prefix = `Test '${name}' at '${location}' is missing`;
 
 				if (!type) {
@@ -393,12 +392,12 @@ class ReportBuilder extends ReportBuilderBase {
 	}
 
 	toJSON() {
-		const data = super.toJSON();
+		const { summary, details } = this.data;
 
 		return {
-			...data,
-			summary: data.summary.toJSON(),
-			details: [...data.details].map(([, detail]) => detail.toJSON())
+			...this.data,
+			summary: summary.data,
+			details: [...details.values()].map(({ data }) => data)
 		};
 	}
 

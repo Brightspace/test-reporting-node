@@ -1,6 +1,7 @@
+import chalk from 'chalk';
+import { escapeSpecialCharacters } from '../helpers/strings.cjs';
 import { ReportBuilder } from '../helpers/report-builder.cjs';
 import { SESSION_STATUS } from '@web/test-runner-core';
-import chalk from 'chalk';
 
 const { yellow, red, cyan, bold } = chalk;
 
@@ -11,8 +12,12 @@ class WebTestRunnerLogger {
 	location(message, location) { this.info(`${message}: ${cyan(bold(location))}`); }
 }
 
+const sanitizeName = (name) => {
+	return escapeSpecialCharacters(name).trim();
+};
+
 const makeDetailName = (prefix, testName) => {
-	return `${prefix}${testName}`;
+	return `${prefix}${sanitizeName(testName)}`;
 };
 
 const makeDetailId = (sessionId, file, name) => {
@@ -93,7 +98,7 @@ export function reporter(options = {}) {
 		collectTests(session, prefix, suite.tests);
 
 		for (const childSuite of suite.suites) {
-			const newPrefix = `${prefix}${childSuite.name} > `;
+			const newPrefix = `${prefix}${sanitizeName(childSuite.name)} > `;
 
 			collectSuite(session, newPrefix, childSuite);
 		}
@@ -105,7 +110,7 @@ export function reporter(options = {}) {
 		for (const session of sessions) {
 			const { passed, group: { name: groupName }, testResults } = session;
 			const isGroupName = groupName && testConfig.groups?.some(({ name }) => groupName === name);
-			const prefix = isGroupName ? `[${groupName}] > ` : '';
+			const prefix = isGroupName ? `[${sanitizeName(groupName)}] > ` : '';
 
 			overallPassed &= passed;
 

@@ -55,7 +55,7 @@ test.describe('reporter 1', () => {
 		throw new Error('fail');
 	});
 
-	test('special/characters "(\n\r\t\b\f)"', async() => { await delay(); });
+	test(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
 
 	test.afterEach(async() => { await delay(250); });
 

@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module';
 import { colors } from 'playwright-core/lib/utilsBundle';
+import { escapeSpecialCharacters } from '../helpers/strings.cjs';
 
 const require = createRequire(import.meta.url);
 
@@ -18,7 +19,9 @@ const makeTestName = (test) => {
 	const [, projectName, , ...titles] = test.titlePath();
 	const titlePaths = projectName ? [`[${projectName}]`, ...titles] : titles;
 
-	return titlePaths.join(' > ');
+	return titlePaths
+		.map(titlePart => escapeSpecialCharacters(titlePart).trim())
+		.join(' > ');
 };
 
 const getBrowser = (project) => {
