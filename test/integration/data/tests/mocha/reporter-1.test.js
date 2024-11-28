@@ -27,7 +27,7 @@ describe('reporter 1', () => {
 
 	it('failed', () => { throw new Error('fail'); });
 
-	it('special/characters "(\n\r\t\b\f)"', async() => { await delay(); });
+	it(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
 
 	afterEach(async() => { await delay(250); });
 

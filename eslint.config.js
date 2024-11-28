@@ -49,7 +49,8 @@ const playwrightConfigs = addExtensions(
 			rules: {
 				'playwright/expect-expect': 'off',
 				'playwright/no-skipped-test': 'off',
-				'playwright/no-conditional-in-test': 'off'
+				'playwright/no-conditional-in-test': 'off',
+				'playwright/valid-title': 'off'
 			}
 		}
 	],
