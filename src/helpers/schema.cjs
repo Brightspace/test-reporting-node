@@ -1,6 +1,7 @@
 const Ajv = require('ajv/dist/2019');
 const addFormats = require('ajv-formats');
 
+const latestReportSchema = require('../../schemas/report/v2.json');
 const ajv = new Ajv({
 	verbose: true,
 	strict: true,
@@ -8,7 +9,7 @@ const ajv = new Ajv({
 	schemas: [
 		require('../../schemas/report-configuration/v1.json'),
 		require('../../schemas/report/v1.json'),
-		require('../../schemas/report/v2.json')
+		latestReportSchema
 	]
 });
 
@@ -34,7 +35,9 @@ const validateReportV1ContextAjv = ajv.getSchema('/test-reporting/schemas/report
 const validateReportV2ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v2/context/loose.json');
 const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
 const validateReportV2Ajv = ajv.getSchema('/test-reporting/schemas/report/v2.json');
-const latestReportVersion = 2;
+const { properties: latestReportSchemaProperties } = latestReportSchema;
+const { version: { const: latestReportVersion } } = latestReportSchemaProperties;
+const { details: { items: { properties: { browser: { enum: latestSupportedBrowsers } } } } } = latestReportSchemaProperties;
 
 const formatErrorAjv = (dataVar, errors) => {
 	const { instancePath, message: ajvMessage, parentSchema: { type }, data } = errors[0];
@@ -61,5 +64,6 @@ module.exports = {
 	validateReportV2ContextAjv,
 	validateReportV1Ajv,
 	validateReportV2Ajv,
-	latestReportVersion
+	latestReportVersion,
+	latestSupportedBrowsers
 };

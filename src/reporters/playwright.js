@@ -25,24 +25,14 @@ const makeTestName = (test) => {
 };
 
 const getBrowser = (project) => {
-	const {
-		use: { browserName, defaultBrowserType } = {},
-		metadata: { browser } = {}
-	} = project;
+	const { name, use: { browserName, defaultBrowserType } = {} } = project;
+	const browser = (browserName ?? defaultBrowserType ?? name)?.trim().toLowerCase();
 
-	if (browser) {
+	if (ReportBuilder.SupportedBrowsers.includes(browser)) {
 		return browser;
 	}
 
-	if (browserName) {
-		return browserName;
-	}
-
-	if (defaultBrowserType) {
-		return defaultBrowserType;
-	}
-
-	return undefined;
+	return null;
 };
 
 export default class Reporter {
@@ -105,7 +95,7 @@ export default class Reporter {
 
 		const browser = getBrowser(project);
 
-		if (browser !== undefined) {
+		if (browser) {
 			detail.setBrowser(browser);
 		}
 

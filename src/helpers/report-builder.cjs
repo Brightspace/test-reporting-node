@@ -4,6 +4,7 @@ const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 const { writeFileSync } = require('node:fs');
+const { latestSupportedBrowsers } = require('./schema.cjs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -281,6 +282,8 @@ class ReportDetailBuilder extends ReportBuilderBase {
 }
 
 class ReportBuilder extends ReportBuilderBase {
+	static SupportedBrowsers = latestSupportedBrowsers;
+
 	constructor(framework, logger, options) {
 		super();
 
