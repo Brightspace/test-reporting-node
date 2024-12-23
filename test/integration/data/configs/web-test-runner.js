@@ -19,7 +19,9 @@ export default {
 		name: 'group 1',
 		files: './test/integration/data/tests/web-test-runner/reporter-2.test.js',
 		browsers: [
-			puppeteerLauncher({ launchOptions: { headless: 'new' } }),
+			puppeteerLauncher({
+				launchOptions: { headless: 'new', args: ['--no-sandbox'] }
+			}),
 			playwrightLauncher({ product: 'firefox' })
 		]
 	}, {
