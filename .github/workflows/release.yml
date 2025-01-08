@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    if: github.triggering_actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout
         uses: Brightspace/third-party-actions@actions/checkout
