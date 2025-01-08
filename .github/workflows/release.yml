@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout
         uses: Brightspace/third-party-actions@actions/checkout
@@ -29,6 +28,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - name: Release
+        if: github.actor != 'dependabot[bot]'
         id: release
         uses: BrightspaceUI/actions/semantic-release@main
         with:
@@ -37,7 +37,10 @@ jobs:
           NPM: true
       - name: Trigger downstream updates
         uses: Brightspace/third-party-actions@actions/github-script
-        if: github.ref == 'refs/heads/main' && steps.release.outputs.VERSION != ''
+        if: >
+          github.ref_name == 'main' &&
+          github.actor != 'dependabot[bot]' &&
+          steps.release.outputs.VERSION != ''
         with:
           github-token: ${{secrets.REPOSITORY_DISPATCH_TOKEN}}
           script: |
