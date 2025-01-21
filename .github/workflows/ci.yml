@@ -60,12 +60,33 @@ jobs:
           npx playwright install --with-deps
       - name: Run tests
         run: npm run test:all
-      - name: Upload coverage report
-        id: coverage-report
-        uses: actions/upload-artifact@main
+      - name: Generate coverage report info
+        if: github.actor != 'dependabot[bot]'
+        id: coverage-info
+        run: |
+          COMMON_PATH="$GITHUB_REPOSITORY/$GITHUB_RUN_ID/$GITHUB_RUN_ATTEMPT/$GITHUB_JOB"
+          DESTINATION="s3://test-reporting-coverage/$COMMON_PATH/"
+          SOURCE='./coverage/lcov-report/'
+          URL="https://test-reporting.d2l.dev/coverage/$COMMON_PATH/"
+          echo "destination=$DESTINATION" >> $GITHUB_OUTPUT
+          echo "source=$SOURCE" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> $GITHUB_OUTPUT
+      - name: Assume role
+        if: github.actor != 'dependabot[bot]'
+        uses: Brightspace/third-party-actions@aws-actions/configure-aws-credentials
         with:
-          name: coverage-report
-          path: coverage/lcov-report/
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::427469055187:role/github+Brightspace+test-reporting-node
+          role-duration-seconds: 3600
+      - name: Upload code coverage
+        if: github.actor != 'dependabot[bot]'
+        uses: BrightspaceUI/actions/publish-to-s3@main
+        with:
+          bucket-path: ${{steps.coverage-info.outputs.destination}}
+          publish-directory: ${{steps.coverage-info.outputs.source}}
       - name: Generate test summary
         id: test-summary
         uses: Brightspace/third-party-actions@actions/github-script
@@ -75,8 +96,10 @@ jobs:
             const { COVERAGE_REPORT_URL: coverageReportUrl } = env;
             const { summary } = core;
             summary.clear();
-            summary.addHeading('Coverage report', 3);
-            summary.addLink('Report', coverageReportUrl);
+            if (coverageReportUrl) {
+              summary.addHeading('Coverage report', 3);
+              summary.addLink('Report', coverageReportUrl);
+            }
             summary.addHeading('Generated reports', 3);
             const reporters = [{
               name: 'mocha',
@@ -97,7 +120,7 @@ jobs:
             summary.write({ overwrite: true });
             core.setOutput('report', summary.stringify());
         env:
-          COVERAGE_REPORT_URL: ${{steps.coverage-report.outputs.artifact-url}}
+          COVERAGE_REPORT_URL: ${{steps.coverage-info.outputs.url}}
       - name: Leave comment
         uses: BrightspaceUI/actions/comment-on-pr@main
         with:
