@@ -64,7 +64,7 @@ jobs:
         if: github.actor != 'dependabot[bot]'
         id: coverage-info
         run: |
-          COMMON_PATH="$GITHUB_REPOSITORY/$GITHUB_RUN_ID/$GITHUB_RUN_ATTEMPT"
+          COMMON_PATH="$GITHUB_REPOSITORY/$GITHUB_RUN_ID/$GITHUB_RUN_ATTEMPT/$GITHUB_JOB"
           DESTINATION="s3://test-reporting-coverage/$COMMON_PATH/"
           SOURCE='./coverage/lcov-report/'
           URL="https://test-reporting.d2l.dev/coverage/$COMMON_PATH/"
