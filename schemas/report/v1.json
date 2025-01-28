@@ -165,8 +165,8 @@
       "$schema": "https://json-schema.org/draft/2019-09/schema",
       "$id": "/test-reporting/schemas/report/v1/non-empty-unpadded-string.json",
       "type": "string",
-      "pattern": "^(?!\\s).+(?<!\\s)$",
       "minLength": 1,
+      "pattern": "^(?!\\s).+(?<!\\s)$",
       "errorMessage": {
         "pattern": "should be non-empty without leading or trailing whitespace"
       }
