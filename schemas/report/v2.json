@@ -284,7 +284,7 @@
         "gitHubAllowedCharactersString": {
           "type": "string",
           "minLength": 1,
-          "pattern": "[A-Za-z0-9_.-]+",
+          "pattern": "^[A-Za-z0-9_.-]+$",
           "errorMessage": {
             "pattern": "should be a valid github string, must include only alpha numeric, ., _, or - characters"
           }
