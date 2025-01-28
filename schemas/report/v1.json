@@ -22,7 +22,7 @@
         },
         "lmsBuildNumber": {
           "type": "string",
-          "pattern": "([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}",
+          "pattern": "^([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}$",
           "errorMessage": {
             "pattern": "should be a valid LMS build number (XX.XX.XX.XXXXX)"
           }
