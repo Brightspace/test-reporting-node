@@ -48,7 +48,7 @@ class ReportConfiguration {
 		if (!validateReportConfigurationV1Ajv(reportConfiguration)) {
 			const { errors } = validateReportConfigurationV1Ajv;
 
-			throw new Error(formatErrorAjv('report configuration', errors));
+			throw new Error(formatErrorAjv(errors, { dataVar: 'report configuration' }));
 		}
 
 		this._reportConfigurationPath = reportConfigurationPath;
