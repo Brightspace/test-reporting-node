@@ -25,7 +25,10 @@
           "properties": {
             "buildNumber": {
               "type": "string",
-              "pattern": "([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}"
+              "pattern": "^([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}$",
+              "errorMessage": {
+                "pattern": "should be a valid LMS build number (XX.XX.XX.XXXXX)"
+              }
             },
             "instanceUrl": {
               "type": "string",
@@ -211,8 +214,11 @@
       "$schema": "https://json-schema.org/draft/2019-09/schema",
       "$id": "/test-reporting/schemas/report/v2/non-empty-unpadded-string.json",
       "type": "string",
+      "pattern": "^(?!\\s).+(?<!\\s)$",
       "minLength": 1,
-      "pattern": "^(?!\\s).+(?<!\\s)$"
+      "errorMessage": {
+        "pattern": "should be non-empty without leading or trailing whitespace"
+      }
     },
     "context": {
       "$schema": "https://json-schema.org/draft/2019-09/schema",
@@ -258,7 +264,10 @@
               "type": "string",
               "minLength": 40,
               "maxLength": 40,
-              "pattern": "[A-Fa-f0-9]+"
+              "pattern": "^[A-Fa-f0-9]+$",
+              "errorMessage": {
+                "pattern": "should be a git hash"
+              }
             }
           },
           "required": [
@@ -275,7 +284,10 @@
         "gitHubAllowedCharactersString": {
           "type": "string",
           "minLength": 1,
-          "pattern": "[A-Za-z0-9_.-]+"
+          "pattern": "^[A-Za-z0-9_.-]+$",
+          "errorMessage": {
+            "pattern": "should be a valid github string, must include only alpha numeric, ., _, or - characters"
+          }
         }
       }
     }

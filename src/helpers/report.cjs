@@ -49,7 +49,7 @@ const validateReport = (report, dataVar = 'report') => {
 	}
 
 	if (errors && errors.length !== 0) {
-		throw new Error(formatErrorAjv(dataVar, errors));
+		throw new Error(formatErrorAjv(errors, { dataVar }));
 	}
 };
 
