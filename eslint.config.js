@@ -6,6 +6,7 @@ import { includeIgnoreFile } from '@eslint/compat';
 import jsonPlugin from 'eslint-plugin-json';
 import mochaPlugin from 'eslint-plugin-mocha';
 import playwrightPlugin from 'eslint-plugin-playwright';
+import promisePlugin from 'eslint-plugin-promise';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,16 +29,25 @@ const importConfigs = [
 		}
 	}
 ];
-const commandDangleConfig = {
-	rules: {
-		'comma-dangle': 'error'
+const commonConfigs = [
+	{
+		rules: {
+			'comma-dangle': 'error',
+			'require-await': 'error'
+		}
+	},
+	promisePlugin.configs['flat/recommended'],
+	{
+		rules: {
+			'promise/prefer-await-to-then': ['error', { strict: true }]
+		}
 	}
-};
+];
 const globalConfigs = addExtensions(
 	[
 		...nodeConfig,
 		...importConfigs,
-		commandDangleConfig
+		...commonConfigs
 	],
 	fileExtensions
 );
@@ -72,7 +82,7 @@ const mochaConfigs = addExtensions(
 const webTestRunnerConfigs = addExtensions(
 	[
 		...testingConfig,
-		commandDangleConfig
+		...commonConfigs
 	],
 	fileExtensions
 );
