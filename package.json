@@ -60,9 +60,9 @@
   "devDependencies": {
     "@eslint/compat": "^1",
     "@playwright/test": "^1",
-    "@web/test-runner": "^0.19",
+    "@web/test-runner": "^0.20",
     "@web/test-runner-playwright": "^0.11",
-    "@web/test-runner-puppeteer": "^0.17",
+    "@web/test-runner-puppeteer": "^0.18",
     "c8": "^10",
     "chai": "^5",
     "chai-subset": "^1",
