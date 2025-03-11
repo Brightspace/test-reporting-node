@@ -76,6 +76,16 @@ export default class Reporter {
 
 		const { id, expectedStatus } = test;
 		const { startTime, retry, status, duration } = result;
+		let finalDuration;
+
+		if (duration < 0) {
+			this._logger.warning('Test duration is less than 0, setting duration to 0');
+
+			finalDuration = 0;
+		} else {
+			finalDuration = duration;
+		}
+
 		const project = test.parent.project();
 		const name = makeTestName(test);
 		const detail = this._report
@@ -86,7 +96,7 @@ export default class Reporter {
 			.setLocationColumn(column)
 			.setStarted(startTime)
 			.setTimeout(Math.round(timeout))
-			.addDuration(Math.round(duration));
+			.addDuration(Math.round(finalDuration));
 		const isRetry = retry !== 0;
 
 		if (isRetry) {
@@ -114,10 +124,20 @@ export default class Reporter {
 		}
 
 		const { startTime, duration, status } = result;
+		let finalDuration;
+
+		if (duration < 0) {
+			this._logger.warning('Total duration is less than 0, setting duration to 0');
+
+			finalDuration = 0;
+		} else {
+			finalDuration = duration;
+		}
+
 		const summary = this._report
 			.getSummary()
 			.setStarted(startTime)
-			.setDurationTotal(Math.round(duration));
+			.setDurationTotal(Math.round(finalDuration));
 
 		if (status === 'passed') {
 			summary.setPassed();
