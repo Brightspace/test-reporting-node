@@ -77,6 +77,6 @@
     "eslint-plugin-promise": "^7",
     "npm-run-all": "^4",
     "playwright": "^1.49",
-    "sinon": "^20"
+    "sinon": "^21"
   }
 }
