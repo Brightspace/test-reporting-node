@@ -7,6 +7,15 @@ updates:
       interval: weekly
       time: '08:00'
       timezone: America/Toronto
+    cooldown:
+      default-days: 5
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 3
+      include:
+        - "playwright"
+        - "playwright-*"
+        - "@playwright/*"
     versioning-strategy: increase
     ignore:
       - dependency-name: '*'
