@@ -31,9 +31,19 @@ const importConfigs = [
 ];
 const commonConfigs = [
 	{
+		linterOptions: {
+			reportUnusedInlineConfigs: 'error',
+			reportUnusedDisableDirectives: 'error'
+		}
+	},
+	{
 		rules: {
-			'comma-dangle': 'error',
-			'require-await': 'error'
+			'require-await': 'error',
+			'key-spacing': ['error', { beforeColon: false, afterColon: true }],
+			'object-shorthand': ['error', 'always'],
+			'prefer-template': 'error',
+			'@stylistic/comma-dangle': 'error',
+			'@stylistic/template-curly-spacing': ['error', 'never']
 		}
 	},
 	promisePlugin.configs['flat/recommended'],
@@ -101,7 +111,7 @@ export default [
 				{
 					rules: {
 						'mocha/no-mocha-arrows': 'off',
-						'mocha/no-skipped-tests': 'off'
+						'mocha/no-pending-tests': 'off'
 					}
 				}
 			],
