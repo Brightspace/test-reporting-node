@@ -55,11 +55,11 @@
     "lodash": "^4",
     "minimatch": "^10",
     "mocha": "^11",
-    "playwright-core": "~1.54"
+    "playwright-core": "~1.55"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
-    "@playwright/test": "~1.54",
+    "@playwright/test": "~1.55",
     "@web/test-runner": "^0.20",
     "@web/test-runner-playwright": "^0.11",
     "@web/test-runner-puppeteer": "^0.18",
@@ -76,7 +76,7 @@
     "eslint-plugin-playwright": "^2",
     "eslint-plugin-promise": "^7",
     "npm-run-all": "^4",
-    "playwright": "~1.54",
+    "playwright": "~1.55",
     "sinon": "^21"
   }
 }
