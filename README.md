@@ -21,17 +21,17 @@ npm install d2l-test-reporting
 
 ## Usage
 
-This library provides a reporters for many of the test execution frameworks we
-use, if one for your test runner framework isn't provided please [file an issue]
-so we can look into adding it to our set of reporters.
+This library provides reporters for many of the test execution frameworks we
+use. If one for your test runner framework isn't provided, please [file an
+issue] so we can look into adding it to our set of reporters.
 
 ### Reporters
 
 #### [Mocha]
 
-Please consult the [official documentation for Mocha] to see how
-to use reporters. Below is an example of how to add the reporter provided by
-this package. It assumes you are using the default `.mocharc.js` file for
+Please consult the [official documentation for Mocha] to see how to use
+reporters. Below is an example of how to add the reporter provided by this
+package. It assumes you are using the default `.mocharc.js` file for
 configuration.
 
 ```js
@@ -47,7 +47,7 @@ module.exports = {
 
 ##### Inputs
 
-* `reportPath`: path to output the reporter to, relative to current working
+* `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
   for mapping test type, experience and tool to test code. Not required.
@@ -55,10 +55,10 @@ module.exports = {
 
 #### [Playwright]
 
-Please consult the [official documentation for Playwright] to see how
-to use reporters. Below is an example of how to add the reporter provided by
-this package. It assumes you are using the default `playwright.config.js`
-file for configuration.
+Please consult the [official documentation for Playwright] to see how to use
+reporters. Below is an example of how to add the reporter provided by this
+package. It assumes you are using the default `playwright.config.js` file for
+configuration.
 
 ```js
 import { defineConfig, devices } from '@playwright/test';
@@ -92,7 +92,7 @@ export default defineConfig({
 
 ##### Inputs
 
-* `reportPath`: path to output the reporter to, relative to current working
+* `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
   for mapping test type, experience and tool to test code. Not required.
@@ -100,10 +100,10 @@ export default defineConfig({
 
 #### [`@web/test-runner`]
 
-Please consult the [official documentation for `@web/test-runner`] to see how
-to use reporters. Below is an example of how to add the reporter provided by
-this package. It assumes you are using the default `web-test-runner.config.js`
-file for configuration.
+Please consult the [official documentation for `@web/test-runner`] to see how to
+use reporters. Below is an example of how to add the reporter provided by this
+package. It assumes you are using the default `web-test-runner.config.js` file
+for configuration.
 
 ```js
 import { defaultReporter } from '@web/test-runner';
@@ -127,7 +127,7 @@ export default {
 
 ##### Inputs
 
-* `reportPath`: path to output the reporter to, relative to current working
+* `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
   for mapping test type, experience and tool to test code. Not required.
@@ -140,11 +140,11 @@ reporting configuration file is required when using one of the reporters
 provided in this package.
 
 Below are examples of how to create the config file. Note that the `type` field
-will end up lowercase in the report.
+will end up as lowercase in the report.
 
-Please see [Automated Testing Definitions] on confluence for the list of
-test types that should be used when creating the D2L test reporting
-configuration file.
+Please see [Automated Testing Definitions] on Confluence for the list of test
+types that should be used when creating the D2L test reporting configuration
+file.
 
 ```json
 {
@@ -179,12 +179,12 @@ configuration file.
 
 ## Report Format
 
-For details on what the schema that the various custom reporters output looks
-like see [Report Format](./docs/report-format.md).
+For details on the schema that the various custom reporters output, see [Report
+Format](./docs/report-format.md).
 
 > [!NOTE]
-  The report format is required in order to upload items to the back-end using
-  the corresponding [GitHub Action].
+> The report format is required in order to upload items to the back-end using
+> the corresponding [GitHub Action].
 
 ## Developing
 
