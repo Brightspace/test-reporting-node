@@ -2,13 +2,13 @@
 
 Reports that are generated from test runs via the custom test reporters stored
 as part of the repository will output a custom format. This format allows us to
-capture all of the desired information consistent way so that the mapping from
-test run data to back-end storage is easier. For details on how data is stored
-in [AWS Timestream] please see [Storage Schema].
+capture all of the desired information in a consistent way so that the mapping
+from test run data to back-end storage is easier. For details on how data is
+stored in [AWS Timestream], please see [Storage Schema].
 
 > [!NOTE]
-  All below JSON is simply a pseudo representation of the actual schemas which
-  are stored in the [`schemas`](../schemas) folder.
+> All JSON below is simply a pseudo representation of the actual schemas which
+> are stored in the [`schemas`](../schemas) folder.
 
 ## Current
 
