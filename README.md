@@ -188,7 +188,7 @@ Format](./docs/report-format.md).
 
 ## Developing
 
-After cloning the repository make sure to install dependencies.
+After cloning the repository, make sure to install dependencies.
 
 ```console
 npm ci
