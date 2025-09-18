@@ -21,18 +21,18 @@ npm install d2l-test-reporting
 
 ## Usage
 
-This library provides reporters for many of the test execution frameworks we
-use. In order to use the accompanying [GitHub Action] to upload reports to the
-back-end you must use of one of the reporters provided below or have a custom
-implementation that outputs a JSON file in the format outlined in [Report
+This library provides reporters for many of the test execution frameworks we use
+at D2L. In order to use the accompanying [GitHub Action] to upload reports to
+the back-end you must use of one of the reporters provided below or have a
+custom implementation that outputs a JSON file in the format outlined in [Report
 Format].
+
+### Reporters
 
 > [!IMPORTANT]
 > If a reporter for your test runner framework isn't provided, please [file an
 > issue] so we can look into adding it to our set of reporters or feel free to
 > put up a pull request proposing an addition of a new type of report.
-
-### Reporters
 
 #### [Mocha]
 
