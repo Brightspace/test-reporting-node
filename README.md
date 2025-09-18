@@ -22,8 +22,11 @@ npm install d2l-test-reporting
 ## Usage
 
 This library provides reporters for many of the test execution frameworks we
-use. If one for your test runner framework isn't provided, please [file an
-issue] so we can look into adding it to our set of reporters.
+use.
+
+> [!IMPORTANT]
+> If one for your test runner framework isn't provided, please [file an
+> issue] so we can look into adding it to our set of reporters.
 
 ### Reporters
 
