@@ -21,11 +21,18 @@ npm install d2l-test-reporting
 
 ## Usage
 
-This library provides reporters for many of the test execution frameworks we
-use. If one for your test runner framework isn't provided, please [file an
-issue] so we can look into adding it to our set of reporters.
+This library provides reporters for many of the test execution frameworks we use
+at D2L. In order to use the accompanying [GitHub Action] to upload reports to
+the back-end you must use of one of the reporters provided below or have a
+custom implementation that outputs a JSON file in the format outlined in [Report
+Format].
 
 ### Reporters
+
+> [!IMPORTANT]
+> If a reporter for your test runner framework isn't provided, please [file an
+> issue] so we can look into adding it to our set of reporters or feel free to
+> put up a pull request proposing an addition of a new type of report.
 
 #### [Mocha]
 
@@ -180,11 +187,11 @@ file.
 ## Report Format
 
 For details on the schema that the various custom reporters output, see [Report
-Format](./docs/report-format.md).
+Format].
 
 > [!NOTE]
-> The report format is required in order to upload items to the back-end using
-> the corresponding [GitHub Action].
+> This specific JSON structure is required in order to upload reports to the
+> back-end using the corresponding [GitHub Action].
 
 ## Developing
 
@@ -262,3 +269,4 @@ refer to the [semantic-release GitHub Action] documentation.
 [Automated Testing Definitions]: https://desire2learn.atlassian.net/wiki/spaces/QE/pages/4354408450/Automated+Testing+Definitions
 [#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
 [semantic-release GitHub Action]: https://github.com/BrightspaceUI/actions/tree/main/semantic-release
+[Report Format]: ./docs/report-format.md
