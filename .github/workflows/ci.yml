@@ -1,7 +1,5 @@
 name: CI
 on: pull_request
-env:
-  FORCE_COLOR: 3
 permissions:
   contents: read
 jobs:
