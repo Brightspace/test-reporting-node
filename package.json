@@ -2,9 +2,14 @@
   "name": "d2l-test-reporting",
   "version": "4.2.5",
   "description": "Helper package for generating reports for use with the D2L test reporting framework",
-  "author": "D2L Corporation",
-  "license": "Apache-2.0",
+  "keywords": [
+    "d2l",
+    "test",
+    "reporting"
+  ],
   "repository": "https://github.com/Brightspace/test-reporting-node.git",
+  "license": "Apache-2.0",
+  "author": "D2L Corporation",
   "type": "module",
   "exports": {
     "./helpers/github.js": "./src/helpers/github.cjs",
@@ -14,38 +19,26 @@
     "./reporters/playwright.js": "./src/reporters/playwright.js",
     "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js"
   },
-  "keywords": [
-    "d2l",
-    "test",
-    "reporting"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "scripts": {
-    "prepack": "sed -ri 's/\\[!([A-Z]+)\\]/**\\1**:/g' README.md",
-    "license-check": "d2l-license-checker -p",
-    "lint": "npm run lint:eslint && npm run lint:editorconfig",
-    "lint:eslint": "eslint",
-    "lint:editorconfig": "editorconfig-checker",
-    "fix": "npm run fix:eslint",
-    "fix:eslint": "npm run lint:eslint -- --fix",
-    "test": "run-s lint test:all",
-    "test:all": "c8 run-s test:unit test:integration",
-    "test:unit": "mocha \"test/unit/**/*.test.js\"",
-    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner && mocha test/integration/report-validation.test.js",
-    "test:integration:mocha": "mocha --config test/integration/data/configs/mocha.cjs || exit 0",
-    "test:integration:playwright": "playwright test --config test/integration/data/configs/playwright.js || exit 0",
-    "test:integration:web-test-runner": "wtr --config test/integration/data/configs/web-test-runner.js || exit 0"
-  },
-  "engines": {
-    "node": ">=20"
-  },
   "files": [
     "/schemas",
     "/src"
   ],
+  "scripts": {
+    "fix": "npm run fix:eslint",
+    "fix:eslint": "npm run lint:eslint -- --fix",
+    "license-check": "d2l-license-checker -p",
+    "lint": "npm run lint:eslint && npm run lint:editorconfig",
+    "lint:editorconfig": "editorconfig-checker",
+    "lint:eslint": "eslint",
+    "prepack": "sed -ri 's/\\[!([A-Z]+)\\]/**\\1**:/g' README.md",
+    "test": "run-s lint test:all",
+    "test:all": "c8 run-s test:unit test:integration",
+    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner && mocha test/integration/report-validation.test.js",
+    "test:integration:mocha": "mocha --config test/integration/data/configs/mocha.cjs || exit 0",
+    "test:integration:playwright": "playwright test --config test/integration/data/configs/playwright.js || exit 0",
+    "test:integration:web-test-runner": "wtr --config test/integration/data/configs/web-test-runner.js || exit 0",
+    "test:unit": "mocha \"test/unit/**/*.test.js\""
+  },
   "dependencies": {
     "@web/test-runner-core": "^0.13",
     "ajv": "^8",
@@ -78,5 +71,12 @@
     "npm-run-all": "^4",
     "playwright": "~1.56",
     "sinon": "^21"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
