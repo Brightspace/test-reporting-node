@@ -199,6 +199,8 @@ After cloning the repository, make sure to install dependencies.
 
 ```console
 npm ci
+npx playwright install --with-deps
+npx puppeteer browsers install chrome
 ```
 
 ### Linting
