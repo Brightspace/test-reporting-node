@@ -59,6 +59,7 @@ jobs:
         run: |
           npm ci
           npx playwright install --with-deps
+          npx puppeteer browsers install chrome
       - name: Run tests
         run: npm run test:all
       - name: Generate coverage report info
