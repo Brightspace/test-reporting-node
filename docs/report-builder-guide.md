@@ -55,7 +55,8 @@ report.getSummary().setStarted(time).setPassed();
 
 Here's a minimal custom reporter showing the typical test lifecycle:
 
-> [!NOTE] The hook names (`onRunStart`, `onTestEnd`, etc.) vary by framework.
+> [!NOTE]
+> The hook names (`onRunStart`, `onTestEnd`, etc.) vary by framework.
 > This example uses generic names. Consult your test framework's documentation
 > for actual hook names and parameters.
 
