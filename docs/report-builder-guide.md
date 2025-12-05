@@ -12,7 +12,7 @@ Runner](../src/reporters/web-test-runner.js)).
 ## Quick Start
 
 ```javascript
-const { ReportBuilder } = require('d2l-test-reporting/helpers/report-builder.cjs');
+const { ReportBuilder } = require('../helpers/report-builder.cjs');
 
 // 1. Create a logger
 const logger = {
@@ -61,6 +61,8 @@ Here's a minimal custom reporter showing the typical test lifecycle:
 > for actual hook names and parameters.
 
 ```javascript
+const { ReportBuilder } = require('../helpers/report-builder.cjs');
+
 class CustomReporter {
   constructor(options = {}) {
     const logger = { /* see Quick Start */ };
