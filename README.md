@@ -29,11 +29,6 @@ Format].
 
 ### Reporters
 
-> [!IMPORTANT]
-> If a reporter for your test runner framework isn't provided, please [file an
-> issue] so we can look into adding it to our set of reporters or feel free to
-> put up a pull request proposing an addition of a new type of report.
-
 #### [Mocha]
 
 Please consult the [official documentation for Mocha] to see how to use
@@ -139,6 +134,12 @@ export default {
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
   for mapping test type, experience and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
+
+#### Custom Reporters
+
+If your test framework isn't supported by the built-in reporters, you can build your own using the `ReportBuilder` class.
+
+See the [ReportBuilder Guide](./docs/report-builder-guide.md) for a complete walkthrough of creating a custom reporter for any test framework.
 
 ### Configuration
 
