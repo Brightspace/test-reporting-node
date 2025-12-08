@@ -41,10 +41,10 @@ const report = new ReportBuilder('your-framework-name', logger);
 You'll build a report with two parts:
 
 1. **Summary** - Overall test run info (total duration, pass/fail counts)
-   - Access with: `report.getSummary()`
+  - Access with: `report.getSummary()`
 
 2. **Details** - Individual test results (one per test)
-   - Access with: `report.getDetail(testId)`
+  - Access with: `report.getDetail(testId)`
 
 All methods return `this` for chaining:
 ```javascript
@@ -209,7 +209,7 @@ What it does:
 1. Loops through all test details
 2. Counts by status: passed, failed, skipped
 3. Detects flaky tests: `status='passed'` AND `retries > 0` → counted as flaky
-   (not passed)
+  (not passed)
 4. Updates summary count fields
 
 Without calling `finalize()`, your summary counts will be incorrect.
