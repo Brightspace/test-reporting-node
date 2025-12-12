@@ -49,6 +49,25 @@ class WebdriverIO extends WDIOReporter {
 		return `${file}[${fullName}]`;
 	}
 
+	_getPlatformName() {
+		const capabilities = this.runnerStat?.capabilities;
+		if (!capabilities) return null;
+
+		// Try to get platformName from capabilities
+		const platformName = capabilities.platformName ||
+		                    capabilities['appium:platformName'] ||
+		                    capabilities.platform;
+
+		return platformName ? platformName.toLowerCase().trim() : null;
+	}
+
+	_makeTestName(test) {
+		const platform = this._getPlatformName();
+		const testName = test.fullTitle || test.title || 'unknown-test';
+
+		return platform ? `[${platform}] > ${testName}` : testName;
+	}
+
 	onRunnerStart() {
 		if (!this._report) return;
 
@@ -76,9 +95,10 @@ class WebdriverIO extends WDIOReporter {
 		this._testStartTimes.set(testId, startTime);
 		this._testFiles.set(testId, filePath);
 
+		const testName = this._makeTestName(test);
 		const detail = this._report.getDetail(testId);
 		detail
-			.setName(test.title)
+			.setName(testName)
 			.setLocationFile(filePath)
 			.setStarted(startTime);
 
