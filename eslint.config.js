@@ -116,7 +116,16 @@ export default [
 				}
 			],
 			'test/integration/data/tests/playwright': playwrightConfigs,
-			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs
+			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs,
+			'test/integration/data/tests/webdriverIO': [
+				...mochaConfigs,
+				{
+					rules: {
+						'mocha/no-mocha-arrows': 'off',
+						'mocha/no-pending-tests': 'off'
+					}
+				}
+			]
 
 		}
 	),
