@@ -53,11 +53,7 @@ class WebdriverIO extends WDIOReporter {
 		const capabilities = this.runnerStat?.capabilities;
 		if (!capabilities) return null;
 
-		// Try to get platformName from capabilities
-		const platformName = capabilities.platformName ||
-		                    capabilities['appium:platformName'] ||
-		                    capabilities.platform;
-
+		const platformName = capabilities.platformName || capabilities['appium:platformName'] || capabilities.platform;
 		return platformName ? platformName.toLowerCase().trim() : null;
 	}
 
