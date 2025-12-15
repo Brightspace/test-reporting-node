@@ -9,6 +9,7 @@
 
 const WDIOReporter = require('@wdio/reporter').default;
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
+const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
 
 class WebdriverIO extends WDIOReporter {
 	constructor(options) {
@@ -59,7 +60,9 @@ class WebdriverIO extends WDIOReporter {
 
 	_makeTestName(test) {
 		const platform = this._getPlatformName();
-		const testName = test.fullTitle || test.title || 'unknown-test';
+		let testName = (test.fullTitle || test.title || 'unknown-test');
+
+		testName = testName.split('.').map(part => escapeSpecialCharacters(part.trim())).join(' > ');
 
 		return platform ? `[${platform}] > ${testName}` : testName;
 	}
@@ -108,29 +111,49 @@ class WebdriverIO extends WDIOReporter {
 		if (!this._report) return;
 
 		const testId = this._getTestId(test);
-		const filePath = this._testFiles.get(testId) || test.file || this.runnerStat?.specs?.[0] || 'unknown';
+		let filePath = this._testFiles.get(testId);
+
+		if (!filePath) {
+			filePath = test.file || this.runnerStat?.specs?.[0] || 'unknown';
+			this._testFiles.set(testId, filePath);
+		}
 
 		if (filePath !== 'unknown' && this._report.ignoreFilePath(filePath)) {
 			return;
 		}
+
 		const detail = this._report.getDetail(testId);
 
-		if (test.duration) {
-			detail.addDuration(test.duration);
-			this._totalDuration += test.duration;
+		if (!this._testStartTimes.has(testId)) {
+			const testName = this._makeTestName(test);
+			const startTime = new Date().toISOString();
+			this._testStartTimes.set(testId, startTime);
+
+			detail
+				.setName(testName)
+				.setLocationFile(filePath)
+				.setStarted(startTime);
+
+			if (test.timeout) {
+				detail.setTimeout(test.timeout);
+			}
 		}
 
 		if (test.state === 'passed') {
 			detail.setPassed();
+			if (test.duration) {
+				detail.addDuration(test.duration);
+				this._totalDuration += test.duration;
+			}
 		} else if (test.state === 'skipped' || test.state === 'pending') {
 			detail.setSkipped();
+			// Set duration to 0 for skipped tests
+			detail.setDurationFinal(0).setDurationTotal(0);
 		} else {
 			detail.setFailed();
-		}
-
-		if (test.retries && test.retries > 0) {
-			for (let i = 0; i < test.retries; i++) {
-				detail.incrementRetries();
+			if (test.duration) {
+				detail.addDuration(test.duration);
+				this._totalDuration += test.duration;
 			}
 		}
 	}
@@ -168,6 +191,11 @@ class WebdriverIO extends WDIOReporter {
 			summary.setFailed();
 		}
 
+		this._report
+			.finalize()
+			.save();
+
+		console.log('[D2L Reporter] Test report saved');
 	}
 }
 

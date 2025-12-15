@@ -7,7 +7,7 @@ const getOperatingSystemType = () => {
 		case 'Linux':
 			return 'linux';
 		case 'Darwin':
-			return 'macos';
+			return 'mac';
 		case 'Windows_NT':
 			return 'windows';
 		default:
@@ -16,6 +16,12 @@ const getOperatingSystemType = () => {
 };
 
 const makeRelativeFilePath = (filePath) => {
+	if (filePath.startsWith('file://')) {
+		filePath = filePath.replace('file://', '');
+	} else if (filePath.startsWith('file:')) {
+		filePath = filePath.replace('file:', '');
+	}
+	
 	const path = relative(process.cwd(), filePath);
 	const pathParts = path.split(platformSeparator);
 

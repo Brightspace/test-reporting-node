@@ -44,7 +44,7 @@ const reportTests = [{
 describe('report validation', () => {
 	for (const reportTest of reportTests) {
 		describe(reportTest.name, () => {
-			it('schema', () => {
+			it('schema', function() {
 				if (!hasContext()) {
 					new Report(reportTest.path, { context: testContext });
 				} else {
@@ -52,7 +52,7 @@ describe('report validation', () => {
 				}
 			});
 
-			it('contents', () => {
+			it('contents', function() {
 				let report;
 
 				if (!hasContext()) {

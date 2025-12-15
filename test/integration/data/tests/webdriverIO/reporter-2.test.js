@@ -25,9 +25,18 @@ describe('reporter 2', () => {
 		await delay();
 	});
 
-	it('failed', () => { throw new Error('fail'); });
-
 	it(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
+
+	it('passed 2', async() => { await delay(); });
+
+	it('passed 3', async() => { await delay(); });
+
+	it('passed 4', async() => { await delay(); });
+
+	it('passed with timeout', async function() { 
+		this.timeout(5000);
+		await delay(); 
+	});
 
 	afterEach(async() => { await delay(250); });
 

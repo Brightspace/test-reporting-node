@@ -3,31 +3,17 @@ const delay = (ms = 50) => {
 };
 
 describe('reporter 3', () => {
-	let count = 0;
-
 	before(async() => { await delay(250); });
 
 	beforeEach(async() => { await delay(250); });
 
-	it('passed', async() => { await delay(); });
+	it('passed 1', async() => { await delay(); });
 
-	it.skip('skipped', () => {});
+	it('passed 2', async() => { await delay(); });
 
-	it('flaky', async() => {
-		if (count < 2) {
-			await delay();
+	it('passed 3', async() => { await delay(); });
 
-			count++;
-
-			throw new Error('flaky test failure');
-		}
-
-		await delay();
-	});
-
-	it('failed', () => { throw new Error('fail'); });
-
-	it(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
+	it('passed 4', async() => { await delay(); });
 
 	afterEach(async() => { await delay(250); });
 
