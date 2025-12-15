@@ -33,10 +33,11 @@
     "prepack": "sed -ri 's/\\[!([A-Z]+)\\]/**\\1**:/g' README.md",
     "test": "run-s lint test:all",
     "test:all": "c8 run-s test:unit test:integration",
-    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner && mocha test/integration/report-validation.test.js",
+    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner test:integration:webdriverio && mocha test/integration/report-validation.test.js",
     "test:integration:mocha": "mocha --config test/integration/data/configs/mocha.cjs || exit 0",
     "test:integration:playwright": "playwright test --config test/integration/data/configs/playwright.js || exit 0",
     "test:integration:web-test-runner": "wtr --config test/integration/data/configs/web-test-runner.js || exit 0",
+    "test:integration:webdriverio": "wdio run test/integration/data/configs/webdriverIO.cjs || exit 0",
     "test:unit": "mocha \"test/unit/**/*.test.js\""
   },
   "dependencies": {
