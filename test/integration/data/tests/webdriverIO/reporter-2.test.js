@@ -33,9 +33,9 @@ describe('reporter 2', () => {
 
 	it('passed 4', async() => { await delay(); });
 
-	it('passed with timeout', async function() { 
-		this.timeout(5000);
-		await delay(); 
+	it('passed with timeout', async function() {
+		this.timeout(5000); // eslint-disable-line no-invalid-this
+		await delay();
 	});
 
 	afterEach(async() => { await delay(250); });

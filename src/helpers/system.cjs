@@ -21,7 +21,7 @@ const makeRelativeFilePath = (filePath) => {
 	} else if (filePath.startsWith('file:')) {
 		filePath = filePath.replace('file:', '');
 	}
-	
+
 	const path = relative(process.cwd(), filePath);
 	const pathParts = path.split(platformSeparator);
 
