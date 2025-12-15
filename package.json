@@ -17,7 +17,8 @@
     "./helpers/report-configuration.js": "./src/helpers/report-configuration.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/playwright.js": "./src/reporters/playwright.js",
-    "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js"
+    "./reporters/web-test-runner.js": "./src/reporters/web-test-runner.js",
+    "./reporters/webdriverIO.js": "./src/reporters/webdriverIO.cjs"
   },
   "files": [
     "/schemas",
