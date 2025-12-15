@@ -7,7 +7,8 @@
     "**/tests/playwright/reporter-3.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
-    "**/tests/web-test-runner/reporter-3.test.js"
+    "**/tests/web-test-runner/reporter-3.test.js",
+    "**/tests/webdriverIO/reporter-3.test.js"
   ],
   "overrides": [
     {
@@ -38,6 +39,15 @@
       "pattern": "**/tests/web-test-runner/reporter-2.test.js",
       "type": "accessibility",
       "experience": "WebTestRunner 2 Test Framework"
+    },
+    {
+      "pattern": "**/tests/webdriverIO/reporter-1.test.js",
+      "type": "ui",
+      "tool": "WebdriverIO 1 Test Reporting"
+    },
+    {
+      "pattern": "**/tests/webdriverIO/reporter-2.test.js",
+      "experience": "WebdriverIO 2 Test Framework"
     }
   ]
 }
