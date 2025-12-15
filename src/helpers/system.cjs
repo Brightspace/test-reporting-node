@@ -7,7 +7,7 @@ const getOperatingSystemType = () => {
 		case 'Linux':
 			return 'linux';
 		case 'Darwin':
-			return 'mac';
+			return 'macos';
 		case 'Windows_NT':
 			return 'windows';
 		default:

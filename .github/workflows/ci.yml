@@ -42,7 +42,7 @@ jobs:
         run: npm run license-check
   test:
     name: Test
-    timeout-minutes: 60
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     permissions:
       contents: read
