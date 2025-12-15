@@ -1,9 +1,31 @@
-module.exports = {
-	spec: 'test/integration/data/tests/webdriverIO/*.test.js',
-	retries: 3,
-	reporter: 'src/reporters/webdriverIO.cjs',
-	reporterOptions: [
-		'reportPath=./d2l-test-report-webdriverIO.json',
-		'verbose=true'
-	]
+exports.config = {
+	specs: [
+		'test/integration/data/tests/webdriverIO/*.test.js'
+	],
+	maxInstances: 1,
+	capabilities: [{
+		browserName: 'chrome',
+		'goog:chromeOptions': {
+			args: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage']
+		}
+	}],
+	logLevel: 'error',
+	bail: 0,
+	waitforTimeout: 10000,
+	connectionRetryTimeout: 120000,
+	connectionRetryCount: 3,
+	framework: 'mocha',
+	reporters: [
+		'spec',
+		['../../../../../../src/reporters/webdriverIO.cjs', {
+			reportPath: './d2l-test-report-webdriverIO.json',
+			reportConfigurationPath: './d2l-test-reporting.config.json',
+			verbose: true
+		}]
+	],
+	mochaOpts: {
+		ui: 'bdd',
+		timeout: 60000,
+		retries: 3
+	}
 };
