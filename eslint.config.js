@@ -1,5 +1,6 @@
 import { addExtensions, nodeConfig, setDirectoryConfigs, testingConfig } from 'eslint-config-brightspace';
 import { dirname, resolve } from 'node:path';
+import checkFilePlugin from 'eslint-plugin-check-file';
 import { fileURLToPath } from 'node:url';
 import importPlugin from 'eslint-plugin-import';
 import { includeIgnoreFile } from '@eslint/compat';
@@ -51,6 +52,22 @@ const commonConfigs = [
 		rules: {
 			'promise/prefer-await-to-then': ['error', { strict: true }]
 		}
+	},
+	{
+		plugins: {
+			'check-file': checkFilePlugin
+		},
+		rules: {
+			'check-file/filename-naming-convention': [
+				'error',
+				{ '**/*': 'KEBAB_CASE' },
+				{ ignoreMiddleExtensions: true }
+			],
+			'check-file/folder-naming-convention': [
+				'error',
+				{ '**/': 'KEBAB_CASE' }
+			]
+		}
 	}
 ];
 const globalConfigs = addExtensions(
@@ -58,6 +75,31 @@ const globalConfigs = addExtensions(
 		...nodeConfig,
 		...importConfigs,
 		...commonConfigs
+	],
+	fileExtensions
+);
+const testConfigs = addExtensions(
+	[
+		...globalConfigs,
+		mochaPlugin.configs.recommended,
+		{
+			rules: {
+				'mocha/no-exclusive-tests': 'error',
+				'mocha/no-mocha-arrows': 'off'
+			}
+		}
+	],
+	fileExtensions
+);
+const mochaConfigs = addExtensions(
+	[
+		...testConfigs,
+		{
+			rules: {
+				'mocha/no-mocha-arrows': 'off',
+				'mocha/no-pending-tests': 'off'
+			}
+		}
 	],
 	fileExtensions
 );
@@ -71,19 +113,6 @@ const playwrightConfigs = addExtensions(
 				'playwright/no-skipped-test': 'off',
 				'playwright/no-conditional-in-test': 'off',
 				'playwright/valid-title': 'off'
-			}
-		}
-	],
-	fileExtensions
-);
-const mochaConfigs = addExtensions(
-	[
-		...globalConfigs,
-		mochaPlugin.configs.recommended,
-		{
-			rules: {
-				'mocha/no-exclusive-tests': 'error',
-				'mocha/no-mocha-arrows': 'off'
 			}
 		}
 	],
@@ -103,21 +132,12 @@ export default [
 	...setDirectoryConfigs(
 		globalConfigs,
 		{
-			'test/unit': mochaConfigs,
-			'test/integration': mochaConfigs,
+			'test/unit': testConfigs,
+			'test/integration': testConfigs,
 			'test/integration/data': globalConfigs,
-			'test/integration/data/tests/mocha': [
-				...mochaConfigs,
-				{
-					rules: {
-						'mocha/no-mocha-arrows': 'off',
-						'mocha/no-pending-tests': 'off'
-					}
-				}
-			],
+			'test/integration/data/tests/mocha': mochaConfigs,
 			'test/integration/data/tests/playwright': playwrightConfigs,
 			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs
-
 		}
 	),
 	jsonConfig
