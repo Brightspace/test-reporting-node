@@ -2,8 +2,8 @@ const { join } = require('path');
 
 exports.config = {
 	specs: [
-		join(__dirname, '../tests/webdriverIO/reporter-1.test.js'),
-		join(__dirname, '../tests/webdriverIO/reporter-2.test.js')
+		join(__dirname, '../tests/webdriverio/reporter-1.test.js'),
+		join(__dirname, '../tests/webdriverio/reporter-2.test.js')
 	],
 	maxInstances: 1,
 	capabilities: [{
@@ -20,8 +20,8 @@ exports.config = {
 	framework: 'mocha',
 	reporters: [
 		'spec',
-		[join(__dirname, '../../../../src/reporters/webdriverIO.cjs'), {
-			reportPath: './d2l-test-report-webdriverIO.json',
+		[join(__dirname, '../../../../src/reporters/webdriverio.cjs'), {
+			reportPath: './d2l-test-report-webdriverio.json',
 			reportConfigurationPath: './d2l-test-reporting.config.json',
 			verbose: true
 		}]

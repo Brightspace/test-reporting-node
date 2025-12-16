@@ -6,7 +6,7 @@ import { Report } from '../../src/helpers/report.cjs';
 import { testReportV2Partial as testReportV2PartialMocha } from './data/validation/test-report-mocha.js';
 import { testReportV2Partial as testReportV2PartialPlaywright } from './data/validation/test-report-playwright.js';
 import { testReportV2Partial as testReportV2PartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
-import { testReportV2Partial as testReportV2PartialWebdriverIO } from './data/validation/test-report-webdriverIO.js';
+import { testReportV2Partial as testReportV2PartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
 
 use(chaiSubset);
 
@@ -37,7 +37,7 @@ const reportTests = [{
 	expected: testReportV2PartialWebTestRunner
 }, {
 	name: 'webdriverio',
-	path: './d2l-test-report-webdriverIO.json',
+	path: './d2l-test-report-webdriverio.json',
 	expected: testReportV2PartialWebdriverIO
 }];
 

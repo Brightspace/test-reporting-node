@@ -117,7 +117,7 @@ export default [
 			],
 			'test/integration/data/tests/playwright': playwrightConfigs,
 			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs,
-			'test/integration/data/tests/webdriverIO': [
+			'test/integration/data/tests/webdriverio': [
 				...mochaConfigs,
 				{
 					rules: {
