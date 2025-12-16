@@ -1,12 +1,3 @@
-/**
- * D2L Test Reporter for WebdriverIO
- *
- * Custom reporter that integrates with Brightspace's test-reporting-node
- * to generate standardized test reports for mobile e2e tests.
- *
- * @see https://github.com/Brightspace/test-reporting-node/blob/main/docs/report-builder-guide.md
- */
-
 const WDIOReporter = require('@wdio/reporter').default;
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
 const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
@@ -72,7 +63,8 @@ class WebdriverIO extends WDIOReporter {
 
 		this._suiteStartTime = new Date().toISOString();
 
-		this._report.getSummary()
+		this._report
+			.getSummary()
 			.addContext()
 			.setStarted(this._suiteStartTime);
 

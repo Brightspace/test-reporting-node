@@ -1,4 +1,5 @@
 const { relative, sep: platformSeparator } = require('node:path');
+const { fileURLToPath } = require('node:url');
 const { join } = require('node:path/posix');
 const { type } = require('node:os');
 
@@ -16,10 +17,8 @@ const getOperatingSystemType = () => {
 };
 
 const makeRelativeFilePath = (filePath) => {
-	if (filePath.startsWith('file://')) {
-		filePath = filePath.replace('file://', '');
-	} else if (filePath.startsWith('file:')) {
-		filePath = filePath.replace('file:', '');
+	if (filePath.startsWith('file:')) {
+		filePath = fileURLToPath(filePath);
 	}
 
 	const path = relative(process.cwd(), filePath);
