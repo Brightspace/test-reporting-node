@@ -16,21 +16,12 @@ class WebdriverIO extends WDIOReporter {
 			location: (msg, loc) => console.log(`[D2L Reporter] ${msg}: ${loc}`)
 		};
 
-		this._cid = null;
 		this._baseReportPath = options.reportPath || './d2l-test-report.json';
-
-		try {
-			this._report = new ReportBuilder('webdriverio', logger, {
-				reportPath: this._baseReportPath,
-				reportConfigurationPath: options.reportConfigurationPath || './d2l-test-reporting.config.json',
-				verbose: options.verbose || false
-			});
-			console.log('[D2L Reporter] Initialized successfully');
-		} catch (error) {
-			console.error('[D2L Reporter] Failed to initialize:', error.message);
-			this._report = null;
-			return;
-		}
+		this._reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
+		this._verbose = options.verbose || false;
+		this._logger = logger;
+		
+		this._report = null;
 
 		this._testStartTimes = new Map();
 		this._testFiles = new Map();
@@ -62,17 +53,26 @@ class WebdriverIO extends WDIOReporter {
 	}
 
 	onRunnerStart(runner) {
-		if (!this._report) return;
-
-		this._cid = runner.cid;
+		const cid = runner.cid;
 		
 		const path = require('path');
 		const dir = path.dirname(this._baseReportPath);
 		const ext = path.extname(this._baseReportPath);
 		const base = path.basename(this._baseReportPath, ext);
-		const workerReportPath = path.join(dir, `${base}-${this._cid}${ext}`);
-		
-		this._report._reportPath = workerReportPath;
+		const workerReportPath = path.join(dir, `${base}-${cid}${ext}`);
+
+		try {
+			this._report = new ReportBuilder('webdriverio', this._logger, {
+				reportPath: workerReportPath,
+				reportConfigurationPath: this._reportConfigurationPath,
+				verbose: this._verbose
+			});
+			console.log(`[D2L Reporter] Initialized successfully`);
+		} catch (error) {
+			console.error('[D2L Reporter] Failed to initialize:', error.message);
+			this._report = null;
+			return;
+		}
 
 		this._suiteStartTime = new Date().toISOString();
 
@@ -81,7 +81,7 @@ class WebdriverIO extends WDIOReporter {
 			.addContext()
 			.setStarted(this._suiteStartTime);
 
-		console.log(`[D2L Reporter] Test run started (worker ${this._cid})`);
+		console.log(`[D2L Reporter] Test run started (worker ${cid})`);
 	}
 
 	onTestStart(test) {
