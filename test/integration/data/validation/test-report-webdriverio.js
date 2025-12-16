@@ -7,7 +7,7 @@ export const testReportV2Partial = {
 	summary: {
 		status: 'failed',
 		framework: 'webdriverio',
-		count: { passed: 8, failed: 1, skipped: 2, flaky: 2 }
+		count: { passed: 13, failed: 1, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: `[${platform}] > reporter 1 > passed`,
@@ -111,6 +111,38 @@ export const testReportV2Partial = {
 		location: { file: 'test/integration/data/tests/webdriverio/reporter-2.test.js' },
 		tool: 'Test Reporting',
 		experience: 'WebdriverIO 2 Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: `[${platform}] > reporter 3 > passed 1`,
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/webdriverio/reporter-3.test.js' },
+		tool: 'Test Reporting',
+		experience: 'Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: `[${platform}] > reporter 3 > passed 2`,
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/webdriverio/reporter-3.test.js' },
+		tool: 'Test Reporting',
+		experience: 'Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: `[${platform}] > reporter 3 > passed 3`,
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/webdriverio/reporter-3.test.js' },
+		tool: 'Test Reporting',
+		experience: 'Test Framework',
+		type: 'integration',
+		retries: 0
+	}, {
+		name: `[${platform}] > reporter 3 > passed 4`,
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/webdriverio/reporter-3.test.js' },
+		tool: 'Test Reporting',
+		experience: 'Test Framework',
 		type: 'integration',
 		retries: 0
 	}]

@@ -1,15 +1,15 @@
 const { join } = require('node:path');
+const { mergeReports } = require('../../../../src/helpers/merge-reports.cjs');
 
 exports.config = {
 	specs: [
 		join(__dirname, '../tests/webdriverio/reporter-1.test.js'),
-		join(__dirname, '../tests/webdriverio/reporter-2.test.js')
+		join(__dirname, '../tests/webdriverio/reporter-2.test.js'),
+		join(__dirname, '../tests/webdriverio/reporter-3.test.js')
 	],
-	maxInstances: 1,
-	specFileRetries: 0,
+	maxInstances: 2,
 	capabilities: [{
 		browserName: 'chrome',
-		maxInstances: 1,
 		'goog:chromeOptions': {
 			args: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage']
 		}
@@ -32,5 +32,12 @@ exports.config = {
 		ui: 'bdd',
 		timeout: 60000,
 		retries: 3
+	},
+	onComplete: function() {
+		// Merge all worker reports into a single final report
+		mergeReports(
+			'./d2l-test-report-webdriverio-*.json',
+			'./d2l-test-report-webdriverio.json'
+		);
 	}
 };

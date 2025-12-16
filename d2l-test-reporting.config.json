@@ -7,8 +7,7 @@
     "**/tests/playwright/reporter-3.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
-    "**/tests/web-test-runner/reporter-3.test.js",
-    "**/tests/webdriverio/reporter-3.test.js"
+    "**/tests/web-test-runner/reporter-3.test.js"
   ],
   "overrides": [
     {

@@ -16,9 +16,12 @@ class WebdriverIO extends WDIOReporter {
 			location: (msg, loc) => console.log(`[D2L Reporter] ${msg}: ${loc}`)
 		};
 
+		this._cid = null;
+		this._baseReportPath = options.reportPath || './d2l-test-report.json';
+
 		try {
 			this._report = new ReportBuilder('webdriverio', logger, {
-				reportPath: options.reportPath || './d2l-test-report.json',
+				reportPath: this._baseReportPath,
 				reportConfigurationPath: options.reportConfigurationPath || './d2l-test-reporting.config.json',
 				verbose: options.verbose || false
 			});
@@ -58,8 +61,18 @@ class WebdriverIO extends WDIOReporter {
 		return platform ? `[${platform}] > ${testName}` : testName;
 	}
 
-	onRunnerStart() {
+	onRunnerStart(runner) {
 		if (!this._report) return;
+
+		this._cid = runner.cid;
+		
+		const path = require('path');
+		const dir = path.dirname(this._baseReportPath);
+		const ext = path.extname(this._baseReportPath);
+		const base = path.basename(this._baseReportPath, ext);
+		const workerReportPath = path.join(dir, `${base}-${this._cid}${ext}`);
+		
+		this._report._reportPath = workerReportPath;
 
 		this._suiteStartTime = new Date().toISOString();
 
@@ -68,7 +81,7 @@ class WebdriverIO extends WDIOReporter {
 			.addContext()
 			.setStarted(this._suiteStartTime);
 
-		console.log('[D2L Reporter] Test run started');
+		console.log(`[D2L Reporter] Test run started (worker ${this._cid})`);
 	}
 
 	onTestStart(test) {
@@ -139,7 +152,6 @@ class WebdriverIO extends WDIOReporter {
 			}
 		} else if (test.state === 'skipped' || test.state === 'pending') {
 			detail.setSkipped();
-			// Set duration to 0 for skipped tests
 			detail.setDurationFinal(0).setDurationTotal(0);
 		} else {
 			detail.setFailed();
