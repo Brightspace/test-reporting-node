@@ -6,8 +6,10 @@ exports.config = {
 		join(__dirname, '../tests/webdriverio/reporter-2.test.js')
 	],
 	maxInstances: 1,
+	specFileRetries: 0,
 	capabilities: [{
 		browserName: 'chrome',
+		maxInstances: 1,
 		'goog:chromeOptions': {
 			args: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage']
 		}
