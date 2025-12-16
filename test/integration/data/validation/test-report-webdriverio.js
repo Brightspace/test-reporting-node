@@ -5,7 +5,7 @@ const platform = getOperatingSystemType();
 export const testReportV2Partial = {
 	version: 2,
 	summary: {
-		status: 'passed',
+		status: 'failed',
 		framework: 'webdriverio',
 		count: { passed: 8, failed: 1, skipped: 2, flaky: 2 }
 	},
