@@ -7,7 +7,7 @@ export const testReportV2Partial = {
 	summary: {
 		status: 'failed',
 		framework: 'webdriverio',
-		count: { passed: 13, failed: 1, skipped: 2, flaky: 2 }
+		count: { passed: 12, failed: 1, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: `[${platform}] > reporter 1 > passed`,
@@ -40,7 +40,7 @@ export const testReportV2Partial = {
 		tool: 'WebdriverIO 1 Test Reporting',
 		experience: 'Test Framework',
 		type: 'ui',
-		retries: 0
+		retries: 3
 	}, {
 		name: `[${platform}] > reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"`,
 		status: 'passed',
