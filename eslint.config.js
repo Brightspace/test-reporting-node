@@ -96,7 +96,6 @@ const webTestRunnerConfigs = addExtensions(
 	],
 	fileExtensions
 );
-const webdriverIOConfigs = mochaConfigs;
 const jsonConfig = jsonPlugin.configs['recommended'];
 
 export default [
@@ -111,14 +110,20 @@ export default [
 				...mochaConfigs,
 				{
 					rules: {
-						'mocha/no-mocha-arrows': 'off',
 						'mocha/no-pending-tests': 'off'
 					}
 				}
 			],
 			'test/integration/data/tests/playwright': playwrightConfigs,
 			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs,
-			'test/integration/data/tests/webdriverio': webdriverIOConfigs
+			'test/integration/data/tests/webdriverio': [
+				...mochaConfigs,
+				{
+					rules: {
+						'mocha/no-pending-tests': 'off'
+					}
+				}
+			]
 		}
 	),
 	jsonConfig
