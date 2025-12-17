@@ -3,3 +3,4 @@ node_modules/
 test-results/
 /d2l-test-report*.json
 !/d2l-test-reporting.config.json
+report-validation-results.json

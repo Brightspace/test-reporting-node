@@ -1,5 +1,7 @@
+import { existsSync, writeFileSync } from 'node:fs';
 import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
+import { env } from 'node:process';
 import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { Report } from '../../src/helpers/report.cjs';
@@ -7,9 +9,12 @@ import { testReportV2Partial as testReportV2PartialMocha } from './data/validati
 import { testReportV2Partial as testReportV2PartialPlaywright } from './data/validation/test-report-playwright.js';
 import { testReportV2Partial as testReportV2PartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
 import { testReportV2Partial as testReportV2PartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
+import yn from 'yn';
 
 use(chaiSubset);
 
+const { GITHUB_ACTIONS } = env;
+const githubActions = yn(GITHUB_ACTIONS, { default: false });
 const testContext = {
 	github: {
 		organization: 'TestOrganization',
@@ -40,16 +45,34 @@ const reportTests = [{
 	path: './d2l-test-report-webdriverio.json',
 	expected: testReportV2PartialWebdriverIO
 }];
+const results = reportTests.reduce((acc, cur) => {
+	acc[cur.name] = {
+		path: cur.path,
+		exists: false,
+		schema: false,
+		contents: false
+	};
+
+	return acc;
+}, {});
 
 describe('report validation', () => {
 	for (const reportTest of reportTests) {
 		describe(reportTest.name, () => {
+			it('exists', () => {
+				expect(existsSync(reportTest.path)).to.be.true;
+
+				results[reportTest.name].exists = true;
+			});
+
 			it('schema', () => {
 				if (!hasContext()) {
 					new Report(reportTest.path, { context: testContext });
 				} else {
 					new Report(reportTest.path);
 				}
+
+				results[reportTest.name].schema = true;
 			});
 
 			it('contents', () => {
@@ -107,7 +130,17 @@ describe('report validation', () => {
 					expect(detailStarted).to.be.at.least(nowMinus30Minutes);
 					expect(detailStarted).to.be.at.least(summaryStarted);
 				}
+
+				results[reportTest.name].contents = true;
 			});
 		});
 	}
+
+	after(() => {
+		if (githubActions) {
+			const output = JSON.stringify(results);
+
+			writeFileSync('./report-validation-results.json', output);
+		}
+	});
 });

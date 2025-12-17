@@ -26,20 +26,21 @@
     "/src"
   ],
   "scripts": {
-    "fix": "npm run fix:eslint",
+    "fix": "run-s fix:*",
     "fix:eslint": "npm run lint:eslint -- --fix",
     "license-check": "d2l-license-checker -p",
-    "lint": "npm run lint:eslint && npm run lint:editorconfig",
+    "lint": "run-s lint:*",
     "lint:editorconfig": "editorconfig-checker",
     "lint:eslint": "eslint",
     "prepack": "sed -ri 's/\\[!([A-Z]+)\\]/**\\1**:/g' README.md",
     "test": "run-s lint test:all",
     "test:all": "c8 run-s test:unit test:integration",
-    "test:integration": "run-s test:integration:mocha test:integration:playwright test:integration:web-test-runner test:integration:webdriverio && mocha test/integration/report-validation.test.js",
+    "test:integration": "run-s test:integration:* test:integration:validate-reports",
     "test:integration:mocha": "mocha --config test/integration/data/configs/mocha.cjs || exit 0",
     "test:integration:playwright": "playwright test --config test/integration/data/configs/playwright.js || exit 0",
     "test:integration:web-test-runner": "wtr --config test/integration/data/configs/web-test-runner.js || exit 0",
     "test:integration:webdriverio": "wdio run test/integration/data/configs/webdriverio.cjs || exit 0",
+    "test:integration:validate-reports": "mocha test/integration/report-validation.test.js",
     "test:unit": "mocha \"test/unit/**/*.test.js\""
   },
   "dependencies": {
@@ -80,7 +81,8 @@
     "npm-run-all": "^4",
     "playwright": "~1.57",
     "sinon": "^21",
-    "webdriverio": "^9"
+    "webdriverio": "^9",
+    "yn": "^5"
   },
   "engines": {
     "node": ">=20"
