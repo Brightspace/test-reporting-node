@@ -33,7 +33,7 @@ exports.config = {
 		timeout: 60000,
 		retries: 3
 	},
-	onComplete: function() {
+	onComplete() {
 		// Merge all worker reports into a single final report
 		mergeReports(
 			'./d2l-test-report-webdriverio-*.json',

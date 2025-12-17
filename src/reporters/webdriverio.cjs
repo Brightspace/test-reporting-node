@@ -20,7 +20,7 @@ class WebdriverIO extends WDIOReporter {
 		this._reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
 		this._verbose = options.verbose || false;
 		this._logger = logger;
-		
+
 		this._report = null;
 
 		this._testStartTimes = new Map();
@@ -54,7 +54,7 @@ class WebdriverIO extends WDIOReporter {
 
 	onRunnerStart(runner) {
 		const cid = runner.cid;
-		
+
 		const path = require('path');
 		const dir = path.dirname(this._baseReportPath);
 		const ext = path.extname(this._baseReportPath);
@@ -67,7 +67,7 @@ class WebdriverIO extends WDIOReporter {
 				reportConfigurationPath: this._reportConfigurationPath,
 				verbose: this._verbose
 			});
-			console.log(`[D2L Reporter] Initialized successfully`);
+			console.log('[D2L Reporter] Initialized successfully');
 		} catch (error) {
 			console.error('[D2L Reporter] Failed to initialize:', error.message);
 			this._report = null;

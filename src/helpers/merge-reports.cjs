@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const glob = require('glob');
 
 /**
@@ -10,7 +9,7 @@ const glob = require('glob');
  */
 function mergeReports(pattern, outputPath) {
 	const files = glob.sync(pattern);
-	
+
 	if (files.length === 0) {
 		console.warn('[Merge Reports] No report files found matching pattern:', pattern);
 		return null;
@@ -85,7 +84,7 @@ function mergeReports(pattern, outputPath) {
 		fs.writeFileSync(outputPath, JSON.stringify(mergedReport, null, 2));
 		console.log(`[Merge Reports] Merged report saved to: ${outputPath}`);
 	} catch (error) {
-		console.error(`[Merge Reports] Failed to save merged report:`, error.message);
+		console.error('[Merge Reports] Failed to save merged report:', error.message);
 		return null;
 	}
 
