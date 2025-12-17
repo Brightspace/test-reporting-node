@@ -125,6 +125,7 @@ const webTestRunnerConfigs = addExtensions(
 	],
 	fileExtensions
 );
+const webdriverIOConfigs = mochaConfigs;
 const jsonConfig = jsonPlugin.configs['recommended'];
 
 export default [
@@ -137,7 +138,8 @@ export default [
 			'test/integration/data': globalConfigs,
 			'test/integration/data/tests/mocha': mochaConfigs,
 			'test/integration/data/tests/playwright': playwrightConfigs,
-			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs
+			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs,
+			'test/integration/data/tests/webdriverio': webdriverIOConfigs
 		}
 	),
 	jsonConfig

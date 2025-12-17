@@ -38,6 +38,15 @@
       "pattern": "**/tests/web-test-runner/reporter-2.test.js",
       "type": "accessibility",
       "experience": "WebTestRunner 2 Test Framework"
+    },
+    {
+      "pattern": "**/tests/webdriverio/reporter-1.test.js",
+      "type": "ui",
+      "tool": "WebdriverIO 1 Test Reporting"
+    },
+    {
+      "pattern": "**/tests/webdriverio/reporter-2.test.js",
+      "experience": "WebdriverIO 2 Test Framework"
     }
   ]
 }

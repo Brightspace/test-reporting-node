@@ -112,6 +112,9 @@ jobs:
             }, {
               name: '@web/test-runner',
               path: './d2l-test-report-web-test-runner.json'
+            }, {
+              name: 'webdriverio',
+              path: './d2l-test-report-webdriverio.json'
             }];
             for (const { name, path } of reporters) {
               let report = require(path);
