@@ -13,6 +13,7 @@
   "type": "module",
   "exports": {
     "./helpers/github.js": "./src/helpers/github.cjs",
+    "./helpers/merge-reports.js": "./src/helpers/merge-reports.cjs",
     "./helpers/report.js": "./src/helpers/report.cjs",
     "./helpers/report-configuration.js": "./src/helpers/report-configuration.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",

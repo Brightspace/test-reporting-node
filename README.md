@@ -135,6 +135,66 @@ export default {
   for mapping test type, experience and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
 
+#### [WebdriverIO]
+
+Please consult the [official documentation for WebdriverIO] to see how to use
+reporters. Below is an example of how to add the reporter provided by this
+package. It assumes you are using the default `wdio.conf.js` file for
+configuration.
+
+```js
+exports.config = {
+	specs: [
+		join(__dirname, '../tests/webdriverio/reporter-1.test.js'),
+		join(__dirname, '../tests/webdriverio/reporter-2.test.js'),
+		join(__dirname, '../tests/webdriverio/reporter-3.test.js')
+	],
+	maxInstances: 2,
+	capabilities: [{
+		browserName: 'chrome',
+		'goog:chromeOptions': {
+			args: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage']
+		}
+	}],
+	logLevel: 'error',
+	bail: 0,
+	waitforTimeout: 10000,
+	connectionRetryTimeout: 120000,
+	connectionRetryCount: 3,
+	framework: 'mocha',
+	reporters: [
+		'spec',
+		[join(__dirname, '../../../../src/reporters/webdriverio.cjs'), {
+			reportPath: './d2l-test-report-webdriverio.json',
+			reportConfigurationPath: './d2l-test-reporting.config.json',
+			verbose: true
+		}]
+	],
+	mochaOpts: {
+		ui: 'bdd',
+		timeout: 60000,
+		retries: 3
+	},
+	onComplete() {
+		// Merge all worker reports into a single final report
+		mergeReports(
+			'./d2l-test-report-webdriverio-*.json',
+			'./d2l-test-report-webdriverio.json'
+		);
+	}
+};
+```
+
+##### Inputs
+
+* `reportPath`: path to output the report to, relative to current working
+  directory. Not required. Defaults to `./d2l-test-report.json`.
+* `reportConfigurationPath`: path to the D2L test reporting configuration file
+  for mapping test type, experience and tool to test code. Not required.
+  Defaults to `./d2l-test-reporting.config.json`.
+* `verbose`: enable verbose logging for debugging purposes. Not required.
+  Defaults to `false`.
+
 #### Custom Reporters
 
 If your test framework isn't supported by the built-in reporters, you can build your own using the `ReportBuilder` class.
@@ -264,9 +324,11 @@ refer to the [semantic-release GitHub Action] documentation.
 [official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
 [official documentation for Playwright]: https://playwright.dev/docs/test-reporters
 [official documentation for `@web/test-runner`]: https://modern-web.dev/docs/test-runner/reporters/overview
+[official documentation for WebdriverIO]: https://webdriver.io/docs/reporter
 [Mocha]: https://mochajs.org
 [Playwright]: https://playwright.dev
 [`@web/test-runner`]: https://modern-web.dev/docs/test-runner/overview
+[WebdriverIO]: https://webdriver.io
 [`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
 [GitHub Action]: https://github.com/Brightspace/test-reporting-action
 [Automated Testing Definitions]: https://desire2learn.atlassian.net/wiki/spaces/QE/pages/4354408450/Automated+Testing+Definitions
