@@ -81,7 +81,7 @@ function mergeReports(pattern, outputPath) {
 	}
 
 	try {
-		fs.writeFileSync(outputPath, JSON.stringify(mergedReport, null, 2));
+		fs.writeFileSync(outputPath, JSON.stringify(mergedReport));
 		console.log(`[Merge Reports] Merged report saved to: ${outputPath}`);
 	} catch (error) {
 		console.error('[Merge Reports] Failed to save merged report:', error.message);
