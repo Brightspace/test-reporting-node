@@ -61,20 +61,29 @@ jobs:
           npx playwright install --with-deps
           npx puppeteer browsers install chrome
       - name: Run tests
+        id: tests
         run: npm run test:all
-      - name: Generate coverage report info
-        if: github.actor != 'dependabot[bot]'
-        id: coverage-info
+      - name: Generate coverage info
+        if: >
+          !cancelled() && github.actor != 'dependabot[bot]' && (
+            steps.tests.conclusion == 'failure' ||
+            steps.tests.outcome == 'success'
+          )
+        id: coverage
         run: |
+          SOURCE='./coverage/lcov-report/'
+          if [ ! -f "$SOURCE/index.html" ]; then
+            echo "No coverage report found."
+            exit 1
+          fi
           COMMON_PATH="$GITHUB_REPOSITORY/$GITHUB_RUN_ID/$GITHUB_RUN_ATTEMPT/$GITHUB_JOB"
           DESTINATION="s3://test-reporting-coverage/$COMMON_PATH/"
-          SOURCE='./coverage/lcov-report/'
           URL="https://test-reporting.d2l.dev/coverage/$COMMON_PATH/"
           echo "destination=$DESTINATION" >> $GITHUB_OUTPUT
           echo "source=$SOURCE" >> $GITHUB_OUTPUT
           echo "url=$URL" >> $GITHUB_OUTPUT
       - name: Assume role
-        if: github.actor != 'dependabot[bot]'
+        if: (!cancelled()) && steps.coverage.outputs.source != ''
         uses: Brightspace/third-party-actions@aws-actions/configure-aws-credentials
         with:
           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
@@ -83,51 +92,71 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::427469055187:role/github+Brightspace+test-reporting-node
           role-duration-seconds: 3600
-      - name: Upload code coverage
-        if: github.actor != 'dependabot[bot]'
+      - name: Upload coverage
+        if: (!cancelled()) && steps.coverage.outputs.source != ''
         uses: BrightspaceUI/actions/publish-to-s3@main
         with:
-          bucket-path: ${{steps.coverage-info.outputs.destination}}
-          publish-directory: ${{steps.coverage-info.outputs.source}}
+          bucket-path: ${{steps.coverage.outputs.destination}}
+          publish-directory: ${{steps.coverage.outputs.source}}
       - name: Generate test summary
-        id: test-summary
+        id: summary
+        if: >
+          !cancelled() && (
+            steps.tests.conclusion == 'failure' ||
+            steps.tests.outcome == 'success'
+          )
         uses: Brightspace/third-party-actions@actions/github-script
         with:
           script: |
+            const { existsSync } = await import('node:fs');
             const { env } = await import('node:process');
-            const { COVERAGE_REPORT_URL: coverageReportUrl } = env;
+            const {
+              COVERAGE_REPORT_URL: coverageReportUrl,
+              REPORT_VALIDATION_RESULTS: reportValidationResultsPath
+            } = env;
             const { summary } = core;
             summary.clear();
+            summary.addHeading('Coverage Report', 3);
             if (coverageReportUrl) {
-              summary.addHeading('Coverage report', 3);
               summary.addLink('Report', coverageReportUrl);
+            } else {
+              summary.addRaw('No coverage report generated.', true);
+              summary.addEOL();
             }
-            summary.addHeading('Generated reports', 3);
-            const reporters = [{
-              name: 'mocha',
-              path: './d2l-test-report-mocha.json'
-            }, {
-              name: 'playwright',
-              path: './d2l-test-report-playwright.json'
-            }, {
-              name: '@web/test-runner',
-              path: './d2l-test-report-web-test-runner.json'
-            }, {
-              name: 'webdriverio',
-              path: './d2l-test-report-webdriverio.json'
-            }];
-            for (const { name, path } of reporters) {
-              let report = require(path);
-              report = JSON.stringify(report, null, 2);
-              report = `\n\n\`\`\`json\n${report}\n\`\`\`\n\n`;
-              summary.addDetails(name, report);
+            summary.addHeading('Report Validation', 3);
+            if (existsSync(reportValidationResultsPath)) {
+              const validationResults = require(reportValidationResultsPath);
+              for (const [framework, result] of Object.entries(validationResults)) {
+                const { path, exists, schema, contents } = result;
+                const failed = !exists || !schema || !contents;
+                const headerIcon = failed ? ':red_circle:' : ':green_circle:';
+                const header = `<code>${framework}</code> ${headerIcon}`;
+                let body = '<br/>\n\n';
+                if (exists) {
+                  const schemaIcon = schema ? ':green_circle:' : ':red_circle:';
+                  const contentsIcon = contents ? ':green_circle:' : ':red_circle:';
+                  body += `Schema: ${schema ? '**PASSED**' : '**FAILED**'} ${schemaIcon}\n`;
+                  body += `Contents: ${contents ? '**PASSED**' : '**FAILED**'} ${contentsIcon}\n`;
+                  const reportContents = JSON.stringify(require(path), null, 2);
+                  body += `\n#### Report Contents\n\n`;
+                  body += `\`\`\`json\n${reportContents}\n\`\`\``;
+                } else {
+                  body += 'No report generated :fire:';
+                }
+                body += '\n\n';
+                summary.addDetails(header, body);
+              }
+            } else {
+              summary.addRaw('No report validation results found :fire:', true);
             }
             summary.write({ overwrite: true });
             core.setOutput('report', summary.stringify());
         env:
-          COVERAGE_REPORT_URL: ${{steps.coverage-info.outputs.url}}
+          COVERAGE_REPORT_URL: ${{steps.coverage.outputs.url}}
+          REPORT_VALIDATION_RESULTS: ./report-validation-results.json
       - name: Leave comment
+        if: (!cancelled()) && steps.summary.outcome == 'success'
         uses: BrightspaceUI/actions/comment-on-pr@main
         with:
-          message: ${{steps.test-summary.outputs.report}}
+          message: ${{steps.summary.outputs.report}}
           post-mode: hide-previous
