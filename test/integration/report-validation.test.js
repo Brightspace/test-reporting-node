@@ -52,7 +52,7 @@ describe('report validation', () => {
 				}
 			});
 
-			it('contents', function() {
+			it('contents', () => {
 				let report;
 
 				if (!hasContext()) {
