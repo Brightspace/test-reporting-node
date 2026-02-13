@@ -1,6 +1,6 @@
 {
   "name": "d2l-test-reporting",
-  "version": "4.3.2",
+  "version": "5.0.0",
   "description": "Helper package for generating reports for use with the D2L test reporting framework",
   "keywords": [
     "d2l",
