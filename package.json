@@ -65,7 +65,7 @@
     "@web/test-runner": "^0.20",
     "@web/test-runner-playwright": "^0.11",
     "@web/test-runner-puppeteer": "^0.18",
-    "c8": "^10",
+    "c8": "^11",
     "chai": "^6",
     "chai-subset": "^1",
     "d2l-license-checker": "^7",
