@@ -47,3 +47,7 @@ updates:
           - playwright
           - playwright-*
           - '@playwright/*'
+      wdio:
+        patterns:
+          - webdriverio
+          - '@wdio/*'
