@@ -1,9 +1,28 @@
+const Codeowners = require('codeowners');
 const schema = require('./schema.cjs');
 const { flatten } = require('./object.cjs');
 const fs = require('node:fs');
 const { makeRelativeFilePath } = require('./system.cjs');
 const { omit } = require('lodash');
 const { resolve } = require('node:path');
+
+const isCurrentRepository = (organization, repository) => {
+	const { env: { GITHUB_REPOSITORY } } = process;
+
+	if (!GITHUB_REPOSITORY) {
+		return false;
+	}
+
+	return GITHUB_REPOSITORY === `${organization}/${repository}`;
+};
+
+const getCodeowners = () => {
+	try {
+		return new Codeowners();
+	} catch {
+		return null;
+	}
+};
 
 const {
 	formatErrorAjv,
@@ -247,6 +266,10 @@ const upgradeReportV1ToV2 = (report) => {
 		summaryUpgraded.lms.instanceUrl = lmsInstanceUrl;
 	}
 
+	const codeowners = isCurrentRepository(githubOrganization, githubRepository) ?
+		getCodeowners() :
+		null;
+
 	return {
 		id: reportId,
 		version: 2,
@@ -254,8 +277,7 @@ const upgradeReportV1ToV2 = (report) => {
 		details: details.map((detail) => {
 			const { location, duration, totalDuration } = detail;
 			const detailCommon = omit(detail, ['totalDuration']);
-
-			return {
+			const upgraded = {
 				...detailCommon,
 				location: {
 					file: location
@@ -265,6 +287,16 @@ const upgradeReportV1ToV2 = (report) => {
 					final: duration
 				}
 			};
+
+			if (codeowners) {
+				const owners = codeowners.getOwner(location);
+
+				if (owners.length > 0) {
+					upgraded.codeowners = owners;
+				}
+			}
+
+			return upgraded;
 		})
 	};
 };
