@@ -10,7 +10,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 16,
+			line: 20,
 			column: 7
 		},
 		browser: 'chromium',
@@ -24,7 +24,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 16,
+			line: 20,
 			column: 7
 		},
 		browser: 'chromium',
@@ -38,7 +38,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 12,
+			line: 16,
 			column: 2
 		},
 		browser: 'chromium',
@@ -52,7 +52,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 22,
+			line: 26,
 			column: 2
 		},
 		browser: 'chromium',
@@ -66,7 +66,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 40,
+			line: 44,
 			column: 2
 		},
 		browser: 'chromium',
@@ -80,7 +80,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 14,
+			line: 18,
 			column: 7
 		},
 		browser: 'chromium',
@@ -94,7 +94,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 12,
+			line: 16,
 			column: 2
 		},
 		browser: 'chromium',
@@ -108,7 +108,7 @@ export const testReportV2Partial = {
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 36,
+			line: 40,
 			column: 2
 		},
 		browser: 'chromium',
@@ -122,7 +122,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 18,
+			line: 22,
 			column: 2
 		},
 		browser: 'chromium',
@@ -136,7 +136,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 52,
+			line: 56,
 			column: 7
 		},
 		browser: 'chromium',
@@ -150,7 +150,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 18,
+			line: 22,
 			column: 2
 		},
 		browser: 'chromium',
@@ -164,7 +164,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 14,
+			line: 18,
 			column: 7
 		},
 		browser: 'chromium',
@@ -178,7 +178,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 26,
+			line: 30,
 			column: 2
 		},
 		browser: 'chromium',
@@ -192,7 +192,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 46,
+			line: 50,
 			column: 7
 		},
 		browser: 'chromium',
@@ -206,7 +206,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 22,
+			line: 26,
 			column: 2
 		},
 		browser: 'chromium',
@@ -220,7 +220,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 40,
+			line: 44,
 			column: 2
 		},
 		browser: 'chromium',
@@ -234,7 +234,7 @@ export const testReportV2Partial = {
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 36,
+			line: 40,
 			column: 2
 		},
 		browser: 'chromium',
@@ -248,7 +248,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 52,
+			line: 56,
 			column: 7
 		},
 		browser: 'chromium',
@@ -262,7 +262,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 26,
+			line: 30,
 			column: 2
 		},
 		browser: 'chromium',
@@ -276,7 +276,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 46,
+			line: 50,
 			column: 7
 		},
 		browser: 'chromium',
@@ -290,7 +290,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 16,
+			line: 20,
 			column: 7
 		},
 		browser: 'firefox',
@@ -304,7 +304,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 12,
+			line: 16,
 			column: 2
 		},
 		browser: 'firefox',
@@ -318,7 +318,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 14,
+			line: 18,
 			column: 7
 		},
 		browser: 'firefox',
@@ -332,7 +332,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 18,
+			line: 22,
 			column: 2
 		},
 		browser: 'firefox',
@@ -346,7 +346,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 22,
+			line: 26,
 			column: 2
 		},
 		browser: 'firefox',
@@ -360,7 +360,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 40,
+			line: 44,
 			column: 2
 		},
 		browser: 'firefox',
@@ -374,7 +374,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 26,
+			line: 30,
 			column: 2
 		},
 		browser: 'firefox',
@@ -388,7 +388,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 46,
+			line: 50,
 			column: 7
 		},
 		browser: 'firefox',
@@ -402,7 +402,7 @@ export const testReportV2Partial = {
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 36,
+			line: 40,
 			column: 2
 		},
 		browser: 'firefox',
@@ -416,7 +416,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 52,
+			line: 56,
 			column: 7
 		},
 		browser: 'firefox',
@@ -430,7 +430,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 16,
+			line: 20,
 			column: 7
 		},
 		browser: 'webkit',
@@ -444,7 +444,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 12,
+			line: 16,
 			column: 2
 		},
 		browser: 'webkit',
@@ -458,7 +458,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 14,
+			line: 18,
 			column: 7
 		},
 		browser: 'webkit',
@@ -472,7 +472,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 38,
+			line: 42,
 			column: 7
 		},
 		browser: 'chromium',
@@ -486,7 +486,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 18,
+			line: 22,
 			column: 2
 		},
 		browser: 'webkit',
@@ -500,7 +500,7 @@ export const testReportV2Partial = {
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 36,
+			line: 40,
 			column: 2
 		},
 		browser: 'webkit',
@@ -514,7 +514,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 38,
+			line: 42,
 			column: 7
 		},
 		browser: 'chromium',
@@ -528,7 +528,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 22,
+			line: 26,
 			column: 2
 		},
 		browser: 'webkit',
@@ -542,7 +542,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 52,
+			line: 56,
 			column: 7
 		},
 		browser: 'webkit',
@@ -556,7 +556,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 16,
+			line: 20,
 			column: 7
 		},
 		browser: 'webkit',
@@ -570,7 +570,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 40,
+			line: 44,
 			column: 2
 		},
 		browser: 'webkit',
@@ -584,7 +584,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 26,
+			line: 30,
 			column: 2
 		},
 		browser: 'webkit',
@@ -598,7 +598,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 18,
+			line: 22,
 			column: 2
 		},
 		browser: 'webkit',
@@ -612,7 +612,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 46,
+			line: 50,
 			column: 7
 		},
 		browser: 'webkit',
@@ -626,7 +626,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 12,
+			line: 16,
 			column: 2
 		},
 		browser: 'webkit',
@@ -640,7 +640,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 40,
+			line: 44,
 			column: 2
 		},
 		browser: 'webkit',
@@ -654,7 +654,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 14,
+			line: 18,
 			column: 7
 		},
 		browser: 'webkit',
@@ -668,7 +668,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 52,
+			line: 56,
 			column: 7
 		},
 		browser: 'webkit',
@@ -682,7 +682,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 46,
+			line: 50,
 			column: 7
 		},
 		browser: 'webkit',
@@ -696,7 +696,7 @@ export const testReportV2Partial = {
 		status: 'skipped',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 22,
+			line: 26,
 			column: 2
 		},
 		browser: 'webkit',
@@ -710,7 +710,7 @@ export const testReportV2Partial = {
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 36,
+			line: 40,
 			column: 2
 		},
 		browser: 'webkit',
@@ -724,7 +724,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 26,
+			line: 30,
 			column: 2
 		},
 		browser: 'webkit',
@@ -738,7 +738,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 38,
+			line: 42,
 			column: 7
 		},
 		browser: 'firefox',
@@ -752,7 +752,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 38,
+			line: 42,
 			column: 7
 		},
 		browser: 'webkit',
@@ -766,7 +766,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 38,
+			line: 42,
 			column: 7
 		},
 		browser: 'webkit',
@@ -780,7 +780,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 58,
+			line: 62,
 			column: 2
 		},
 		browser: 'chromium',
@@ -794,7 +794,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 58,
+			line: 62,
 			column: 2
 		},
 		browser: 'chromium',
@@ -808,7 +808,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 58,
+			line: 62,
 			column: 2
 		},
 		browser: 'firefox',
@@ -822,7 +822,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
-			line: 58,
+			line: 62,
 			column: 2
 		},
 		browser: 'webkit',
@@ -836,7 +836,7 @@ export const testReportV2Partial = {
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
-			line: 58,
+			line: 62,
 			column: 2
 		},
 		browser: 'webkit',

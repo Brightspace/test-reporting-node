@@ -9,6 +9,10 @@ test.describe('reporter 3', () => {
 
 	test.beforeEach(async() => { await delay(250); });
 
+	test.afterEach(async() => { await delay(250); });
+
+	test.afterAll(async() => { await delay(250); });
+
 	test('passed', async() => { await delay(); });
 
 	test.skip('skipped static', () => {});
@@ -56,8 +60,4 @@ test.describe('reporter 3', () => {
 	});
 
 	test(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
-
-	test.afterEach(async() => { await delay(250); });
-
-	test.afterAll(async() => { await delay(250); });
 });
