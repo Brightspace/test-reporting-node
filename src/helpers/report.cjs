@@ -292,7 +292,7 @@ const upgradeReportV1ToV2 = (report) => {
 				const owners = codeowners.getOwner(location);
 
 				if (owners.length > 0) {
-					upgraded.codeowners = owners;
+					upgraded.github = { codeowners: owners };
 				}
 			}
 
