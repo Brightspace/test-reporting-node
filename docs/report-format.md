@@ -56,9 +56,7 @@ stored in [AWS Timestream], please see [Storage Schema].
       },
       "name": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$>'",
       "status": "<Must be 'passed', 'skipped' or 'failed'>",
-      "github": {
-        "codeowners": "<Array of non-empty strings starting with @ from CODEOWNERS file, optional>"
-      },
+      "codeowners": "<Array of non-empty strings from CODEOWNERS file, optional>",
       "retries": "<Positive integer, can be 0>",
       "timeout": "<Positive integer representing milliseconds, can be 0, optional>",
       "browser": "<Can be 'chromium', 'chrome', 'firefox', 'webkit', 'safari' or 'edge', optional>",

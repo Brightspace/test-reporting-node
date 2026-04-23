@@ -191,17 +191,12 @@
             "type": "integer",
             "minimum": 0
           },
-          "github": {
-            "type": "object",
-            "properties": {
-              "codeowners": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/githubCodeownerString"
-                },
-                "minItems": 1
-              }
-            }
+          "codeowners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/codeownerString"
+            },
+            "minItems": 1
           }
         },
         "required": [
@@ -232,7 +227,7 @@
         "pattern": "should be non-empty without leading or trailing whitespace"
       }
     },
-    "githubCodeownerString": {
+    "codeownerString": {
       "allOf": [
         {
           "$ref": "#/$defs/nonEmptyUnpaddedString"

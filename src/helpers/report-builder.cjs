@@ -212,7 +212,7 @@ class ReportDetailBuilder extends ReportBuilderBase {
 			const owners = this._codeowners.getOwner(filePath);
 
 			if (owners.length > 0) {
-				this._setNestedProperty('github', 'codeowners', owners, options);
+				this._setProperty('codeowners', owners, options);
 			}
 		}
 
