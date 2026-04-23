@@ -123,7 +123,12 @@ const playwrightConfigs = addExtensions(
 const webTestRunnerConfigs = addExtensions(
 	[
 		...testingConfig,
-		...commonConfigs
+		...commonConfigs,
+		{
+			rules: {
+				'mocha/no-pending-tests': 'off'
+			}
+		}
 	],
 	fileExtensions
 );

@@ -64,22 +64,6 @@ describe('report builder', () => {
 	afterEach(() => sandbox.restore());
 
 	describe('constructor', () => {
-		it('sets version', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-
-			expect(builder.data.version).to.eq(latestReportVersion);
-		});
-
-		it('produces loadable report', () => {
-			const builder = buildValidReport();
-
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(builder));
-
-			const report = new Report('./test-report.json', { context: testContext });
-
-			expect(report.getVersion()).to.eq(latestReportVersion);
-		});
-
 		it('throws with both output options', () => {
 			expect(() => new ReportBuilder('mocha', noopLogger, {
 				reportPath: './report.json',
@@ -104,6 +88,57 @@ describe('report builder', () => {
 			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
 
 			expect(builder.data.id).to.be.a.uuid('v4');
+		});
+
+		describe('v2', () => {
+			it('sets version to 2', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+
+				expect(builder.data.version).to.eq(2);
+			});
+
+			it('produces loadable report', () => {
+				const builder = buildValidReport();
+
+				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(builder));
+
+				const report = new Report('./test-report.json', { context: testContext });
+
+				expect(report.getVersion()).to.eq(2);
+			});
+
+			it('does not set codeowners on details', () => {
+				const builder = buildValidReport();
+				const json = builder.toJSON();
+
+				expect(json.details[0]).to.not.have.nested.property('github.codeowners');
+			});
+		});
+
+		describe('v3', () => {
+			it('sets version to latest', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
+
+				expect(builder.data.version).to.eq(latestReportVersion);
+			});
+
+			it('produces loadable report', () => {
+				const builder = buildValidReport({ reportVersionLatest: true });
+
+				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(builder));
+
+				const report = new Report('./test-report.json', { context: testContext });
+
+				expect(report.getVersion()).to.eq(latestReportVersion);
+			});
+
+			it('sets codeowners on details', () => {
+				const builder = buildValidReport({ reportVersionLatest: true });
+				const json = builder.toJSON();
+
+				expect(json.details[0]).to.have.nested.property('github.codeowners');
+				expect(json.details[0].github.codeowners).to.be.an('array').that.is.not.empty;
+			});
 		});
 	});
 
