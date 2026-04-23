@@ -8,7 +8,6 @@ export const testReportV2Partial = {
 	details: [{
 		name: 'reporter 1 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
 		timeout: 120000,
@@ -19,7 +18,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > skipped',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
 		timeout: 120000,
@@ -30,7 +28,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
 		timeout: 120000,
@@ -41,7 +38,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
 		timeout: 120000,
@@ -52,7 +48,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > skipped',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
 		timeout: 120000,
@@ -63,7 +58,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
 		timeout: 120000,
@@ -74,7 +68,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
 		timeout: 120000,
@@ -85,7 +78,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > skipped',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
 		timeout: 120000,
@@ -96,7 +88,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
 		timeout: 120000,
@@ -107,7 +98,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter 1 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
 		timeout: 120000,
@@ -118,7 +108,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter 1 > skipped',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
 		timeout: 120000,
@@ -129,7 +118,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter 1 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
 		timeout: 120000,
@@ -140,7 +128,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
 		timeout: 120000,
@@ -151,7 +138,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
 		timeout: 120000,
@@ -162,7 +148,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 1] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
 		timeout: 120000,
@@ -173,7 +158,6 @@ export const testReportV2Partial = {
 	}, {
 		name: '[group 2] > reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
 		timeout: 120000,

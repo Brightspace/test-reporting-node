@@ -1,4 +1,3 @@
-const Codeowners = require('codeowners');
 const { getContext, hasContext } = require('./github.cjs');
 const { getOperatingSystemType, makeRelativeFilePath } = require('./system.cjs');
 const { randomUUID } = require('node:crypto');
@@ -24,7 +23,6 @@ const reportMemberPriority = [
 	'sha',
 	'name',
 	'status',
-	'codeowners',
 	'lms',
 	'buildNumber',
 	'instanceUrl',
@@ -174,11 +172,10 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 }
 
 class ReportDetailBuilder extends ReportBuilderBase {
-	constructor(reportConfiguration, codeowners) {
+	constructor(reportConfiguration) {
 		super();
 
 		this._reportConfiguration = reportConfiguration;
-		this._codeowners = codeowners;
 
 		this._setProperty('retries', 0);
 	}
@@ -200,21 +197,15 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 		this._setNestedProperty('location', 'file', filePath, options);
 
-		if (this._reportConfiguration) {
-			const { type, tool, experience } = this._reportConfiguration.getTaxonomy(filePath);
-
-			this._setProperty('type', type, options);
-			this._setProperty('tool', tool, options);
-			this._setProperty('experience', experience, options);
+		if (!this._reportConfiguration) {
+			return this;
 		}
 
-		if (this._codeowners) {
-			const owners = this._codeowners.getOwner(filePath);
+		const { type, tool, experience } = this._reportConfiguration.getTaxonomy(filePath);
 
-			if (owners.length > 0) {
-				this._setProperty('codeowners', owners, options);
-			}
-		}
+		this._setProperty('type', type, options);
+		this._setProperty('tool', tool, options);
+		this._setProperty('experience', experience, options);
 
 		return this;
 	}
@@ -307,12 +298,6 @@ class ReportBuilder extends ReportBuilderBase {
 		this._verbose = verbose;
 		this._reportConfiguration = new ReportConfiguration(reportConfigurationPath);
 
-		try {
-			this._codeowners = new Codeowners();
-		} catch {
-			this._codeowners = null;
-		}
-
 		if (reportWriter) {
 			if (reportPath) {
 				throw new Error('must supply only one of \'reportPath\' or \'reportWriter\'');
@@ -355,7 +340,7 @@ class ReportBuilder extends ReportBuilderBase {
 		const { details } = this._data;
 
 		if (!details.has(id)) {
-			details.set(id, new ReportDetailBuilder(this._reportConfiguration, this._codeowners));
+			details.set(id, new ReportDetailBuilder(this._reportConfiguration));
 		}
 
 		return details.get(id);

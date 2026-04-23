@@ -8,7 +8,6 @@ export const testReportV2Partial = {
 	details: [{
 		name: 'reporter 1 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
 		timeout: 2000,
 		tool: 'Mocha 1 Test Reporting',
@@ -18,7 +17,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > skipped',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
 		timeout: 2000,
 		tool: 'Mocha 1 Test Reporting',
@@ -28,7 +26,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
 		timeout: 2000,
 		tool: 'Mocha 1 Test Reporting',
@@ -38,7 +35,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
 		timeout: 2000,
 		tool: 'Mocha 1 Test Reporting',
@@ -48,7 +44,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 2 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
 		timeout: 2000,
 		tool: 'Test Reporting',
@@ -58,7 +53,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 2 > skipped',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
 		timeout: 2000,
 		tool: 'Test Reporting',
@@ -68,7 +62,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 2 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
 		timeout: 2000,
 		tool: 'Test Reporting',
@@ -78,7 +71,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 2 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
 		timeout: 2000,
 		tool: 'Test Reporting',
@@ -88,7 +80,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
 		timeout: 2000,
 		tool: 'Mocha 1 Test Reporting',
@@ -98,7 +89,6 @@ export const testReportV2Partial = {
 	}, {
 		name: 'reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
 		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
 		timeout: 2000,
 		tool: 'Test Reporting',
