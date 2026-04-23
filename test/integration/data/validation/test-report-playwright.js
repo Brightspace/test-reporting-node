@@ -8,7 +8,7 @@ export const testReportV2Partial = {
 	details: [{
 		name: '[chromium] > reporter 1 > skipped static, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 20,
@@ -23,7 +23,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > skipped static, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 20,
@@ -38,7 +38,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 16,
@@ -53,7 +53,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 26,
@@ -68,7 +68,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > failed dynamic expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 44,
@@ -83,7 +83,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > skipped static',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 18,
@@ -98,7 +98,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 16,
@@ -113,7 +113,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 40,
@@ -128,7 +128,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 22,
@@ -143,7 +143,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > failed static expected, skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 56,
@@ -158,7 +158,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 22,
@@ -173,7 +173,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > skipped static',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 18,
@@ -188,7 +188,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 30,
@@ -203,7 +203,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > failed static expected, skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 50,
@@ -218,7 +218,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 26,
@@ -233,7 +233,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > failed dynamic expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 44,
@@ -248,7 +248,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 40,
@@ -263,7 +263,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > failed static expected, skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 56,
@@ -278,7 +278,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 30,
@@ -293,7 +293,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > failed static expected, skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 50,
@@ -308,7 +308,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > skipped static, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 20,
@@ -323,7 +323,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 16,
@@ -338,7 +338,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > skipped static',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 18,
@@ -353,7 +353,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 22,
@@ -368,7 +368,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 26,
@@ -383,7 +383,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > failed dynamic expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 44,
@@ -398,7 +398,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 30,
@@ -413,7 +413,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > failed static expected, skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 50,
@@ -428,7 +428,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 40,
@@ -443,7 +443,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > failed static expected, skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 56,
@@ -458,7 +458,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > skipped static, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 20,
@@ -473,7 +473,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 16,
@@ -488,7 +488,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > skipped static',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 18,
@@ -503,7 +503,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > failed static expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 42,
@@ -518,7 +518,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 22,
@@ -533,7 +533,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 40,
@@ -548,7 +548,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > failed static expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 42,
@@ -563,7 +563,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 26,
@@ -578,7 +578,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > failed static expected, skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 56,
@@ -593,7 +593,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > skipped static, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 20,
@@ -608,7 +608,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > failed dynamic expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 44,
@@ -623,7 +623,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 30,
@@ -638,7 +638,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 22,
@@ -653,7 +653,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > failed static expected, skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 50,
@@ -668,7 +668,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > passed',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 16,
@@ -683,7 +683,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > failed dynamic expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 44,
@@ -698,7 +698,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > skipped static',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 18,
@@ -713,7 +713,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > failed static expected, skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 56,
@@ -728,7 +728,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > failed static expected, skipped dynamic',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 50,
@@ -743,7 +743,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > skipped dynamic, fixme',
 		status: 'skipped',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 26,
@@ -758,7 +758,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > failed',
 		status: 'failed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 40,
@@ -773,7 +773,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > flaky',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 30,
@@ -788,7 +788,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > failed static expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 42,
@@ -803,7 +803,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > failed static expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 42,
@@ -818,7 +818,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > failed static expected',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 42,
@@ -833,7 +833,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 62,
@@ -848,7 +848,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[chromium] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 62,
@@ -863,7 +863,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[firefox] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 62,
@@ -878,7 +878,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-1.test.js',
 			line: 62,
@@ -893,7 +893,7 @@ export const testReportV2Partial = {
 	}, {
 		name: '[webkit] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
 		status: 'passed',
-		codeowners: ['@Brightspace/quality-enablement'],
+		github: { codeowners: ['@Brightspace/quality-enablement'] },
 		location: {
 			file: 'test/integration/data/tests/playwright/reporter-2.test.js',
 			line: 62,
