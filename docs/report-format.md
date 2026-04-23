@@ -15,6 +15,69 @@ stored in [AWS Timestream], please see [Storage Schema].
 ```json
 {
   "id": "<GUID>",
+  "version": 3,
+  "summary": {
+    "status": "<Must be 'passed' or 'failed'>",
+    "github": {
+      "organization": "<Non-empty string matching pattern '[A-Za-z0-9_.-]+'>",
+      "repository": "<Non-empty string matching pattern '[A-Za-z0-9_.-]+'>",
+      "workflow": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$'>",
+      "runId": "<Positive integer, can be 0>",
+      "runAttempt": "<Positive integer, must be 1 or greater>"
+    },
+    "git": {
+      "branch": "<Git branch this was generated for>",
+      "sha": "<Git SHA hash representing the commit this was generated for>"
+    },
+    "framework": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$>'",
+    "operatingSystem": "<Must be one of 'linux', 'windows' or 'mac'>",
+    "started": "<UTC timestamp>",
+    "duration": {
+      "total": "<Positive integer representing milliseconds, can be 0>"
+    },
+    "count": {
+      "passed": "<Positive integer, can be 0>",
+      "failed": "<Positive integer, can be 0>",
+      "skipped": "<Positive integer, can be 0>",
+      "flaky": "<Positive integer, can be 0>"
+    }
+  },
+  "details": [
+    {
+      "name": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$>'",
+      "status": "<Must be 'passed', 'skipped' or 'failed'>",
+      "location": {
+        "file": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$'>",
+        "line": "<Positive integer, can be 0, optional>",
+        "column": "<Positive integer, can be 0, optional>"
+      },
+      "browser": "<Can be 'chromium', 'chrome', 'firefox', 'webkit', 'safari' or 'edge', optional>",
+      "timeout": "<Positive integer representing milliseconds, can be 0, optional>",
+      "started": "<Timestamp in UTC time>",
+      "duration": {
+        "total": "<Positive integer representing milliseconds, can be 0>",
+        "final": "<Positive integer representing milliseconds, can be 0>"
+      },
+      "tool": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
+      "experience": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
+      "type": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
+      "retries": "<Positive integer, can be 0>",
+      "github": {
+        "codeowners": "<Array of strings starting with '@', optional>"
+      }
+    }
+  ]
+}
+```
+
+## Previous
+
+<details>
+<summary>Version 2</summary>
+
+```json
+{
+  "id": "<GUID>",
   "version": 2,
   "summary": {
     "status": "<Must be 'passed' or 'failed'>",
@@ -67,7 +130,7 @@ stored in [AWS Timestream], please see [Storage Schema].
 }
 ```
 
-## Previous
+</details>
 
 <details>
 <summary>Version 1</summary>
