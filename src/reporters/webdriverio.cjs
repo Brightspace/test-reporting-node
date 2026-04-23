@@ -109,7 +109,6 @@ class WebdriverIO extends WDIOReporter {
 		if (test.timeout) {
 			detail.setTimeout(test.timeout);
 		}
-
 	}
 
 	onTestEnd(test) {
