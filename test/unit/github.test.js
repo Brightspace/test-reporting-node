@@ -24,13 +24,13 @@ describe('github', () => {
 	afterEach(() => sandbox.restore());
 
 	describe('has context', () => {
-		it('not in github actions', () => {
+		it('false outside actions', () => {
 			sandbox.stub(process, 'env').value({});
 
 			expect(hasContext()).to.be.false;
 		});
 
-		it('in github actions', () => {
+		it('true in actions', () => {
 			sandbox.stub(process, 'env').value({ 'GITHUB_ACTIONS': '1' });
 
 			expect(hasContext()).to.be.true;
@@ -48,34 +48,66 @@ describe('github', () => {
 			'GITHUB_SHA': '0000000000000000000000000000000000000000'
 		};
 
-		describe('in github actions', () => {
-			it('on pull request', () => {
-				sandbox.stub(process, 'env').value({
-					...commonEnvironment,
-					'GITHUB_HEAD_REF': 'test/branch'
-				});
-
-				const context = getContext();
-
-				expect(expectedResult).to.deep.eq(context);
-			});
-
-			it('on branch', () => {
-				sandbox.stub(process, 'env').value({
-					...commonEnvironment,
-					'GITHUB_REF': 'test/branch'
-				});
-
-				const context = getContext();
-
-				expect(expectedResult).to.deep.eq(context);
-			});
-		});
-
-		it('not in github actions', () => {
+		it('throws outside actions', () => {
 			sandbox.stub(process, 'env').value({});
 
 			expect(getContext).to.throw('GitHub context unavailable');
+		});
+
+		it('on pull request', () => {
+			sandbox.stub(process, 'env').value({
+				...commonEnvironment,
+				'GITHUB_HEAD_REF': 'test/branch'
+			});
+
+			const context = getContext();
+
+			expect(expectedResult).to.deep.eq(context);
+		});
+
+		it('on branch', () => {
+			sandbox.stub(process, 'env').value({
+				...commonEnvironment,
+				'GITHUB_REF': 'test/branch'
+			});
+
+			const context = getContext();
+
+			expect(expectedResult).to.deep.eq(context);
+		});
+
+		it('strips prefix', () => {
+			sandbox.stub(process, 'env').value({
+				...commonEnvironment,
+				'GITHUB_REF': 'refs/heads/test/branch'
+			});
+
+			const context = getContext();
+
+			expect(context.git.branch).to.eq('test/branch');
+		});
+
+		it('strips prefix (case-insensitive)', () => {
+			sandbox.stub(process, 'env').value({
+				...commonEnvironment,
+				'GITHUB_REF': 'Refs/Heads/test/branch'
+			});
+
+			const context = getContext();
+
+			expect(context.git.branch).to.eq('test/branch');
+		});
+
+		it('prefers head ref', () => {
+			sandbox.stub(process, 'env').value({
+				...commonEnvironment,
+				'GITHUB_HEAD_REF': 'pr/branch',
+				'GITHUB_REF': 'refs/heads/main'
+			});
+
+			const context = getContext();
+
+			expect(context.git.branch).to.eq('pr/branch');
 		});
 	});
 });

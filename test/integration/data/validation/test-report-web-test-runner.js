@@ -1,5 +1,7 @@
-export const testReportV2Partial = {
-	version: 2,
+import { latestReportVersion } from '../../../../src/helpers/schema.cjs';
+
+export const testReportLatestPartial = {
+	version: latestReportVersion,
 	summary: {
 		status: 'failed',
 		framework: '@web/test-runner',

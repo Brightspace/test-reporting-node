@@ -20,9 +20,7 @@ class WebdriverIO extends WDIOReporter {
 		this._reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
 		this._verbose = options.verbose || false;
 		this._logger = logger;
-
 		this._report = null;
-
 		this._testStartTimes = new Map();
 		this._testFiles = new Map();
 		this._suiteStartTime = null;

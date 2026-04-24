@@ -1,10 +1,10 @@
+const os = require('node:os');
 const { relative, sep: platformSeparator } = require('node:path');
-const { fileURLToPath } = require('node:url');
 const { join } = require('node:path/posix');
-const { type } = require('node:os');
+const { fileURLToPath } = require('node:url');
 
 const getOperatingSystemType = () => {
-	switch (type()) {
+	switch (os.type()) {
 		case 'Linux':
 			return 'linux';
 		case 'Darwin':
@@ -21,8 +21,8 @@ const makeRelativeFilePath = (filePath) => {
 		filePath = fileURLToPath(filePath);
 	}
 
-	const path = relative(process.cwd(), filePath);
-	const pathParts = path.split(platformSeparator);
+	const relativePath = relative(process.cwd(), filePath);
+	const pathParts = relativePath.split(platformSeparator);
 
 	return join(...pathParts);
 };
