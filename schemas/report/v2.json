@@ -190,13 +190,6 @@
           "retries": {
             "type": "integer",
             "minimum": 0
-          },
-          "codeowners": {
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/codeownerString"
-            },
-            "minItems": 1
           }
         },
         "required": [
@@ -226,21 +219,6 @@
       "errorMessage": {
         "pattern": "should be non-empty without leading or trailing whitespace"
       }
-    },
-    "codeownerString": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/nonEmptyUnpaddedString"
-        },
-        {
-          "type": "string",
-          "pattern": "^@\\S+$",
-          "minLength": 2,
-          "errorMessage": {
-            "pattern": "should be a valid codeowner starting with @ and containing no whitespace"
-          }
-        }
-      ]
     },
     "context": {
       "$schema": "https://json-schema.org/draft/2019-09/schema",
