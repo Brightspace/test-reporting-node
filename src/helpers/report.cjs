@@ -249,7 +249,7 @@ const upgradeReportV1ToV2 = (report) => {
 
 	return {
 		id: reportId,
-		version: 2,
+		version: latestReportVersion,
 		summary: summaryUpgraded,
 		details: details.map((detail) => {
 			const { location, duration, totalDuration } = detail;

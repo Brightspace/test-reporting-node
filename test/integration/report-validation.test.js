@@ -4,11 +4,12 @@ import chaiSubset from 'chai-subset';
 import { env } from 'node:process';
 import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
+import { latestReportVersion } from '../../src/helpers/schema.cjs';
 import { Report } from '../../src/helpers/report.cjs';
-import { testReportV2Partial as testReportV2PartialMocha } from './data/validation/test-report-mocha.js';
-import { testReportV2Partial as testReportV2PartialPlaywright } from './data/validation/test-report-playwright.js';
-import { testReportV2Partial as testReportV2PartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
-import { testReportV2Partial as testReportV2PartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
+import { testReportLatestPartial as testReportLatestPartialMocha } from './data/validation/test-report-mocha.js';
+import { testReportLatestPartial as testReportLatestPartialPlaywright } from './data/validation/test-report-playwright.js';
+import { testReportLatestPartial as testReportLatestPartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
+import { testReportLatestPartial as testReportLatestPartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
 import yn from 'yn';
 
 use(chaiSubset);
@@ -30,20 +31,24 @@ const testContext = {
 };
 const reportTests = [{
 	name: 'mocha',
+	version: latestReportVersion,
 	path: './d2l-test-report-mocha.json',
-	expected: testReportV2PartialMocha
+	expected: testReportLatestPartialMocha
 }, {
 	name: 'playwright',
+	version: latestReportVersion,
 	path: './d2l-test-report-playwright.json',
-	expected: testReportV2PartialPlaywright
+	expected: testReportLatestPartialPlaywright
 }, {
 	name: '@web/test-runner',
+	version: latestReportVersion,
 	path: './d2l-test-report-web-test-runner.json',
-	expected: testReportV2PartialWebTestRunner
+	expected: testReportLatestPartialWebTestRunner
 }, {
 	name: 'webdriverio',
+	version: latestReportVersion,
 	path: './d2l-test-report-webdriverio.json',
-	expected: testReportV2PartialWebdriverIO
+	expected: testReportLatestPartialWebdriverIO
 }];
 const results = reportTests.reduce((acc, cur) => {
 	acc[cur.name] = {
@@ -89,8 +94,8 @@ describe('report validation', () => {
 
 				nowMinus30Minutes.setMinutes(now.getMinutes() - 30);
 
-				expect(report.getVersion()).to.eq(2);
-				expect(report.getVersionOriginal()).to.eq(2);
+				expect(report.getVersion()).to.eq(reportTest.version);
+				expect(report.getVersionOriginal()).to.eq(reportTest.version);
 
 				report = report.toJSON();
 

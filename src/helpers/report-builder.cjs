@@ -4,7 +4,7 @@ const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 const { writeFileSync } = require('node:fs');
-const { latestSupportedBrowsers } = require('./schema.cjs');
+const { latestSupportedBrowsers, latestReportVersion } = require('./schema.cjs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -12,6 +12,8 @@ const reportMemberPriority = [
 	'version',
 	'summary',
 	'details',
+	'name',
+	'status',
 	'github',
 	'organization',
 	'repository',
@@ -21,8 +23,6 @@ const reportMemberPriority = [
 	'git',
 	'branch',
 	'sha',
-	'name',
-	'status',
 	'lms',
 	'buildNumber',
 	'instanceUrl',
@@ -319,7 +319,7 @@ class ReportBuilder extends ReportBuilderBase {
 		}
 
 		this._setProperty('id', randomUUID());
-		this._setProperty('version', 2);
+		this._setProperty('version', latestReportVersion);
 		this._setProperty('summary', new ReportSummaryBuilder(framework, this._logger));
 		this._setProperty('details', new Map());
 	}

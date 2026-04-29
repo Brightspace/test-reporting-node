@@ -1,4 +1,4 @@
-const { readFileSync } = require('node:fs');
+const fs = require('node:fs');
 const { resolve } = require('node:path');
 const { formatErrorAjv, validateReportConfigurationV1Ajv } = require('./schema.cjs');
 const { minimatch } = require('minimatch');
@@ -15,7 +15,7 @@ class ReportConfiguration {
 			path = resolve(path);
 
 			try {
-				const contents = readFileSync(path, 'utf8');
+				const contents = fs.readFileSync(path, 'utf8');
 
 				reportConfiguration = JSON.parse(contents);
 			} catch {
@@ -29,7 +29,7 @@ class ReportConfiguration {
 			let contents;
 
 			try {
-				contents = readFileSync(path, 'utf8');
+				contents = fs.readFileSync(path, 'utf8');
 			} catch {
 				this._reportConfiguration = {};
 
