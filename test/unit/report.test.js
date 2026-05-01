@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import { latestReportVersion } from '../../src/helpers/schema.cjs';
 import { Report } from '../../src/helpers/report.cjs';
 import { resolve } from 'node:path';
+
 const testReportPath = resolve('./test-report.json');
 const testContext = {
 	github: {
@@ -131,6 +132,78 @@ const testReportV1PartialContext = {
 		countFlaky: 1
 	}
 };
+const testReportV2Full = {
+	id: '00000000-0000-0000-0000-000000000000',
+	version: 2,
+	summary: {
+		...testContext,
+		operatingSystem: 'linux',
+		framework: 'mocha',
+		started: testStarted,
+		status: 'passed',
+		duration: {
+			total: 23857
+		},
+		count: {
+			passed: 2,
+			failed: 0,
+			skipped: 1,
+			flaky: 1
+		}
+	},
+	details: testDetails
+};
+const testReportV2FullOther = {
+	...testReportV2Full,
+	summary: {
+		...testReportV2Full.summary,
+		...testContextOther
+	}
+};
+const testReportV2NoContext = {
+	...testReportV2Full,
+	summary: {
+		operatingSystem: 'linux',
+		framework: 'mocha',
+		started: testStarted,
+		duration: {
+			total: 23857
+		},
+		status: 'passed',
+		count: {
+			passed: 2,
+			failed: 0,
+			skipped: 1,
+			flaky: 1
+		}
+	}
+};
+const testReportV2PartialContext = {
+	...testReportV2Full,
+	summary: {
+		github: {
+			organization: testContext.github.organization,
+			workflow: testContext.github.workflow
+		},
+		git: {
+			branch: testContext.git.branch,
+			sha: testContext.git.sha
+		},
+		operatingSystem: 'linux',
+		framework: 'mocha',
+		started: testStarted,
+		duration: {
+			total: 23857
+		},
+		status: 'passed',
+		count: {
+			passed: 2,
+			failed: 0,
+			skipped: 1,
+			flaky: 1
+		}
+	}
+};
 const testReportLatestFull = {
 	id: '00000000-0000-0000-0000-000000000000',
 	version: latestReportVersion,
@@ -220,7 +293,7 @@ describe('report', () => {
 
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath));
+				const wrapper = () => report = (new Report(testReportPath, { upgradeToLatest: true }));
 
 				expect(wrapper).to.not.throw();
 				expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
@@ -236,7 +309,8 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true
+						overrideContext: true,
+						upgradeToLatest: true
 					};
 					let report;
 
@@ -253,7 +327,10 @@ describe('report', () => {
 				it('inject context if needed', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1Full));
 
-					const reportOptions = { context: testContextOther };
+					const reportOptions = {
+						context: testContextOther,
+						upgradeToLatest: true
+					};
 					let report;
 
 					const wrapper = () => report = new Report(testReportPath, reportOptions);
@@ -273,7 +350,8 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true
+						overrideContext: true,
+						upgradeToLatest: true
 					};
 					let report;
 
@@ -290,7 +368,10 @@ describe('report', () => {
 				it('inject context if needed', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1NoContext));
 
-					const reportOptions = { context: testContextOther };
+					const reportOptions = {
+						context: testContextOther,
+						upgradeToLatest: true
+					};
 					let report;
 
 					const wrapper = () => report = new Report(testReportPath, reportOptions);
@@ -310,7 +391,8 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true
+						overrideContext: true,
+						upgradeToLatest: true
 					};
 					let report;
 
@@ -327,7 +409,10 @@ describe('report', () => {
 				it('inject context if needed', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1PartialContext));
 
-					const reportOptions = { context: testContextOther };
+					const reportOptions = {
+						context: testContextOther,
+						upgradeToLatest: true
+					};
 					let report;
 
 					const wrapper = () => report = new Report(testReportPath, reportOptions);
@@ -337,6 +422,150 @@ describe('report', () => {
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
+					expect(report.getContext()).to.deep.equal(testContextOther);
+				});
+			});
+		});
+	});
+
+	describe(`legacy (v2, upgrades to v${latestReportVersion})`, () => {
+		const testReportCurrentVersion = 2;
+
+		describe('construction', () => {
+			it('don\'t override context', () => {
+				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
+
+				let report;
+
+				const wrapper = () => report = (new Report(testReportPath, { upgradeToLatest: true }));
+
+				expect(wrapper).to.not.throw();
+				expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+				expect(report.getVersion()).to.equal(latestReportVersion);
+				expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+				expect(report.toJSON()).to.deep.not.equal(testReportV2Full);
+				expect(report.getContext()).to.deep.equal(testContext);
+			});
+
+			describe('full report', () => {
+				it('override context', () => {
+					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
+
+					const reportOptions = {
+						context: testContextOther,
+						overrideContext: true,
+						upgradeToLatest: true
+					};
+					let report;
+
+					const wrapper = () => report = new Report(testReportPath, reportOptions);
+
+					expect(wrapper).to.not.throw();
+					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+					expect(report.getVersion()).to.equal(latestReportVersion);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
+					expect(report.getContext()).to.deep.equal(testContextOther);
+				});
+
+				it('inject context if needed', () => {
+					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
+
+					const reportOptions = {
+						context: testContextOther,
+						upgradeToLatest: true
+					};
+					let report;
+
+					const wrapper = () => report = new Report(testReportPath, reportOptions);
+
+					expect(wrapper).to.not.throw();
+					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+					expect(report.getVersion()).to.equal(latestReportVersion);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2Full);
+					expect(report.getContext()).to.deep.equal(testContext);
+				});
+			});
+
+			describe('no context', () => {
+				it('override context', () => {
+					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2NoContext));
+
+					const reportOptions = {
+						context: testContextOther,
+						overrideContext: true,
+						upgradeToLatest: true
+					};
+					let report;
+
+					const wrapper = () => report = new Report(testReportPath, reportOptions);
+
+					expect(wrapper).to.not.throw();
+					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+					expect(report.getVersion()).to.equal(latestReportVersion);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
+					expect(report.getContext()).to.deep.equal(testContextOther);
+				});
+
+				it('inject context if needed', () => {
+					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2NoContext));
+
+					const reportOptions = {
+						context: testContextOther,
+						upgradeToLatest: true
+					};
+					let report;
+
+					const wrapper = () => report = new Report(testReportPath, reportOptions);
+
+					expect(wrapper).to.not.throw();
+					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+					expect(report.getVersion()).to.equal(latestReportVersion);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
+					expect(report.getContext()).to.deep.equal(testContextOther);
+				});
+			});
+
+			describe('partial context', () => {
+				it('override context', () => {
+					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2PartialContext));
+
+					const reportOptions = {
+						context: testContextOther,
+						overrideContext: true,
+						upgradeToLatest: true
+					};
+					let report;
+
+					const wrapper = () => report = new Report(testReportPath, reportOptions);
+
+					expect(wrapper).to.not.throw();
+					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+					expect(report.getVersion()).to.equal(latestReportVersion);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
+					expect(report.getContext()).to.deep.equal(testContextOther);
+				});
+
+				it('inject context if needed', () => {
+					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2PartialContext));
+
+					const reportOptions = {
+						context: testContextOther,
+						upgradeToLatest: true
+					};
+					let report;
+
+					const wrapper = () => report = new Report(testReportPath, reportOptions);
+
+					expect(wrapper).to.not.throw();
+					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
+					expect(report.getVersion()).to.equal(latestReportVersion);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 			});
@@ -356,7 +585,7 @@ describe('report', () => {
 				expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 				expect(report.getVersion()).to.equal(latestReportVersion);
 				expect(report.toJSON()).to.deep.equal(testReportLatestFull);
-				expect(report.toJSON()).to.deep.not.equal(testReportV1Full);
+				expect(report.toJSON()).to.deep.not.equal(testReportV2Full);
 				expect(report.getContext()).to.deep.equal(testContext);
 			});
 
@@ -376,7 +605,7 @@ describe('report', () => {
 					expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
-					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 
@@ -392,7 +621,7 @@ describe('report', () => {
 					expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFull);
-					expect(report.toJSON()).to.deep.not.equal(testReportV1Full);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2Full);
 					expect(report.getContext()).to.deep.equal(testContext);
 				});
 			});
@@ -413,7 +642,7 @@ describe('report', () => {
 					expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
-					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 
@@ -429,7 +658,7 @@ describe('report', () => {
 					expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
-					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 			});
@@ -450,7 +679,7 @@ describe('report', () => {
 					expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
-					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 
@@ -466,7 +695,7 @@ describe('report', () => {
 					expect(report.getVersionOriginal()).to.equal(latestReportVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
 					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
-					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
+					expect(report.toJSON()).to.deep.not.equal(testReportV2FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 			});

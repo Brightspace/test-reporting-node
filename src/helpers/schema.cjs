@@ -2,7 +2,7 @@ const Ajv = require('ajv/dist/2019');
 const addFormats = require('ajv-formats');
 const addErrors = require('ajv-errors');
 
-const latestReportSchema = require('../../schemas/report/v2.json');
+const latestReportSchema = require('../../schemas/report/v3.json');
 const ajv = new Ajv({
 	verbose: true,
 	strict: true,
@@ -14,6 +14,7 @@ addFormats(ajv, ['date-time', 'uri', 'uuid']);
 
 ajv.addSchema(require('../../schemas/report-configuration/v1.json'));
 ajv.addSchema(require('../../schemas/report/v1.json'));
+ajv.addSchema(require('../../schemas/report/v2.json'));
 ajv.addSchema(latestReportSchema);
 ajv.addSchema({
 	$schema: 'https://json-schema.org/draft/2019-09/schema',
@@ -29,12 +30,21 @@ ajv.addSchema({
 	type: 'object',
 	unevaluatedProperties: true
 });
+ajv.addSchema({
+	$schema: 'https://json-schema.org/draft/2019-09/schema',
+	$id: '/test-reporting/schemas/report/v3/context/loose.json',
+	$ref: '/test-reporting/schemas/report/v3/context.json',
+	type: 'object',
+	unevaluatedProperties: true
+});
 
 const validateReportConfigurationV1Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v1.json');
 const validateReportV1ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');
 const validateReportV2ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v2/context/loose.json');
+const validateReportV3ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v3/context/loose.json');
 const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
 const validateReportV2Ajv = ajv.getSchema('/test-reporting/schemas/report/v2.json');
+const validateReportV3Ajv = ajv.getSchema('/test-reporting/schemas/report/v3.json');
 const formatErrorAjv = ajv.errorsText;
 const { properties: latestReportSchemaProperties } = latestReportSchema;
 const { version: { const: latestReportVersion } } = latestReportSchemaProperties;
@@ -45,8 +55,10 @@ module.exports = {
 	validateReportConfigurationV1Ajv,
 	validateReportV1ContextAjv,
 	validateReportV2ContextAjv,
+	validateReportV3ContextAjv,
 	validateReportV1Ajv,
 	validateReportV2Ajv,
+	validateReportV3Ajv,
 	latestReportVersion,
 	latestSupportedBrowsers
 };
