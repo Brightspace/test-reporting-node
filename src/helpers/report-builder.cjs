@@ -1,10 +1,11 @@
+const Codeowners = require('codeowners');
 const { getContext, hasContext } = require('./github.cjs');
 const { getOperatingSystemType, makeRelativeFilePath } = require('./system.cjs');
 const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 const { writeFileSync } = require('node:fs');
-const { latestSupportedBrowsers, latestReportVersion } = require('./schema.cjs');
+const { latestReportVersion, latestSupportedBrowsers } = require('./schema.cjs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -46,7 +47,8 @@ const reportMemberPriority = [
 	'failed',
 	'skipped',
 	'flaky',
-	'retries'
+	'retries',
+	'codeowners'
 ];
 
 const determineReportPath = (path) => {
@@ -172,10 +174,11 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 }
 
 class ReportDetailBuilder extends ReportBuilderBase {
-	constructor(reportConfiguration) {
+	constructor(reportConfiguration, codeowners) {
 		super();
 
 		this._reportConfiguration = reportConfiguration;
+		this._codeowners = codeowners;
 
 		this._setProperty('retries', 0);
 	}
@@ -206,6 +209,14 @@ class ReportDetailBuilder extends ReportBuilderBase {
 		this._setProperty('type', type, options);
 		this._setProperty('tool', tool, options);
 		this._setProperty('experience', experience, options);
+
+		if (this._codeowners) {
+			const owners = this._codeowners.getOwner(filePath);
+
+			if (owners.length > 0) {
+				this._setNestedProperty('github', 'codeowners', owners, options);
+			}
+		}
 
 		return this;
 	}
@@ -291,6 +302,7 @@ class ReportBuilder extends ReportBuilderBase {
 			reportPath,
 			reportConfigurationPath,
 			reportWriter,
+			reportVersionLatest = false,
 			verbose = false
 		} = options;
 
@@ -319,9 +331,19 @@ class ReportBuilder extends ReportBuilderBase {
 		}
 
 		this._setProperty('id', randomUUID());
-		this._setProperty('version', latestReportVersion);
+		this._setProperty('version', reportVersionLatest ? latestReportVersion : 2);
 		this._setProperty('summary', new ReportSummaryBuilder(framework, this._logger));
 		this._setProperty('details', new Map());
+
+		this._codeowners = null;
+
+		if (this._data.version >= 3) {
+			try {
+				this._codeowners = new Codeowners();
+			} catch {
+				// No CODEOWNERS file found, skip
+			}
+		}
 	}
 
 	ignoreFilePath(filePath) {
@@ -340,7 +362,7 @@ class ReportBuilder extends ReportBuilderBase {
 		const { details } = this._data;
 
 		if (!details.has(id)) {
-			details.set(id, new ReportDetailBuilder(this._reportConfiguration));
+			details.set(id, new ReportDetailBuilder(this._reportConfiguration, this._codeowners));
 		}
 
 		return details.get(id);

@@ -9,8 +9,10 @@ const {
 	formatErrorAjv,
 	validateReportV1Ajv,
 	validateReportV2Ajv,
+	validateReportV3Ajv,
 	validateReportV1ContextAjv,
 	validateReportV2ContextAjv,
+	validateReportV3ContextAjv,
 	latestReportVersion
 } = schema;
 
@@ -41,6 +43,12 @@ const validateReport = (report, dataVar = 'report') => {
 		case 2:
 			if (!validateReportV2Ajv(report)) {
 				errors = validateReportV2Ajv.errors;
+			}
+
+			break;
+		case 3:
+			if (!validateReportV3Ajv(report)) {
+				errors = validateReportV3Ajv.errors;
 			}
 
 			break;
@@ -87,6 +95,23 @@ const injectReportV2Context = (report, context, override) => {
 	return report;
 };
 
+const injectReportV3Context = (report, context, override) => {
+	const { summary } = report;
+
+	if (!summary) {
+		throw new Error('Report is missing needed property \'summary\'');
+	}
+
+	if (override || !validateReportV3ContextAjv(summary)) {
+		report.summary = {
+			...summary,
+			...context
+		};
+	}
+
+	return report;
+};
+
 const injectReportContext = (report, context, override) => {
 	const reportVersion = getReportVersion(report);
 
@@ -95,6 +120,8 @@ const injectReportContext = (report, context, override) => {
 			return injectReportV1Context(report, context, override);
 		case 2:
 			return injectReportV2Context(report, context, override);
+		case 3:
+			return injectReportV3Context(report, context, override);
 		default:
 			throw new Error(`Unknown report version '${reportVersion}'`);
 	}
@@ -162,6 +189,38 @@ const injectReportV2LmsInfo = (report, lmsInfo) => {
 	return report;
 };
 
+const injectReportV3LmsInfo = (report, lmsInfo) => {
+	const { summary } = report;
+
+	if (!summary) {
+		throw new Error('Report is missing needed property \'summary\'');
+	}
+
+	summary.lms = summary.lms ?? {};
+
+	const { buildNumber, instanceUrl } = lmsInfo;
+
+	if (buildNumber) {
+		if (!summary.lms.buildNumber) {
+			summary.lms.buildNumber = buildNumber;
+		} else {
+			throw new Error('LMS build number already present');
+		}
+	}
+
+	if (instanceUrl) {
+		if (!summary.lms.instanceUrl) {
+			summary.lms.instanceUrl = instanceUrl;
+		} else {
+			throw new Error('LMS instance URL already present');
+		}
+	}
+
+	report.summary = summary;
+
+	return report;
+};
+
 const injectReportLmsInfo = (report, lmsInfo) => {
 	const reportVersion = getReportVersion(report);
 
@@ -170,6 +229,8 @@ const injectReportLmsInfo = (report, lmsInfo) => {
 			return injectReportV1LmsInfo(report, lmsInfo);
 		case 2:
 			return injectReportV2LmsInfo(report, lmsInfo);
+		case 3:
+			return injectReportV3LmsInfo(report, lmsInfo);
 		default:
 			throw new Error(`Unknown report version '${reportVersion}'`);
 	}
@@ -269,13 +330,36 @@ const upgradeReportV1ToV2 = (report) => {
 	};
 };
 
-const upgradeReport = (report) => {
+const upgradeReportV2ToV3 = (report) => {
+	return {
+		...report,
+		version: 3
+	};
+};
+
+const upgradeReportToV2 = (report) => {
 	const reportVersion = getReportVersion(report);
 
 	switch (reportVersion) {
 		case 1:
 			return upgradeReportV1ToV2(report);
 		case 2:
+		case 3:
+			return report;
+		default:
+			throw new Error(`Unknown report version: ${reportVersion}`);
+	}
+};
+
+const upgradeReport = (report) => {
+	const reportVersion = getReportVersion(report);
+
+	switch (reportVersion) {
+		case 1:
+			return upgradeReportV2ToV3(upgradeReportV1ToV2(report));
+		case 2:
+			return upgradeReportV2ToV3(report);
+		case 3:
 			return report;
 		default:
 			throw new Error(`Unknown report version: ${reportVersion}`);
@@ -283,7 +367,7 @@ const upgradeReport = (report) => {
 };
 
 class Report {
-	constructor(path, { context, lmsInfo, overrideContext = false } = {}) {
+	constructor(path, { context, lmsInfo, overrideContext = false, upgradeToLatest = false } = {}) {
 		let report;
 
 		try {
@@ -310,13 +394,17 @@ class Report {
 
 		this._reportVersionOriginal = reportVersionOriginal;
 
-		if (reportVersionOriginal < latestReportVersion) {
+		if (reportVersionOriginal < 2) {
+			report = upgradeReportToV2(report);
+
+			validateReport(report, `report (v${getReportVersion(report)})`);
+		}
+
+		if (upgradeToLatest && getReportVersion(report) < latestReportVersion) {
 			report = upgradeReport(report);
 
-			const reportVersionUpgraded = getReportVersion(report);
-
-			validateReport(report, `report (v${reportVersionUpgraded})`);
-		} else if (reportVersionOriginal > latestReportVersion) {
+			validateReport(report, `report (v${getReportVersion(report)})`);
+		} else if (getReportVersion(report) > latestReportVersion) {
 			throw new Error(`Unsupported report version specified: ${reportVersionOriginal}`);
 		}
 
