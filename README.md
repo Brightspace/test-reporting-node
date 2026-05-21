@@ -201,14 +201,15 @@ If your test framework isn't supported by the built-in reporters, you can build 
 
 See the [ReportBuilder Guide](./docs/report-builder-guide.md) for a complete walkthrough of creating a custom reporter for any test framework.
 
-### Configuration
+## Report Configuration
 
 To have the test type, experience and tool mapped to test code, a D2L test
 reporting configuration file is required when using one of the reporters
 provided in this package.
 
 Below are examples of how to create the config file. Note that the `type` field
-will end up as lowercase in the report.
+will end up as lowercase in the report. For details on the schema that the
+report configuration file follows, see [Report Configuration Format].
 
 Please see [Automated Testing Definitions] on Confluence for the list of test
 types that should be used when creating the D2L test reporting configuration
@@ -218,7 +219,7 @@ file.
 {
   "type": "UI Visual Diff",
   "experience": "Experience",
-  "tool": "Tool",
+  "tool": "Tool"
 }
 ```
 
@@ -227,19 +228,19 @@ file.
   "type": "UI E2E",
   "overrides": [
     {
-      "pattern": "tests/account-settings/**/*",
-      "experience": "Administration",
-      "tool": "Account Settings"
+      "pattern": "tests/feature-a/**/*",
+      "experience": "Experience A",
+      "tool": "Feature A"
     },
     {
-      "pattern": "tests/announcements/**/*",
-      "experience": "Teaching & Learning",
-      "tool": "Announcements"
+      "pattern": "tests/feature-b/**/*",
+      "experience": "Experience B",
+      "tool": "Feature B"
     },
     {
-      "pattern": "tests/rubrics.test.js",
-      "experience": "Assessment",
-      "tool": "Rubrics"
+      "pattern": "tests/feature-c.test.js",
+      "experience": "Experience C",
+      "tool": "Feature C"
     }
   ]
 }
@@ -335,3 +336,4 @@ refer to the [semantic-release GitHub Action] documentation.
 [#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
 [semantic-release GitHub Action]: https://github.com/BrightspaceUI/actions/tree/main/semantic-release
 [Report Format]: ./docs/report-format.md
+[Report Configuration Format]: ./docs/report-configuration-format.md
