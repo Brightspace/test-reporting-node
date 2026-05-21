@@ -30,5 +30,6 @@ lists patterns to ignore when generating a report.
 ```
 
 If `type` is omitted at the top level then every entry in `overrides` must
-specify `type`. The same rule applies to `tool` and `experience`. If all three
-are omitted at the top level then `overrides` is required.
+specify `type`. The same rule applies to `tool` and `experience`. If `type`,
+`tool` and `experience` are all omitted at the top level then `overrides` is
+required.

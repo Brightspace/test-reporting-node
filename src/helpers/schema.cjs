@@ -13,6 +13,7 @@ addErrors(ajv);
 addFormats(ajv, ['date-time', 'uri', 'uuid']);
 
 ajv.addSchema(require('../../schemas/report-configuration/v1.json'));
+ajv.addSchema(require('../../schemas/report-configuration/v2.json'));
 ajv.addSchema(require('../../schemas/report/v1.json'));
 ajv.addSchema(require('../../schemas/report/v2.json'));
 ajv.addSchema(latestReportSchema);
@@ -39,6 +40,7 @@ ajv.addSchema({
 });
 
 const validateReportConfigurationV1Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v1.json');
+const validateReportConfigurationV2Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v2.json');
 const validateReportV1ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');
 const validateReportV2ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v2/context/loose.json');
 const validateReportV3ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v3/context/loose.json');
@@ -53,6 +55,7 @@ const { details: { items: { properties: { browser: { enum: latestSupportedBrowse
 module.exports = {
 	formatErrorAjv,
 	validateReportConfigurationV1Ajv,
+	validateReportConfigurationV2Ajv,
 	validateReportV1ContextAjv,
 	validateReportV2ContextAjv,
 	validateReportV3ContextAjv,
