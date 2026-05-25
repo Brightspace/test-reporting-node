@@ -52,18 +52,15 @@ stored in [AWS Timestream], please see [Storage Schema].
         "column": "<Positive integer, can be 0, optional>"
       },
       "browser": "<Can be 'chromium', 'chrome', 'firefox', 'webkit', 'safari' or 'edge', optional>",
-      "config": {
-        "timeout": "<Positive integer representing milliseconds, can be 0, optional>"
-      },
+      "timeout": "<Positive integer representing milliseconds, can be 0, optional>",
       "started": "<Timestamp in UTC time>",
       "duration": {
         "total": "<Positive integer representing milliseconds, can be 0>",
         "final": "<Positive integer representing milliseconds, can be 0>"
       },
-      "taxonomy": {
-        "tool": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
-        "type": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>"
-      },
+      "tool": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
+      "experience": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
+      "type": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$', optional>",
       "retries": "<Positive integer, can be 0>",
       "github": {
         "codeowners": "<Array of strings starting with '@', optional>"
