@@ -310,7 +310,7 @@ const upgradeReportV1ToV2 = (report) => {
 
 	return {
 		id: reportId,
-		version: latestReportVersion,
+		version: 2,
 		summary: summaryUpgraded,
 		details: details.map((detail) => {
 			const { location, duration, totalDuration } = detail;
@@ -333,7 +333,29 @@ const upgradeReportV1ToV2 = (report) => {
 const upgradeReportV2ToV3 = (report) => {
 	return {
 		...report,
-		version: 3
+		version: latestReportVersion,
+		details: report.details.map((detail) => {
+			const { tool, experience, type, timeout, ...rest } = detail;
+			const upgraded = { ...rest };
+
+			if (tool != null || type != null) {
+				upgraded.taxonomy = {};
+
+				if (tool != null) {
+					upgraded.taxonomy.tool = tool;
+				}
+
+				if (type != null) {
+					upgraded.taxonomy.type = type;
+				}
+			}
+
+			if (timeout != null) {
+				upgraded.config = { timeout };
+			}
+
+			return upgraded;
+		})
 	};
 };
 
