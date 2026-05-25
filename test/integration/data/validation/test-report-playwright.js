@@ -16,10 +16,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > skipped static, fixme',
@@ -30,10 +28,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > passed',
@@ -44,10 +40,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > skipped dynamic, fixme',
@@ -58,10 +52,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > failed dynamic expected',
@@ -72,10 +64,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > skipped static',
@@ -86,10 +76,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > passed',
@@ -100,10 +88,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > failed',
@@ -114,10 +100,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 3
 	}, {
 		name: '[chromium] > reporter 1 > skipped dynamic',
@@ -128,10 +112,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > failed static expected, skipped dynamic, fixme',
@@ -142,10 +124,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > skipped dynamic',
@@ -156,10 +136,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > skipped static',
@@ -170,10 +148,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > flaky',
@@ -184,10 +160,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 2
 	}, {
 		name: '[chromium] > reporter 1 > failed static expected, skipped dynamic',
@@ -198,10 +172,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > skipped dynamic, fixme',
@@ -212,10 +184,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > failed dynamic expected',
@@ -226,10 +196,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > failed',
@@ -240,10 +208,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 3
 	}, {
 		name: '[chromium] > reporter 2 > failed static expected, skipped dynamic, fixme',
@@ -254,10 +220,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > flaky',
@@ -268,10 +232,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 2
 	}, {
 		name: '[chromium] > reporter 2 > failed static expected, skipped dynamic',
@@ -282,10 +244,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > skipped static, fixme',
@@ -296,10 +256,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > passed',
@@ -310,10 +268,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > skipped static',
@@ -324,10 +280,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > skipped dynamic',
@@ -338,10 +292,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > skipped dynamic, fixme',
@@ -352,10 +304,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > failed dynamic expected',
@@ -366,10 +316,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > flaky',
@@ -380,10 +328,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 2
 	}, {
 		name: '[firefox] > reporter 2 > failed static expected, skipped dynamic',
@@ -394,10 +340,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > failed',
@@ -408,10 +352,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 3
 	}, {
 		name: '[firefox] > reporter 2 > failed static expected, skipped dynamic, fixme',
@@ -422,10 +364,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > skipped static, fixme',
@@ -436,10 +376,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > passed',
@@ -450,10 +388,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > skipped static',
@@ -464,10 +400,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > failed static expected',
@@ -478,10 +412,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > skipped dynamic',
@@ -492,10 +424,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > failed',
@@ -506,10 +436,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 3
 	}, {
 		name: '[chromium] > reporter 2 > failed static expected',
@@ -520,10 +448,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > skipped dynamic, fixme',
@@ -534,10 +460,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > failed static expected, skipped dynamic, fixme',
@@ -548,10 +472,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > skipped static, fixme',
@@ -562,10 +484,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > failed dynamic expected',
@@ -576,10 +496,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > flaky',
@@ -590,10 +508,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 2
 	}, {
 		name: '[webkit] > reporter 2 > skipped dynamic',
@@ -604,10 +520,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > failed static expected, skipped dynamic',
@@ -618,10 +532,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > passed',
@@ -632,10 +544,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > failed dynamic expected',
@@ -646,10 +556,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > skipped static',
@@ -660,10 +568,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > failed static expected, skipped dynamic, fixme',
@@ -674,10 +580,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > failed static expected, skipped dynamic',
@@ -688,10 +592,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > skipped dynamic, fixme',
@@ -702,10 +604,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > failed',
@@ -716,10 +616,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 3
 	}, {
 		name: '[webkit] > reporter 2 > flaky',
@@ -730,10 +628,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 2
 	}, {
 		name: '[firefox] > reporter 2 > failed static expected',
@@ -744,10 +640,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > failed static expected',
@@ -758,10 +652,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > failed static expected',
@@ -772,10 +664,8 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
@@ -786,10 +676,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[chromium] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
@@ -800,10 +688,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[firefox] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
@@ -814,10 +700,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
@@ -828,10 +712,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Playwright 1 Test Reporting',
-		experience: 'Playwright 1 Test Framework',
-		type: 'integration',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
 		name: '[webkit] > reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
@@ -842,10 +724,8 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		timeout: 30000,
-		tool: 'Test Reporting',
-		experience: 'Playwright 2 Test Framework',
-		type: 'visual diff',
+		config: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}]
 };
