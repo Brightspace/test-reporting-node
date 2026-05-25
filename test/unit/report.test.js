@@ -34,40 +34,99 @@ const testContextOther = {
 	}
 };
 const testStarted = (new Date()).toISOString();
-const testDetails = [{
+const testDetailsV1 = [{
 	name: 'test suite > flaky test',
-	location: {
-		file: 'test/test-suite.js'
-	},
+	location: 'test/test-suite.js',
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
 	started: testStarted,
-	duration: {
-		final: 237,
-		total: 549
-	},
+	duration: 237,
+	totalDuration: 549,
 	status: 'passed',
 	retries: 1
 }, {
 	name: 'test suite > passing test',
-	location: {
-		file: 'test/test-suite.js'
-	},
+	location: 'test/test-suite.js',
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
 	started: testStarted,
-	duration: {
-		final: 237,
-		total: 237
-	},
+	duration: 237,
+	totalDuration: 237,
 	status: 'passed',
 	retries: 0
 }, {
 	name: 'test suite > skipped test',
-	location: {
-		file: 'test/test-suite.js'
-	},
+	location: 'test/test-suite.js',
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
 	started: testStarted,
-	duration: {
-		final: 0,
-		total: 0
-	},
+	duration: 0,
+	totalDuration: 0,
+	status: 'skipped',
+	retries: 0
+}];
+const testDetailsV2 = [{
+	name: 'test suite > flaky test',
+	location: { file: 'test/test-suite.js' },
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
+	started: testStarted,
+	timeout: 30000,
+	duration: { final: 237, total: 549 },
+	status: 'passed',
+	retries: 1
+}, {
+	name: 'test suite > passing test',
+	location: { file: 'test/test-suite.js' },
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
+	started: testStarted,
+	timeout: 30000,
+	duration: { final: 237, total: 237 },
+	status: 'passed',
+	retries: 0
+}, {
+	name: 'test suite > skipped test',
+	location: { file: 'test/test-suite.js' },
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
+	started: testStarted,
+	timeout: 30000,
+	duration: { final: 0, total: 0 },
+	status: 'skipped',
+	retries: 0
+}];
+const testDetailsLatest = [{
+	name: 'test suite > flaky test',
+	location: { file: 'test/test-suite.js' },
+	taxonomy: { tool: 'My Tool', type: 'integration' },
+	started: testStarted,
+	config: { timeout: 30000 },
+	duration: { final: 237, total: 549 },
+	status: 'passed',
+	retries: 1
+}, {
+	name: 'test suite > passing test',
+	location: { file: 'test/test-suite.js' },
+	taxonomy: { tool: 'My Tool', type: 'integration' },
+	started: testStarted,
+	config: { timeout: 30000 },
+	duration: { final: 237, total: 237 },
+	status: 'passed',
+	retries: 0
+}, {
+	name: 'test suite > skipped test',
+	location: { file: 'test/test-suite.js' },
+	taxonomy: { tool: 'My Tool', type: 'integration' },
+	started: testStarted,
+	config: { timeout: 30000 },
+	duration: { final: 0, total: 0 },
 	status: 'skipped',
 	retries: 0
 }];
@@ -86,12 +145,7 @@ const testReportV1Full = {
 		countSkipped: 1,
 		countFlaky: 1
 	},
-	details: testDetails.map(detail => ({
-		...detail,
-		location: detail.location.file,
-		duration: detail.duration.final,
-		totalDuration: detail.duration.total
-	}))
+	details: testDetailsV1
 };
 const testReportV1FullOther = {
 	...testReportV1Full,
@@ -151,7 +205,7 @@ const testReportV2Full = {
 			flaky: 1
 		}
 	},
-	details: testDetails
+	details: testDetailsV2
 };
 const testReportV2FullOther = {
 	...testReportV2Full,
@@ -223,7 +277,7 @@ const testReportLatestFull = {
 			flaky: 1
 		}
 	},
-	details: testDetails
+	details: testDetailsLatest
 };
 const testReportLatestFullOther = {
 	...testReportLatestFull,
@@ -231,6 +285,15 @@ const testReportLatestFullOther = {
 		...testReportLatestFull.summary,
 		...testContextOther
 	}
+};
+const testDetailsLatestFromV1 = testDetailsLatest.map(({ config, ...rest }) => rest);
+const testReportLatestFromV1Full = {
+	...testReportLatestFull,
+	details: testDetailsLatestFromV1
+};
+const testReportLatestFromV1FullOther = {
+	...testReportLatestFullOther,
+	details: testDetailsLatestFromV1
 };
 const testReportLatestNoContext = {
 	...testReportLatestFull,
@@ -298,7 +361,7 @@ describe('report', () => {
 				expect(wrapper).to.not.throw();
 				expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 				expect(report.getVersion()).to.equal(latestReportVersion);
-				expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+				expect(report.toJSON()).to.deep.equal(testReportLatestFromV1Full);
 				expect(report.toJSON()).to.deep.not.equal(testReportV1Full);
 				expect(report.getContext()).to.deep.equal(testContext);
 			});
@@ -319,7 +382,7 @@ describe('report', () => {
 					expect(wrapper).to.not.throw();
 					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
-					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFromV1FullOther);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
@@ -338,7 +401,7 @@ describe('report', () => {
 					expect(wrapper).to.not.throw();
 					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
-					expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFromV1Full);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1Full);
 					expect(report.getContext()).to.deep.equal(testContext);
 				});
@@ -360,7 +423,7 @@ describe('report', () => {
 					expect(wrapper).to.not.throw();
 					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
-					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFromV1FullOther);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
@@ -379,7 +442,7 @@ describe('report', () => {
 					expect(wrapper).to.not.throw();
 					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
-					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFromV1FullOther);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
@@ -401,7 +464,7 @@ describe('report', () => {
 					expect(wrapper).to.not.throw();
 					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
-					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFromV1FullOther);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
@@ -420,7 +483,7 @@ describe('report', () => {
 					expect(wrapper).to.not.throw();
 					expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
 					expect(report.getVersion()).to.equal(latestReportVersion);
-					expect(report.toJSON()).to.deep.equal(testReportLatestFullOther);
+					expect(report.toJSON()).to.deep.equal(testReportLatestFromV1FullOther);
 					expect(report.toJSON()).to.deep.not.equal(testReportV1FullOther);
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
