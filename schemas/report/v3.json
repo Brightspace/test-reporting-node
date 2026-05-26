@@ -138,22 +138,31 @@
               "file"
             ]
           },
-          "tool": {
-            "$ref": "#/$defs/nonEmptyUnpaddedString"
-          },
-          "experience": {
-            "$ref": "#/$defs/nonEmptyUnpaddedString"
-          },
-          "type": {
-            "$ref": "#/$defs/nonEmptyUnpaddedString"
+          "taxonomy": {
+            "type": "object",
+            "unevaluatedProperties": false,
+            "properties": {
+              "tool": {
+                "$ref": "#/$defs/nonEmptyUnpaddedString"
+              },
+              "type": {
+                "$ref": "#/$defs/nonEmptyUnpaddedString"
+              }
+            }
           },
           "started": {
             "type": "string",
             "format": "date-time"
           },
-          "timeout": {
-            "type": "integer",
-            "minimum": 0
+          "config": {
+            "type": "object",
+            "unevaluatedProperties": false,
+            "properties": {
+              "timeout": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
           },
           "duration": {
             "type": "object",
