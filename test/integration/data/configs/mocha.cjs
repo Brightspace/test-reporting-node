@@ -5,6 +5,7 @@ module.exports = {
 	reporterOptions: [
 		'reportPath=./d2l-test-report-mocha.json',
 		'reportVersionLatest=true',
+		'reportConfigurationVersionLatest=true',
 		'verbose=true'
 	]
 };

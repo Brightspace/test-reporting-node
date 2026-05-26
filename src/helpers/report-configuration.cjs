@@ -1,15 +1,56 @@
 const fs = require('node:fs');
 const { resolve } = require('node:path');
-const { formatErrorAjv, validateReportConfigurationV1Ajv } = require('./schema.cjs');
+const {
+	formatErrorAjv,
+	validateReportConfigurationV1Ajv,
+	validateReportConfigurationV2Ajv
+} = require('./schema.cjs');
 const { minimatch } = require('minimatch');
 const { makeRelativeFilePath } = require('./system.cjs');
 
 const defaultConfigurationPath = './d2l-test-reporting.config.json';
 
+const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
+	const { experience, overrides, ...rest } = configuration;
+	const upgraded = { ...rest };
+
+	if (experience != null) {
+		logger.warning('Report configuration field \'experience\' is no longer supported and will be ignored');
+	}
+
+	if (overrides) {
+		const upgradedOverrides = [];
+
+		for (const override of overrides) {
+			const { experience: overrideExperience, ...overrideRest } = override;
+
+			if (overrideExperience != null) {
+				logger.warning(`Report configuration override for pattern '${override.pattern}' has field 'experience' which is no longer supported and will be ignored`);
+			}
+
+			if (Object.keys(overrideRest).length < 2) {
+				logger.warning(`Report configuration override for pattern '${override.pattern}' has no remaining fields after upgrade and will be dropped`);
+
+				continue;
+			}
+
+			upgradedOverrides.push(overrideRest);
+		}
+
+		if (upgradedOverrides.length > 0) {
+			upgraded.overrides = upgradedOverrides;
+		}
+	}
+
+	return upgraded;
+};
+
 class ReportConfiguration {
-	constructor(path) {
+	constructor(path, logger, { configurationVersionLatest = false } = {}) {
 		let reportConfiguration;
 		let reportConfigurationPath;
+
+		this._configurationVersionLatest = configurationVersionLatest;
 
 		if (path) {
 			path = resolve(path);
@@ -45,7 +86,15 @@ class ReportConfiguration {
 			reportConfigurationPath = makeRelativeFilePath(path);
 		}
 
-		if (!validateReportConfigurationV1Ajv(reportConfiguration)) {
+		if (configurationVersionLatest) {
+			reportConfiguration = upgradeReportConfigurationV1ToV2(reportConfiguration, logger);
+
+			if (!validateReportConfigurationV2Ajv(reportConfiguration)) {
+				const { errors } = validateReportConfigurationV2Ajv;
+
+				throw new Error(formatErrorAjv(errors, { dataVar: 'report configuration' }));
+			}
+		} else if (!validateReportConfigurationV1Ajv(reportConfiguration)) {
 			const { errors } = validateReportConfigurationV1Ajv;
 
 			throw new Error(formatErrorAjv(errors, { dataVar: 'report configuration' }));
@@ -76,7 +125,10 @@ class ReportConfiguration {
 			if (minimatch(filePath, pattern)) {
 				metadata.type = overriddenType?.toLowerCase();
 				metadata.tool = overriddenTool;
-				metadata.experience = overriddenExperience;
+
+				if (!this._configurationVersionLatest) {
+					metadata.experience = overriddenExperience;
+				}
 
 				break;
 			}
@@ -90,13 +142,20 @@ class ReportConfiguration {
 
 		metadata.type = metadata.type ?? defaultType?.toLowerCase();
 		metadata.tool = metadata.tool ?? defaultTool;
-		metadata.experience = metadata.experience ?? defaultExperience;
+
+		if (!this._configurationVersionLatest) {
+			metadata.experience = metadata.experience ?? defaultExperience;
+		}
 
 		return metadata;
 	}
 
 	hasTaxonomy(filePath) {
 		const taxonomy = this.getTaxonomy(filePath);
+
+		if (this._configurationVersionLatest) {
+			return taxonomy.type != null && taxonomy.tool != null;
+		}
 
 		return taxonomy.type != null &&
 			taxonomy.tool != null &&

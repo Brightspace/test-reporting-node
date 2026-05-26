@@ -179,8 +179,8 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	constructor(reportConfiguration, codeowners, { reportVersionLatest = false } = {}) {
 		super();
 
-		this._reportConfiguration = reportConfiguration;
 		this._codeowners = codeowners;
+		this._reportConfiguration = reportConfiguration;
 		this._reportVersionLatest = reportVersionLatest;
 
 		this._setProperty('retries', 0);
@@ -320,13 +320,18 @@ class ReportBuilder extends ReportBuilderBase {
 			reportConfigurationPath,
 			reportWriter,
 			reportVersionLatest = false,
+			reportConfigurationVersionLatest = false,
 			verbose = false
 		} = options;
 
 		this._logger = logger;
 		this._verbose = verbose;
 		this._reportVersionLatest = reportVersionLatest;
-		this._reportConfiguration = new ReportConfiguration(reportConfigurationPath);
+		this._reportConfiguration = new ReportConfiguration(
+			reportConfigurationPath,
+			logger,
+			{ configurationVersionLatest: reportConfigurationVersionLatest }
+		);
 
 		if (reportWriter) {
 			if (reportPath) {
@@ -380,9 +385,14 @@ class ReportBuilder extends ReportBuilderBase {
 		const { details } = this._data;
 
 		if (!details.has(id)) {
-			details.set(id, new ReportDetailBuilder(this._reportConfiguration, this._codeowners, {
-				reportVersionLatest: this._reportVersionLatest
-			}));
+			details.set(
+				id,
+				new ReportDetailBuilder(
+					this._reportConfiguration,
+					this._codeowners,
+					{ reportVersionLatest: this._reportVersionLatest }
+				)
+			);
 		}
 
 		return details.get(id);
