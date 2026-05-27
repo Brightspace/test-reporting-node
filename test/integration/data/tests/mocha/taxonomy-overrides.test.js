@@ -2,7 +2,7 @@ const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-describe('reporter 3', () => {
+describe('taxonomy overrides', () => {
 	let count = 0;
 
 	before(async() => { await delay(250); });
@@ -26,8 +26,6 @@ describe('reporter 3', () => {
 	});
 
 	it('failed', () => { throw new Error('fail'); });
-
-	it(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
 
 	afterEach(async() => { await delay(250); });
 
