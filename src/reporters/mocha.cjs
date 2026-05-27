@@ -108,7 +108,7 @@ class TestReportingMochaReporter extends Spec {
 	}
 
 	_onTestEnd(test) {
-		const { file } = test;
+		const { file, _timeout } = test;
 
 		if (this._report.ignoreFilePath(file)) {
 			return;
@@ -117,7 +117,9 @@ class TestReportingMochaReporter extends Spec {
 		const { duration, state } = test;
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
-		const detail = this._report.getDetail(id);
+		const detail = this._report
+			.getDetail(id)
+			.setTimeout(_timeout, { override: true });
 
 		if (state === 'pending') {
 			detail
