@@ -20,6 +20,11 @@
       "experience": "Mocha 2 Test Framework"
     },
     {
+      "pattern": "**/tests/mocha/hook-failures.test.js",
+      "type": "ui",
+      "tool": "Mocha Hook Failures Test Reporting"
+    },
+    {
       "pattern": "**/tests/playwright/reporter-1.test.js",
       "experience": "Playwright 1 Test Framework",
       "tool": "Playwright 1 Test Reporting"
