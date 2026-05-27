@@ -173,31 +173,33 @@ describe('report builder', () => {
 		});
 	});
 
-	describe('getSummary', () => {
-		it('same instance', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+	describe('accessors', () => {
+		describe('summary', () => {
+			it('same instance', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
 
-			expect(builder.getSummary()).to.equal(builder.getSummary());
-		});
-	});
-
-	describe('getDetail', () => {
-		it('same instance per id', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-
-			const detail1 = builder.getDetail('test-1');
-			const detail2 = builder.getDetail('test-1');
-
-			expect(detail1).to.equal(detail2);
+				expect(builder.getSummary()).to.equal(builder.getSummary());
+			});
 		});
 
-		it('different instance per id', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+		describe('detail', () => {
+			it('same instance per id', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
 
-			const detail1 = builder.getDetail('test-1');
-			const detail2 = builder.getDetail('test-2');
+				const detail1 = builder.getDetail('test-1');
+				const detail2 = builder.getDetail('test-1');
 
-			expect(detail1).to.not.equal(detail2);
+				expect(detail1).to.equal(detail2);
+			});
+
+			it('different instance per id', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+
+				const detail1 = builder.getDetail('test-1');
+				const detail2 = builder.getDetail('test-2');
+
+				expect(detail1).to.not.equal(detail2);
+			});
 		});
 	});
 
