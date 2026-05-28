@@ -8,6 +8,7 @@ const {
 	EVENT_RUN_END,
 	EVENT_TEST_BEGIN,
 	EVENT_TEST_END,
+	EVENT_TEST_FAIL,
 	EVENT_TEST_PENDING,
 	EVENT_TEST_RETRY
 } = constants;
@@ -55,6 +56,7 @@ class TestReportingMochaReporter extends Spec {
 			.on(EVENT_TEST_PENDING, test => this._onTestPending(test))
 			.on(EVENT_TEST_BEGIN, test => this._onTestBegin(test))
 			.on(EVENT_TEST_END, test => this._onTestEnd(test))
+			.on(EVENT_TEST_FAIL, test => this._onTestFail(test))
 			.on(EVENT_TEST_RETRY, test => this._onTestRetry(test))
 			.once(EVENT_RUN_END, () => this._onRunEnd(stats));
 	}
@@ -130,6 +132,38 @@ class TestReportingMochaReporter extends Spec {
 			} else {
 				detail.setFailed();
 			}
+		}
+	}
+
+	_onTestFail(test) {
+		if (test.type !== 'hook') {
+			return;
+		}
+
+		const affectedTest = test.ctx?.currentTest;
+
+		if (!affectedTest) {
+			return;
+		}
+
+		const { file, _timeout } = affectedTest;
+
+		if (!file || this._report.ignoreFilePath(file)) {
+			return;
+		}
+
+		const name = makeDetailName(affectedTest);
+		const id = makeDetailId(file, name);
+		const detail = this._report.getDetail(id);
+
+		if (!detail.getStatus()) {
+			detail
+				.setName(name)
+				.setLocationFile(file)
+				.setStarted((new Date()).toISOString())
+				.setTimeout(_timeout)
+				.addDuration(0)
+				.setFailed();
 		}
 	}
 

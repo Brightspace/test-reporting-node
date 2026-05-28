@@ -5,7 +5,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'mocha',
-		count: { passed: 4, failed: 2, skipped: 2, flaky: 2 }
+		count: { passed: 8, failed: 6, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: 'reporter 1 > passed',
@@ -76,6 +76,62 @@ export const testReportLatestPartial = {
 		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
 		config: { timeout: 2000 },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'hook failures > before all failure > test with before all failure',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > before each failure > test with before each failure',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > after each failure > test with after each failure',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > after all failure > test with after all failure',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > flaky before all > test with flaky before all',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > flaky before each > test with flaky before each',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > flaky after each > test with flaky after each',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'hook failures > flaky after all > test with flaky after all',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/hook-failures.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
 		retries: 0
 	}]
 };

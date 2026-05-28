@@ -66,6 +66,10 @@ class ReportBuilderBase {
 		return this._data;
 	}
 
+	_getProperty(key) {
+		return this._data[key];
+	}
+
 	_setProperty(key, value, { override = false } = {}) {
 		if (override) {
 			this._data[key] = value;
@@ -256,6 +260,10 @@ class ReportDetailBuilder extends ReportBuilderBase {
 		this._setProperty('status', status, options);
 
 		return this;
+	}
+
+	getStatus() {
+		return this._getProperty('status');
 	}
 
 	setPassed(options) {
