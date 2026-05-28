@@ -139,30 +139,82 @@ describe('report builder', () => {
 				expect(json.details[0]).to.have.nested.property('github.codeowners');
 				expect(json.details[0].github.codeowners).to.be.an('array').that.is.not.empty;
 			});
+
+			describe('timeout', () => {
+				it('sets under config', () => {
+					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
+					const detail = builder.getDetail('test-1');
+
+					detail.setTimeout(5000);
+
+					expect(detail.data.config.timeout).to.eq(5000);
+				});
+
+				it('don\'t override by default', () => {
+					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
+					const detail = builder.getDetail('test-1');
+
+					detail.setTimeout(5000);
+					detail.setTimeout(10000);
+
+					expect(detail.data.config.timeout).to.eq(5000);
+				});
+
+				it('override with option', () => {
+					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
+					const detail = builder.getDetail('test-1');
+
+					detail.setTimeout(5000);
+					detail.setTimeout(10000, { override: true });
+
+					expect(detail.data.config.timeout).to.eq(10000);
+				});
+			});
+		});
+	});
+
+	describe('accessors', () => {
+		describe('summary', () => {
+			it('same instance', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+
+				expect(builder.getSummary()).to.equal(builder.getSummary());
+			});
+		});
+
+		describe('detail', () => {
+			it('same instance per id', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+
+				const detail1 = builder.getDetail('test-1');
+				const detail2 = builder.getDetail('test-1');
+
+				expect(detail1).to.equal(detail2);
+			});
+
+			it('different instance per id', () => {
+				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+
+				const detail1 = builder.getDetail('test-1');
+				const detail2 = builder.getDetail('test-2');
+
+				expect(detail1).to.not.equal(detail2);
+			});
 		});
 	});
 
 	describe('summary', () => {
-		it('returns builder', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-			const summary = builder.getSummary();
-
-			expect(summary).to.be.an('object');
-			expect(summary.data).to.have.property('framework', 'mocha');
-		});
-
-		it('same instance', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-
-			expect(builder.getSummary()).to.equal(builder.getSummary());
-		});
-
 		let summary;
 
 		beforeEach(() => {
 			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
 
 			summary = builder.getSummary();
+		});
+
+		it('returns builder', () => {
+			expect(summary).to.be.an('object');
+			expect(summary.data).to.have.property('framework', 'mocha');
 		});
 
 		it('sets started', () => {
@@ -177,48 +229,6 @@ describe('report builder', () => {
 			summary.setDurationTotal(5000);
 
 			expect(summary.data.duration.total).to.eq(5000);
-		});
-
-		it('sets status', () => {
-			summary.setStatus('failed');
-
-			expect(summary.data.status).to.eq('failed');
-		});
-
-		it('sets passed', () => {
-			summary.setPassed();
-
-			expect(summary.data.status).to.eq('passed');
-		});
-
-		it('sets failed', () => {
-			summary.setFailed();
-
-			expect(summary.data.status).to.eq('failed');
-		});
-
-		it('sets count passed', () => {
-			summary.setCountPassed(5);
-
-			expect(summary.data.count.passed).to.eq(5);
-		});
-
-		it('sets count failed', () => {
-			summary.setCountFailed(2);
-
-			expect(summary.data.count.failed).to.eq(2);
-		});
-
-		it('sets count skipped', () => {
-			summary.setCountSkipped(3);
-
-			expect(summary.data.count.skipped).to.eq(3);
-		});
-
-		it('sets count flaky', () => {
-			summary.setCountFlaky(1);
-
-			expect(summary.data.count.flaky).to.eq(1);
 		});
 
 		it('chainable', () => {
@@ -243,34 +253,55 @@ describe('report builder', () => {
 
 			expect(summary.data.status).to.eq('failed');
 		});
+
+		describe('status', () => {
+			it('sets status', () => {
+				summary.setStatus('failed');
+
+				expect(summary.data.status).to.eq('failed');
+			});
+
+			it('sets passed', () => {
+				summary.setPassed();
+
+				expect(summary.data.status).to.eq('passed');
+			});
+
+			it('sets failed', () => {
+				summary.setFailed();
+
+				expect(summary.data.status).to.eq('failed');
+			});
+		});
+
+		describe('count', () => {
+			it('sets passed', () => {
+				summary.setCountPassed(5);
+
+				expect(summary.data.count.passed).to.eq(5);
+			});
+
+			it('sets failed', () => {
+				summary.setCountFailed(2);
+
+				expect(summary.data.count.failed).to.eq(2);
+			});
+
+			it('sets skipped', () => {
+				summary.setCountSkipped(3);
+
+				expect(summary.data.count.skipped).to.eq(3);
+			});
+
+			it('sets flaky', () => {
+				summary.setCountFlaky(1);
+
+				expect(summary.data.count.flaky).to.eq(1);
+			});
+		});
 	});
 
 	describe('detail', () => {
-		it('same instance per id', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-
-			const detail1 = builder.getDetail('test-1');
-			const detail2 = builder.getDetail('test-1');
-
-			expect(detail1).to.equal(detail2);
-		});
-
-		it('different instance per id', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-
-			const detail1 = builder.getDetail('test-1');
-			const detail2 = builder.getDetail('test-2');
-
-			expect(detail1).to.not.equal(detail2);
-		});
-
-		it('initializes retries', () => {
-			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
-			const detail = builder.getDetail('test-1');
-
-			expect(detail.data.retries).to.eq(0);
-		});
-
 		let detail;
 
 		beforeEach(() => {
@@ -293,101 +324,10 @@ describe('report builder', () => {
 			expect(detail.data.started).to.eq(started);
 		});
 
-		it('sets status', () => {
-			detail.setStatus('failed');
-
-			expect(detail.data.status).to.eq('failed');
-		});
-
-		it('sets passed', () => {
-			detail.setPassed();
-
-			expect(detail.data.status).to.eq('passed');
-		});
-
-		it('sets skipped', () => {
-			detail.setSkipped();
-
-			expect(detail.data.status).to.eq('skipped');
-		});
-
-		it('sets failed', () => {
-			detail.setFailed();
-
-			expect(detail.data.status).to.eq('failed');
-		});
-
-		it('sets location file', () => {
-			detail.setLocationFile('test/example.test.js');
-
-			expect(detail.data.location.file).to.be.a('string');
-			expect(detail.data.location.file).to.include('example.test.js');
-		});
-
-		it('sets location line', () => {
-			detail.setLocationFile('test/example.test.js');
-			detail.setLocationLine(42);
-
-			expect(detail.data.location.line).to.eq(42);
-		});
-
-		it('sets location column', () => {
-			detail.setLocationFile('test/example.test.js');
-			detail.setLocationColumn(10);
-
-			expect(detail.data.location.column).to.eq(10);
-		});
-
 		it('sets browser', () => {
 			detail.setBrowser('chromium');
 
 			expect(detail.data.browser).to.eq('chromium');
-		});
-
-		it('sets timeout', () => {
-			detail.setTimeout(10000);
-
-			expect(detail.data.timeout).to.eq(10000);
-		});
-
-		it('accumulates duration total', () => {
-			detail.addDuration(100);
-			detail.addDuration(200);
-
-			expect(detail.data.duration.total).to.eq(300);
-		});
-
-		it('final is last added', () => {
-			detail.addDuration(100);
-			detail.addDuration(200);
-
-			expect(detail.data.duration.final).to.eq(200);
-		});
-
-		it('sets duration total', () => {
-			detail.setDurationTotal(500);
-
-			expect(detail.data.duration.total).to.eq(500);
-		});
-
-		it('sets duration final', () => {
-			detail.setDurationFinal(250);
-
-			expect(detail.data.duration.final).to.eq(250);
-		});
-
-		it('increments retries', () => {
-			detail.incrementRetries();
-			detail.incrementRetries();
-
-			expect(detail.data.retries).to.eq(2);
-		});
-
-		it('accumulates retries', () => {
-			detail.addRetries(3);
-			detail.addRetries(2);
-
-			expect(detail.data.retries).to.eq(5);
 		});
 
 		it('chainable', () => {
@@ -414,6 +354,125 @@ describe('report builder', () => {
 			detail.setName('updated', { override: true });
 
 			expect(detail.data.name).to.eq('updated');
+		});
+
+		describe('status', () => {
+			it('sets status', () => {
+				detail.setStatus('failed');
+
+				expect(detail.data.status).to.eq('failed');
+			});
+
+			it('sets passed', () => {
+				detail.setPassed();
+
+				expect(detail.data.status).to.eq('passed');
+			});
+
+			it('sets skipped', () => {
+				detail.setSkipped();
+
+				expect(detail.data.status).to.eq('skipped');
+			});
+
+			it('sets failed', () => {
+				detail.setFailed();
+
+				expect(detail.data.status).to.eq('failed');
+			});
+		});
+
+		describe('location', () => {
+			it('sets file', () => {
+				detail.setLocationFile('test/example.test.js');
+
+				expect(detail.data.location.file).to.be.a('string');
+				expect(detail.data.location.file).to.include('example.test.js');
+			});
+
+			it('sets line', () => {
+				detail.setLocationFile('test/example.test.js');
+				detail.setLocationLine(42);
+
+				expect(detail.data.location.line).to.eq(42);
+			});
+
+			it('sets column', () => {
+				detail.setLocationFile('test/example.test.js');
+				detail.setLocationColumn(10);
+
+				expect(detail.data.location.column).to.eq(10);
+			});
+		});
+
+		describe('timeout', () => {
+			it('sets timeout', () => {
+				detail.setTimeout(10000);
+
+				expect(detail.data.timeout).to.eq(10000);
+			});
+
+			it('don\'t override by default', () => {
+				detail.setTimeout(5000);
+				detail.setTimeout(10000);
+
+				expect(detail.data.timeout).to.eq(5000);
+			});
+
+			it('override with option', () => {
+				detail.setTimeout(5000);
+				detail.setTimeout(10000, { override: true });
+
+				expect(detail.data.timeout).to.eq(10000);
+			});
+		});
+
+		describe('duration', () => {
+			it('accumulates total', () => {
+				detail.addDuration(100);
+				detail.addDuration(200);
+
+				expect(detail.data.duration.total).to.eq(300);
+			});
+
+			it('final is last added', () => {
+				detail.addDuration(100);
+				detail.addDuration(200);
+
+				expect(detail.data.duration.final).to.eq(200);
+			});
+
+			it('sets total', () => {
+				detail.setDurationTotal(500);
+
+				expect(detail.data.duration.total).to.eq(500);
+			});
+
+			it('sets final', () => {
+				detail.setDurationFinal(250);
+
+				expect(detail.data.duration.final).to.eq(250);
+			});
+		});
+
+		describe('retries', () => {
+			it('initializes to zero', () => {
+				expect(detail.data.retries).to.eq(0);
+			});
+
+			it('increments', () => {
+				detail.incrementRetries();
+				detail.incrementRetries();
+
+				expect(detail.data.retries).to.eq(2);
+			});
+
+			it('accumulates', () => {
+				detail.addRetries(3);
+				detail.addRetries(2);
+
+				expect(detail.data.retries).to.eq(5);
+			});
 		});
 	});
 
