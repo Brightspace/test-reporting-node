@@ -3,7 +3,7 @@
   "experience": "Test Framework",
   "tool": "Test Reporting",
   "ignorePatterns": [
-    "**/tests/mocha/reporter-3.test.js",
+    "**/tests/mocha/ignored.test.js",
     "**/tests/playwright/reporter-3.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
@@ -11,12 +11,12 @@
   ],
   "overrides": [
     {
-      "pattern": "**/tests/mocha/reporter-1.test.js",
+      "pattern": "**/tests/mocha/statuses.test.js",
       "type": "ui",
       "tool": "Mocha 1 Test Reporting"
     },
     {
-      "pattern": "**/tests/mocha/reporter-2.test.js",
+      "pattern": "**/tests/mocha/taxonomy-overrides.test.js",
       "experience": "Mocha 2 Test Framework"
     },
     {

@@ -5,7 +5,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'mocha',
-		count: { passed: 10, failed: 6, skipped: 2, flaky: 2 }
+		count: { passed: 9, failed: 6, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: 'custom timeout > suite level timeout',
@@ -19,76 +19,6 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/mocha/custom-timeout.test.js' },
 		config: { timeout: 10000 },
-		taxonomy: { tool: 'Test Reporting', type: 'integration' },
-		retries: 0
-	}, {
-		name: 'reporter 1 > passed',
-		status: 'passed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
-		retries: 0
-	}, {
-		name: 'reporter 1 > skipped',
-		status: 'skipped',
-		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
-		retries: 0
-	}, {
-		name: 'reporter 1 > flaky',
-		status: 'passed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
-		retries: 2
-	}, {
-		name: 'reporter 1 > failed',
-		status: 'failed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
-		retries: 3
-	}, {
-		name: 'reporter 2 > passed',
-		status: 'passed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Test Reporting', type: 'integration' },
-		retries: 0
-	}, {
-		name: 'reporter 2 > skipped',
-		status: 'skipped',
-		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Test Reporting', type: 'integration' },
-		retries: 0
-	}, {
-		name: 'reporter 2 > flaky',
-		status: 'passed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Test Reporting', type: 'integration' },
-		retries: 2
-	}, {
-		name: 'reporter 2 > failed',
-		status: 'failed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Test Reporting', type: 'integration' },
-		retries: 3
-	}, {
-		name: 'reporter 1 > special/characters "(\\n\\r\\t\\b\\f)"',
-		status: 'passed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
-		config: { timeout: 2000 },
-		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
-		retries: 0
-	}, {
-		name: 'reporter 2 > special/characters "(\\n\\r\\t\\b\\f)"',
-		status: 'passed',
-		location: { file: 'test/integration/data/tests/mocha/reporter-2.test.js' },
-		config: { timeout: 2000 },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -147,5 +77,68 @@ export const testReportLatestPartial = {
 		config: { timeout: 2000 },
 		taxonomy: { tool: 'Mocha Hook Failures Test Reporting', type: 'ui' },
 		retries: 0
+	}, {
+		name: 'special characters > special/characters "(\\n\\r\\t\\b\\f)"',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/special-characters.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'statuses > passed',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/statuses.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'statuses > skipped',
+		status: 'skipped',
+		location: { file: 'test/integration/data/tests/mocha/statuses.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: 'statuses > flaky',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/statuses.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
+		retries: 2
+	}, {
+		name: 'statuses > failed',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/statuses.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Mocha 1 Test Reporting', type: 'ui' },
+		retries: 3
+	}, {
+		name: 'taxonomy overrides > passed',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/taxonomy-overrides.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'taxonomy overrides > skipped',
+		status: 'skipped',
+		location: { file: 'test/integration/data/tests/mocha/taxonomy-overrides.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'taxonomy overrides > flaky',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/taxonomy-overrides.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 2
+	}, {
+		name: 'taxonomy overrides > failed',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/taxonomy-overrides.test.js' },
+		config: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 3
 	}]
 };
