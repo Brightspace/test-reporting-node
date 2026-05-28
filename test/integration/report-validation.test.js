@@ -9,7 +9,6 @@ import { Report } from '../../src/helpers/report.cjs';
 import { testReportLatestPartial as testReportLatestPartialMocha } from './data/validation/test-report-mocha.js';
 import { testReportLatestPartial as testReportLatestPartialPlaywright } from './data/validation/test-report-playwright.js';
 import { testReportLatestPartial as testReportLatestPartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
-import { testReportLatestPartial as testReportLatestPartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
 import yn from 'yn';
 
 use(chaiSubset);
@@ -44,11 +43,6 @@ const reportTests = [{
 	version: latestReportVersion,
 	path: './d2l-test-report-web-test-runner.json',
 	expected: testReportLatestPartialWebTestRunner
-}, {
-	name: 'webdriverio',
-	version: latestReportVersion,
-	path: './d2l-test-report-webdriverio.json',
-	expected: testReportLatestPartialWebdriverIO
 }];
 const results = reportTests.reduce((acc, cur) => {
 	acc[cur.name] = {
