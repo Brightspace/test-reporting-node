@@ -5,9 +5,23 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'mocha',
-		count: { passed: 8, failed: 6, skipped: 2, flaky: 2 }
+		count: { passed: 10, failed: 6, skipped: 2, flaky: 2 }
 	},
 	details: [{
+		name: 'custom timeout > suite level timeout',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/custom-timeout.test.js' },
+		config: { timeout: 5000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'custom timeout > test level timeout',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/custom-timeout.test.js' },
+		config: { timeout: 10000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
 		name: 'reporter 1 > passed',
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/mocha/reporter-1.test.js' },
