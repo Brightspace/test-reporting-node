@@ -97,6 +97,21 @@ jobs:
         with:
           bucket-path: ${{steps.coverage.outputs.destination}}
           publish-directory: ${{steps.coverage.outputs.source}}
+      - name: Report test results (Unit)
+        if: (!cancelled()) && github.actor != 'dependabot[bot]'
+        uses: Brightspace/test-reporting-action@main
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
+      - name: Report test results (Validation)
+        if: (!cancelled()) && github.actor != 'dependabot[bot]'
+        uses: Brightspace/test-reporting-action@main
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
+          report-path: ./d2l-test-report-validation.json
       - name: Generate test summary
         id: summary
         if: >
