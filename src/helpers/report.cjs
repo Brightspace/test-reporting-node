@@ -351,10 +351,38 @@ const upgradeReportV2ToV3 = (report) => {
 			}
 
 			if (timeout != null) {
-				upgraded.config = { timeout };
+				upgraded.configuration = { timeout };
 			}
 
 			return upgraded;
+		})
+	};
+};
+
+const cleanReportV3 = (report) => {
+	return {
+		...report,
+		details: report.details.map((detail) => {
+			const { config, tool, experience, type, ...rest } = detail;
+			const cleaned = { ...rest };
+
+			if (config != null && cleaned.configuration == null) {
+				cleaned.configuration = config;
+			}
+
+			if (cleaned.taxonomy == null && (tool != null || type != null)) {
+				cleaned.taxonomy = {};
+
+				if (tool != null) {
+					cleaned.taxonomy.tool = tool;
+				}
+
+				if (type != null) {
+					cleaned.taxonomy.type = type;
+				}
+			}
+
+			return cleaned;
 		})
 	};
 };
@@ -382,7 +410,7 @@ const upgradeReport = (report) => {
 		case 2:
 			return upgradeReportV2ToV3(report);
 		case 3:
-			return report;
+			return cleanReportV3(report);
 		default:
 			throw new Error(`Unknown report version: ${reportVersion}`);
 	}
@@ -411,6 +439,10 @@ class Report {
 		}
 
 		const reportVersionOriginal = getReportVersion(report);
+
+		if (reportVersionOriginal === 3) {
+			report = cleanReportV3(report);
+		}
 
 		validateReport(report, `report (v${reportVersionOriginal})`);
 

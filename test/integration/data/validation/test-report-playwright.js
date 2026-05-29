@@ -16,7 +16,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -28,7 +28,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -40,7 +40,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -52,7 +52,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -64,7 +64,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -76,7 +76,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -88,7 +88,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -100,7 +100,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 3
 	}, {
@@ -112,7 +112,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -124,7 +124,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -136,7 +136,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -148,7 +148,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -160,7 +160,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 2
 	}, {
@@ -172,7 +172,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -184,7 +184,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -196,7 +196,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -208,7 +208,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 3
 	}, {
@@ -220,7 +220,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -232,7 +232,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 2
 	}, {
@@ -244,7 +244,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -256,7 +256,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -268,7 +268,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -280,7 +280,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -292,7 +292,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -304,7 +304,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -316,7 +316,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -328,7 +328,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 2
 	}, {
@@ -340,7 +340,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -352,7 +352,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 3
 	}, {
@@ -364,7 +364,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -376,7 +376,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -388,7 +388,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -400,7 +400,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -412,7 +412,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -424,7 +424,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -436,7 +436,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 3
 	}, {
@@ -448,7 +448,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -460,7 +460,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -472,7 +472,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -484,7 +484,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -496,7 +496,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -508,7 +508,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 2
 	}, {
@@ -520,7 +520,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -532,7 +532,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -544,7 +544,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -556,7 +556,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -568,7 +568,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -580,7 +580,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -592,7 +592,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -604,7 +604,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -616,7 +616,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 3
 	}, {
@@ -628,7 +628,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 2
 	}, {
@@ -640,7 +640,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -652,7 +652,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -664,7 +664,7 @@ export const testReportLatestPartial = {
 			column: 7
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -676,7 +676,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -688,7 +688,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'chromium',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -700,7 +700,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'firefox',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}, {
@@ -712,7 +712,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -724,7 +724,7 @@ export const testReportLatestPartial = {
 			column: 2
 		},
 		browser: 'webkit',
-		config: { timeout: 30000 },
+		configuration: { timeout: 30000 },
 		taxonomy: { tool: 'Test Reporting', type: 'visual diff' },
 		retries: 0
 	}]

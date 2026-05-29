@@ -107,7 +107,7 @@ const testDetailsLatest = [{
 	location: { file: 'test/test-suite.js' },
 	taxonomy: { tool: 'My Tool', type: 'integration' },
 	started: testStarted,
-	config: { timeout: 30000 },
+	configuration: { timeout: 30000 },
 	duration: { final: 237, total: 549 },
 	status: 'passed',
 	retries: 1
@@ -116,7 +116,7 @@ const testDetailsLatest = [{
 	location: { file: 'test/test-suite.js' },
 	taxonomy: { tool: 'My Tool', type: 'integration' },
 	started: testStarted,
-	config: { timeout: 30000 },
+	configuration: { timeout: 30000 },
 	duration: { final: 237, total: 237 },
 	status: 'passed',
 	retries: 0
@@ -125,7 +125,7 @@ const testDetailsLatest = [{
 	location: { file: 'test/test-suite.js' },
 	taxonomy: { tool: 'My Tool', type: 'integration' },
 	started: testStarted,
-	config: { timeout: 30000 },
+	configuration: { timeout: 30000 },
 	duration: { final: 0, total: 0 },
 	status: 'skipped',
 	retries: 0
@@ -286,7 +286,7 @@ const testReportLatestFullOther = {
 		...testContextOther
 	}
 };
-const testDetailsLatestFromV1 = testDetailsLatest.map(({ config, ...rest }) => rest);
+const testDetailsLatestFromV1 = testDetailsLatest.map(({ configuration, ...rest }) => rest);
 const testReportLatestFromV1Full = {
 	...testReportLatestFull,
 	details: testDetailsLatestFromV1
@@ -338,6 +338,70 @@ const testReportLatestPartialContext = {
 			flaky: 1
 		}
 	}
+};
+
+const testDetailsOldV3 = [{
+	name: 'test suite > flaky test',
+	location: { file: 'test/test-suite.js' },
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
+	started: testStarted,
+	config: { timeout: 30000 },
+	duration: { final: 237, total: 549 },
+	status: 'passed',
+	retries: 1
+}, {
+	name: 'test suite > passing test',
+	location: { file: 'test/test-suite.js' },
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
+	started: testStarted,
+	config: { timeout: 30000 },
+	duration: { final: 237, total: 237 },
+	status: 'passed',
+	retries: 0
+}, {
+	name: 'test suite > skipped test',
+	location: { file: 'test/test-suite.js' },
+	tool: 'My Tool',
+	experience: 'My Experience',
+	type: 'integration',
+	started: testStarted,
+	config: { timeout: 30000 },
+	duration: { final: 0, total: 0 },
+	status: 'skipped',
+	retries: 0
+}];
+const testDetailsOldV3ConfigOnly = testDetailsLatest.map(({ configuration, ...rest }) => ({
+	...rest,
+	config: configuration
+}));
+const testReportOldV3Full = {
+	id: '00000000-0000-0000-0000-000000000000',
+	version: latestReportVersion,
+	summary: {
+		...testContext,
+		operatingSystem: 'linux',
+		framework: 'mocha',
+		started: testStarted,
+		status: 'passed',
+		duration: {
+			total: 23857
+		},
+		count: {
+			passed: 2,
+			failed: 0,
+			skipped: 1,
+			flaky: 1
+		}
+	},
+	details: testDetailsOldV3
+};
+const testReportOldV3ConfigOnly = {
+	...testReportOldV3Full,
+	details: testDetailsOldV3ConfigOnly
 };
 
 describe('report', () => {
@@ -762,6 +826,125 @@ describe('report', () => {
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 			});
+		});
+	});
+
+	describe(`legacy (old v3, cleans to v${latestReportVersion})`, () => {
+		it('cleans config to configuration', () => {
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3ConfigOnly));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+			expect(report.getVersionOriginal()).to.equal(latestReportVersion);
+			expect(report.getVersion()).to.equal(latestReportVersion);
+			expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+		});
+
+		it('cleans flat taxonomy to nested taxonomy', () => {
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3Full));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+
+			const details = report.toJSON().details;
+
+			for (const detail of details) {
+				expect(detail).to.have.nested.property('taxonomy.tool');
+				expect(detail).to.have.nested.property('taxonomy.type');
+				expect(detail).to.not.have.property('tool');
+				expect(detail).to.not.have.property('type');
+			}
+		});
+
+		it('strips experience', () => {
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3Full));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+
+			for (const detail of report.toJSON().details) {
+				expect(detail).to.not.have.property('experience');
+			}
+		});
+
+		it('cleans all old v3 properties at once', () => {
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3Full));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+			expect(report.getVersionOriginal()).to.equal(latestReportVersion);
+			expect(report.getVersion()).to.equal(latestReportVersion);
+			expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+		});
+
+		it('preserves already-clean v3 report', () => {
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestFull));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+			expect(report.toJSON()).to.deep.equal(testReportLatestFull);
+		});
+
+		it('does not overwrite existing taxonomy', () => {
+			const mixedDetails = testDetailsLatest.map((detail) => ({
+				...detail,
+				tool: 'Stale Tool',
+				type: 'stale'
+			}));
+			const mixedReport = { ...testReportLatestFull, details: mixedDetails };
+
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(mixedReport));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+
+			const details = report.toJSON().details;
+
+			for (const detail of details) {
+				expect(detail.taxonomy.tool).to.equal('My Tool');
+				expect(detail.taxonomy.type).to.equal('integration');
+				expect(detail).to.not.have.property('tool');
+				expect(detail).to.not.have.property('type');
+			}
+		});
+
+		it('does not overwrite existing configuration', () => {
+			const mixedDetails = testDetailsLatest.map((detail) => ({
+				...detail,
+				config: { timeout: 99999 }
+			}));
+			const mixedReport = { ...testReportLatestFull, details: mixedDetails };
+
+			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(mixedReport));
+
+			let report;
+
+			const wrapper = () => report = new Report(testReportPath);
+
+			expect(wrapper).to.not.throw();
+
+			for (const detail of report.toJSON().details) {
+				expect(detail.configuration.timeout).to.equal(30000);
+				expect(detail).to.not.have.property('config');
+			}
 		});
 	});
 });
