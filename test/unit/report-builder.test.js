@@ -1,5 +1,5 @@
 import chaiUuid from 'chai-uuid';
-import { createSandbox } from 'sinon';
+import { createSandbox, match } from 'sinon';
 import { expect, use } from 'chai';
 import fs from 'node:fs';
 import { latestReportVersion } from '../../src/helpers/schema.cjs';
@@ -54,11 +54,29 @@ const buildValidReport = (options = {}) => {
 	return builder;
 };
 
+const configPathMatcher = match(
+	path => typeof path === 'string' &&
+		path.includes('d2l-test-reporting.config')
+);
+const testConfig = JSON.stringify({
+	type: 'unit',
+	tool: 'Test Reporting',
+	experience: 'Test Framework'
+});
+
 describe('report builder', () => {
 	let sandbox;
+	let readFileSyncStub;
 
 	before(() => {
 		sandbox = createSandbox();
+	});
+
+	beforeEach(() => {
+		readFileSyncStub = sandbox.stub(fs, 'readFileSync').callThrough();
+		readFileSyncStub
+			.withArgs(configPathMatcher)
+			.returns(testConfig);
 	});
 
 	afterEach(() => sandbox.restore());
@@ -100,7 +118,7 @@ describe('report builder', () => {
 			it('produces loadable report', () => {
 				const builder = buildValidReport();
 
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(builder));
+				readFileSyncStub.returns(JSON.stringify(builder));
 
 				const report = new Report('./test-report.json', { context: testContext });
 
@@ -125,7 +143,7 @@ describe('report builder', () => {
 			it('produces loadable report', () => {
 				const builder = buildValidReport({ reportVersionLatest: true });
 
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(builder));
+				readFileSyncStub.returns(JSON.stringify(builder));
 
 				const report = new Report('./test-report.json', { context: testContext });
 
@@ -635,7 +653,9 @@ describe('report builder', () => {
 				ignorePatterns: ['**/ignored/**']
 			});
 
-			sandbox.stub(fs, 'readFileSync').returns(config);
+			readFileSyncStub
+				.withArgs(configPathMatcher)
+				.returns(config);
 
 			const builder = new ReportBuilder('mocha', noopLogger, {
 				reportWriter: () => { },
@@ -653,7 +673,9 @@ describe('report builder', () => {
 				ignorePatterns: ['**/ignored/**']
 			});
 
-			sandbox.stub(fs, 'readFileSync').returns(config);
+			readFileSyncStub
+				.withArgs(configPathMatcher)
+				.returns(config);
 
 			const builder = new ReportBuilder('mocha', noopLogger, {
 				reportWriter: () => { },
