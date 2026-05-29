@@ -1,57 +1,13 @@
 {
-  "type": "integration",
-  "experience": "Test Framework",
-  "tool": "Test Reporting",
-  "ignorePatterns": [
-    "**/tests/mocha/ignored.test.js",
-    "**/tests/playwright/reporter-3.test.js",
-    "**/tests/playwright/setup.js",
-    "**/tests/playwright/teardown.js",
-    "**/tests/web-test-runner/reporter-3.test.js"
-  ],
+  "tool": "Test Tooling",
   "overrides": [
     {
-      "pattern": "**/tests/mocha/statuses.test.js",
-      "type": "ui",
-      "tool": "Mocha 1 Test Reporting"
+      "pattern": "./test/unit/**",
+      "type": "unit"
     },
     {
-      "pattern": "**/tests/mocha/taxonomy-overrides.test.js",
-      "experience": "Mocha 2 Test Framework"
-    },
-    {
-      "pattern": "**/tests/mocha/hook-failures.test.js",
-      "type": "ui",
-      "tool": "Mocha Hook Failures Test Reporting"
-    },
-    {
-      "pattern": "**/tests/playwright/reporter-1.test.js",
-      "experience": "Playwright 1 Test Framework",
-      "tool": "Playwright 1 Test Reporting"
-    },
-    {
-      "pattern": "**/tests/playwright/reporter-2.test.js",
-      "type": "visual diff",
-      "experience": "Playwright 2 Test Framework"
-    },
-    {
-      "pattern": "**/tests/web-test-runner/reporter-1.test.js",
-      "experience": "WebTestRunner 1 Test Framework",
-      "tool": "WebTestRunner 1 Test Reporting"
-    },
-    {
-      "pattern": "**/tests/web-test-runner/reporter-2.test.js",
-      "type": "accessibility",
-      "experience": "WebTestRunner 2 Test Framework"
-    },
-    {
-      "pattern": "**/tests/webdriverio/reporter-1.test.js",
-      "type": "ui",
-      "tool": "WebdriverIO 1 Test Reporting"
-    },
-    {
-      "pattern": "**/tests/webdriverio/reporter-2.test.js",
-      "experience": "WebdriverIO 2 Test Framework"
+      "pattern": "./test/integration/**",
+      "type": "integration"
     }
   ]
 }
