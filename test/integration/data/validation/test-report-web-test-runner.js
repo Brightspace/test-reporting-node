@@ -12,7 +12,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -20,7 +20,7 @@ export const testReportLatestPartial = {
 		status: 'skipped',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -28,7 +28,7 @@ export const testReportLatestPartial = {
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -36,7 +36,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -44,7 +44,7 @@ export const testReportLatestPartial = {
 		status: 'skipped',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -52,7 +52,7 @@ export const testReportLatestPartial = {
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -60,7 +60,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -68,7 +68,7 @@ export const testReportLatestPartial = {
 		status: 'skipped',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -76,7 +76,7 @@ export const testReportLatestPartial = {
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -84,7 +84,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -92,7 +92,7 @@ export const testReportLatestPartial = {
 		status: 'skipped',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -100,7 +100,7 @@ export const testReportLatestPartial = {
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -108,7 +108,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'chrome',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
@@ -116,7 +116,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'chromium',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -124,7 +124,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-2.test.js' },
 		browser: 'firefox',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'Test Reporting', type: 'accessibility' },
 		retries: 0
 	}, {
@@ -132,7 +132,7 @@ export const testReportLatestPartial = {
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/web-test-runner/reporter-1.test.js' },
 		browser: 'webkit',
-		config: { timeout: 120000 },
+		configuration: { timeout: 120000 },
 		taxonomy: { tool: 'WebTestRunner 1 Test Reporting', type: 'integration' },
 		retries: 0
 	}]

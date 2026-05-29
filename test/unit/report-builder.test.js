@@ -159,13 +159,13 @@ describe('report builder', () => {
 			});
 
 			describe('timeout', () => {
-				it('sets under config', () => {
+				it('sets under configuration', () => {
 					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
 					const detail = builder.getDetail('test-1');
 
 					detail.setTimeout(5000);
 
-					expect(detail.data.config.timeout).to.eq(5000);
+					expect(detail.data.configuration.timeout).to.eq(5000);
 				});
 
 				it('don\'t override by default', () => {
@@ -175,7 +175,7 @@ describe('report builder', () => {
 					detail.setTimeout(5000);
 					detail.setTimeout(10000);
 
-					expect(detail.data.config.timeout).to.eq(5000);
+					expect(detail.data.configuration.timeout).to.eq(5000);
 				});
 
 				it('override with option', () => {
@@ -185,7 +185,7 @@ describe('report builder', () => {
 					detail.setTimeout(5000);
 					detail.setTimeout(10000, { override: true });
 
-					expect(detail.data.config.timeout).to.eq(10000);
+					expect(detail.data.configuration.timeout).to.eq(10000);
 				});
 			});
 		});

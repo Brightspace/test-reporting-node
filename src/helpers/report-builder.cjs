@@ -34,7 +34,7 @@ const reportMemberPriority = [
 	'browser',
 	'framework',
 	'operatingSystem',
-	'config',
+	'configuration',
 	'timeout',
 	'started',
 	'duration',
@@ -308,7 +308,7 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 	setTimeout(timeout, options) {
 		if (this._reportVersionLatest) {
-			this._setNestedProperty('config', 'timeout', timeout, options);
+			this._setNestedProperty('configuration', 'timeout', timeout, options);
 		} else {
 			this._setProperty('timeout', timeout, options);
 		}
