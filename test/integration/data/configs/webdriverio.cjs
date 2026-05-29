@@ -24,7 +24,7 @@ exports.config = {
 		'spec',
 		[join(__dirname, '../../../../src/reporters/webdriverio.cjs'), {
 			reportPath: './d2l-test-report-webdriverio.json',
-			reportConfigurationPath: './d2l-test-reporting.config.json',
+			reportConfigurationPath: './test/integration/data/d2l-test-reporting.config.json',
 			reportVersionLatest: true,
 			reportConfigurationVersionLatest: true,
 			verbose: true
