@@ -417,7 +417,7 @@ const upgradeReport = (report) => {
 };
 
 class Report {
-	constructor(path, { context, lmsInfo, overrideContext = false, upgradeToLatest = false } = {}) {
+	constructor(path, { context, lmsInfo, overrideContext = false } = {}) {
 		let report;
 
 		try {
@@ -454,7 +454,7 @@ class Report {
 			validateReport(report, `report (v${getReportVersion(report)})`);
 		}
 
-		if (upgradeToLatest && getReportVersion(report) < latestReportVersion) {
+		if (getReportVersion(report) < latestReportVersion) {
 			report = upgradeReport(report);
 
 			validateReport(report, `report (v${getReportVersion(report)})`);

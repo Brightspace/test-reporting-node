@@ -1,8 +1,4 @@
 {
   "spec": "test/unit/**/*.test.js",
-  "reporter": "src/reporters/mocha.cjs",
-  "reporter-options": [
-    "reportVersionLatest=true",
-    "reportConfigurationVersionLatest=true"
-  ]
+  "reporter": "src/reporters/mocha.cjs"
 }

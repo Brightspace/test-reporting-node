@@ -180,12 +180,11 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 }
 
 class ReportDetailBuilder extends ReportBuilderBase {
-	constructor(reportConfiguration, codeowners, { reportVersionLatest = false } = {}) {
+	constructor(reportConfiguration, codeowners) {
 		super();
 
 		this._codeowners = codeowners;
 		this._reportConfiguration = reportConfiguration;
-		this._reportVersionLatest = reportVersionLatest;
 
 		this._setProperty('retries', 0);
 	}
@@ -211,20 +210,14 @@ class ReportDetailBuilder extends ReportBuilderBase {
 			return this;
 		}
 
-		const { type, tool, experience } = this._reportConfiguration.getTaxonomy(filePath);
+		const { type, tool } = this._reportConfiguration.getTaxonomy(filePath);
 
-		if (this._reportVersionLatest) {
-			if (type != null) {
-				this._setNestedProperty('taxonomy', 'type', type, options);
-			}
+		if (type != null) {
+			this._setNestedProperty('taxonomy', 'type', type, options);
+		}
 
-			if (tool != null) {
-				this._setNestedProperty('taxonomy', 'tool', tool, options);
-			}
-		} else {
-			this._setProperty('type', type, options);
-			this._setProperty('tool', tool, options);
-			this._setProperty('experience', experience, options);
+		if (tool != null) {
+			this._setNestedProperty('taxonomy', 'tool', tool, options);
 		}
 
 		if (this._codeowners) {
@@ -307,11 +300,7 @@ class ReportDetailBuilder extends ReportBuilderBase {
 	}
 
 	setTimeout(timeout, options) {
-		if (this._reportVersionLatest) {
-			this._setNestedProperty('configuration', 'timeout', timeout, options);
-		} else {
-			this._setProperty('timeout', timeout, options);
-		}
+		this._setNestedProperty('configuration', 'timeout', timeout, options);
 
 		return this;
 	}
@@ -327,18 +316,14 @@ class ReportBuilder extends ReportBuilderBase {
 			reportPath,
 			reportConfigurationPath,
 			reportWriter,
-			reportVersionLatest = false,
-			reportConfigurationVersionLatest = false,
 			verbose = false
 		} = options;
 
 		this._logger = logger;
 		this._verbose = verbose;
-		this._reportVersionLatest = reportVersionLatest;
 		this._reportConfiguration = new ReportConfiguration(
 			reportConfigurationPath,
-			logger,
-			{ configurationVersionLatest: reportConfigurationVersionLatest }
+			logger
 		);
 
 		if (reportWriter) {
@@ -362,18 +347,16 @@ class ReportBuilder extends ReportBuilderBase {
 		}
 
 		this._setProperty('id', randomUUID());
-		this._setProperty('version', reportVersionLatest ? latestReportVersion : 2);
+		this._setProperty('version', latestReportVersion);
 		this._setProperty('summary', new ReportSummaryBuilder(framework, this._logger));
 		this._setProperty('details', new Map());
 
 		this._codeowners = null;
 
-		if (this._data.version >= 3) {
-			try {
-				this._codeowners = new Codeowners();
-			} catch {
-				// No CODEOWNERS file found, skip
-			}
+		try {
+			this._codeowners = new Codeowners();
+		} catch {
+			// No CODEOWNERS file found, skip
 		}
 	}
 
@@ -397,8 +380,7 @@ class ReportBuilder extends ReportBuilderBase {
 				id,
 				new ReportDetailBuilder(
 					this._reportConfiguration,
-					this._codeowners,
-					{ reportVersionLatest: this._reportVersionLatest }
+					this._codeowners
 				)
 			);
 		}
@@ -430,8 +412,8 @@ class ReportBuilder extends ReportBuilderBase {
 			if (this._verbose) {
 				const { name, location } = detail;
 				const prefix = `Test '${name}' at '${location}' is missing`;
-				const type = this._reportVersionLatest ? detail.taxonomy?.type : detail.type;
-				const tool = this._reportVersionLatest ? detail.taxonomy?.tool : detail.tool;
+				const type = detail.taxonomy?.type;
+				const tool = detail.taxonomy?.tool;
 
 				if (!type) {
 					this._logger.warning(`${prefix} a 'type'`);
@@ -439,10 +421,6 @@ class ReportBuilder extends ReportBuilderBase {
 
 				if (!tool) {
 					this._logger.warning(`${prefix} a 'tool'`);
-				}
-
-				if (!this._reportVersionLatest && !detail.experience) {
-					this._logger.warning(`${prefix} an 'experience'`);
 				}
 			}
 		}

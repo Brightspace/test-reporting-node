@@ -52,7 +52,7 @@ module.exports = {
 * `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type, experience and tool to test code. Not required.
+  for mapping test type and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
 
 #### [Playwright]
@@ -97,7 +97,7 @@ export default defineConfig({
 * `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type, experience and tool to test code. Not required.
+  for mapping test type and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
 
 #### [`@web/test-runner`]
@@ -132,7 +132,7 @@ export default {
 * `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type, experience and tool to test code. Not required.
+  for mapping test type and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
 
 #### [WebdriverIO]
@@ -190,7 +190,7 @@ exports.config = {
 * `reportPath`: path to output the report to, relative to current working
   directory. Not required. Defaults to `./d2l-test-report.json`.
 * `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type, experience and tool to test code. Not required.
+  for mapping test type and tool to test code. Not required.
   Defaults to `./d2l-test-reporting.config.json`.
 * `verbose`: enable verbose logging for debugging purposes. Not required.
   Defaults to `false`.
@@ -203,7 +203,7 @@ See the [ReportBuilder Guide](./docs/report-builder-guide.md) for a complete wal
 
 ## Report Configuration
 
-To have the test type, experience and tool mapped to test code, a D2L test
+To have the test type and tool mapped to test code, a D2L test
 reporting configuration file is required when using one of the reporters
 provided in this package.
 
@@ -218,7 +218,6 @@ file.
 ```json
 {
   "type": "UI Visual Diff",
-  "experience": "Experience",
   "tool": "Tool"
 }
 ```
@@ -229,17 +228,14 @@ file.
   "overrides": [
     {
       "pattern": "tests/feature-a/**/*",
-      "experience": "Experience A",
       "tool": "Feature A"
     },
     {
       "pattern": "tests/feature-b/**/*",
-      "experience": "Experience B",
       "tool": "Feature B"
     },
     {
       "pattern": "tests/feature-c.test.js",
-      "experience": "Experience C",
       "tool": "Feature C"
     }
   ]

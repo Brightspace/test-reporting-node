@@ -60,8 +60,7 @@ const configPathMatcher = match(
 );
 const testConfig = JSON.stringify({
 	type: 'unit',
-	tool: 'Test Reporting',
-	experience: 'Test Framework'
+	tool: 'Test Reporting'
 });
 
 describe('report builder', () => {
@@ -108,86 +107,28 @@ describe('report builder', () => {
 			expect(builder.data.id).to.be.a.uuid('v4');
 		});
 
-		describe('v2', () => {
-			it('sets version to 2', () => {
-				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+		it('sets version to latest', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
 
-				expect(builder.data.version).to.eq(2);
-			});
-
-			it('produces loadable report', () => {
-				const builder = buildValidReport();
-
-				readFileSyncStub.returns(JSON.stringify(builder));
-
-				const report = new Report('./test-report.json', { context: testContext });
-
-				expect(report.getVersion()).to.eq(2);
-			});
-
-			it('does not set codeowners on details', () => {
-				const builder = buildValidReport();
-				const json = builder.toJSON();
-
-				expect(json.details[0]).to.not.have.nested.property('github.codeowners');
-			});
+			expect(builder.data.version).to.eq(latestReportVersion);
 		});
 
-		describe('v3', () => {
-			it('sets version to latest', () => {
-				const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
+		it('produces loadable report', () => {
+			const builder = buildValidReport();
 
-				expect(builder.data.version).to.eq(latestReportVersion);
-			});
+			readFileSyncStub.returns(JSON.stringify(builder));
 
-			it('produces loadable report', () => {
-				const builder = buildValidReport({ reportVersionLatest: true });
+			const report = new Report('./test-report.json', { context: testContext });
 
-				readFileSyncStub.returns(JSON.stringify(builder));
+			expect(report.getVersion()).to.eq(latestReportVersion);
+		});
 
-				const report = new Report('./test-report.json', { context: testContext });
+		it('sets codeowners on details', () => {
+			const builder = buildValidReport();
+			const json = builder.toJSON();
 
-				expect(report.getVersion()).to.eq(latestReportVersion);
-			});
-
-			it('sets codeowners on details', () => {
-				const builder = buildValidReport({ reportVersionLatest: true });
-				const json = builder.toJSON();
-
-				expect(json.details[0]).to.have.nested.property('github.codeowners');
-				expect(json.details[0].github.codeowners).to.be.an('array').that.is.not.empty;
-			});
-
-			describe('timeout', () => {
-				it('sets under configuration', () => {
-					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
-					const detail = builder.getDetail('test-1');
-
-					detail.setTimeout(5000);
-
-					expect(detail.data.configuration.timeout).to.eq(5000);
-				});
-
-				it('don\'t override by default', () => {
-					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
-					const detail = builder.getDetail('test-1');
-
-					detail.setTimeout(5000);
-					detail.setTimeout(10000);
-
-					expect(detail.data.configuration.timeout).to.eq(5000);
-				});
-
-				it('override with option', () => {
-					const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { }, reportVersionLatest: true });
-					const detail = builder.getDetail('test-1');
-
-					detail.setTimeout(5000);
-					detail.setTimeout(10000, { override: true });
-
-					expect(detail.data.configuration.timeout).to.eq(10000);
-				});
-			});
+			expect(json.details[0]).to.have.nested.property('github.codeowners');
+			expect(json.details[0].github.codeowners).to.be.an('array').that.is.not.empty;
 		});
 	});
 
@@ -427,21 +368,21 @@ describe('report builder', () => {
 			it('sets timeout', () => {
 				detail.setTimeout(10000);
 
-				expect(detail.data.timeout).to.eq(10000);
+				expect(detail.data.configuration.timeout).to.eq(10000);
 			});
 
 			it('don\'t override by default', () => {
 				detail.setTimeout(5000);
 				detail.setTimeout(10000);
 
-				expect(detail.data.timeout).to.eq(5000);
+				expect(detail.data.configuration.timeout).to.eq(5000);
 			});
 
 			it('override with option', () => {
 				detail.setTimeout(5000);
 				detail.setTimeout(10000, { override: true });
 
-				expect(detail.data.timeout).to.eq(10000);
+				expect(detail.data.configuration.timeout).to.eq(10000);
 			});
 		});
 
@@ -649,7 +590,6 @@ describe('report builder', () => {
 			const config = JSON.stringify({
 				type: 'integration',
 				tool: 'test',
-				experience: 'test',
 				ignorePatterns: ['**/ignored/**']
 			});
 
@@ -669,7 +609,6 @@ describe('report builder', () => {
 			const config = JSON.stringify({
 				type: 'integration',
 				tool: 'test',
-				experience: 'test',
 				ignorePatterns: ['**/ignored/**']
 			});
 

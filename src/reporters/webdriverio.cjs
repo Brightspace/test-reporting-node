@@ -18,8 +18,6 @@ class WebdriverIO extends WDIOReporter {
 
 		this._baseReportPath = options.reportPath || './d2l-test-report.json';
 		this._reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
-		this._reportVersionLatest = options.reportVersionLatest || false;
-		this._reportConfigurationVersionLatest = options.reportConfigurationVersionLatest || false;
 		this._verbose = options.verbose || false;
 		this._logger = logger;
 		this._report = null;
@@ -65,8 +63,6 @@ class WebdriverIO extends WDIOReporter {
 			this._report = new ReportBuilder('webdriverio', this._logger, {
 				reportPath: workerReportPath,
 				reportConfigurationPath: this._reportConfigurationPath,
-				reportVersionLatest: this._reportVersionLatest,
-				reportConfigurationVersionLatest: this._reportConfigurationVersionLatest,
 				verbose: this._verbose
 			});
 			console.log('[D2L Reporter] Initialized successfully');
