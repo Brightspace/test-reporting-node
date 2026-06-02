@@ -6,8 +6,9 @@
 [![Node Version][Node Version Badge]][Node Version Rules]
 
 Helper package for generating reports for use with the **D2L test reporting
-framework**. This package is meant to be used in conjunction with this [GitHub
-Action].
+framework**. Reporters in this package produce a structured JSON report file
+that can be uploaded to the D2L test reporting back-end using the corresponding
+[GitHub Action].
 
 > [!NOTE]
 > If you have any questions, concerns or just want to chat feel free to reach
@@ -15,241 +16,51 @@ Action].
 
 ## Installation
 
+Install the package as a dev dependency since it is only used during test
+execution.
+
 ```console
-npm install d2l-test-reporting
+npm install --save-dev d2l-test-reporting
 ```
 
 ## Usage
 
-This library provides reporters for many of the test execution frameworks we use
-at D2L. In order to use the accompanying [GitHub Action] to upload reports to
-the back-end you must use of one of the reporters provided below or have a
-custom implementation that outputs a JSON file in the format outlined in [Report
-Format].
+This library provides built-in reporters for several test execution frameworks
+used at D2L, along with a `ReportBuilder` class for building custom reporters.
+
+### Configuration
+
+A D2L test reporting configuration file is required when using one of the
+reporters in this package. It maps test files to a test type and tool, which
+are recorded in the output report. By default, reporters look for a file named
+`d2l-test-reporting.config.json` at the root of the repository. This path can
+be changed using the `reportConfigurationPath` option available on each
+reporter, though the default is sufficient for most projects.
+
+See [Report Configuration] for examples, and [Report Configuration Format] for
+schema details.
 
 ### Reporters
 
-#### [Mocha]
+Each reporter wraps your test framework and emits a D2L test report JSON file
+when the test run completes. The following frameworks are supported.
 
-Please consult the [official documentation for Mocha] to see how to use
-reporters. Below is an example of how to add the reporter provided by this
-package. It assumes you are using the default `.mocharc.js` file for
-configuration.
-
-```js
-module.exports = {
-  spec: 'test/*.test.js',
-  reporter: 'd2l-test-reporting/reporters/mocha.js',
-  reporterOptions: [
-    'reportPath=./d2l-test-report.json', // optional
-    'reportConfigurationPath=./d2l-test-reporting.config.json' // optional
-  ]
-};
-```
-
-##### Inputs
-
-* `reportPath`: path to output the report to, relative to current working
-  directory. Not required. Defaults to `./d2l-test-report.json`.
-* `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type and tool to test code. Not required.
-  Defaults to `./d2l-test-reporting.config.json`.
-
-#### [Playwright]
-
-Please consult the [official documentation for Playwright] to see how to use
-reporters. Below is an example of how to add the reporter provided by this
-package. It assumes you are using the default `playwright.config.js` file for
-configuration.
-
-```js
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
-  reporter: [
-    [
-      'd2l-test-reporting/reporters/playwright.js',
-      {
-        reportPath: './d2l-test-report.json', // optional
-        reportConfigurationPath: './d2l-test-reporting.config.json' // optional
-      }
-    ],
-    ['list']
-  ],
-  testDir: '../',
-  testMatch: '*.test.js',
-  projects: [{
-    name: 'firefox',
-    use: devices['Desktop Firefox'],
-    testMatch: 'firefox/*.test.js'
-  }]
-});
-```
-
-> [!WARNING]
-> Currently the [`merge-reports`] command is not fully supported due to a lack
-> of browser/launcher information preservation with the `blob` reporter. If you
-> are using a GitHub matrix run this may result in partial data showing in the
-> reporting dashboard as it becomes available.
-
-##### Inputs
-
-* `reportPath`: path to output the report to, relative to current working
-  directory. Not required. Defaults to `./d2l-test-report.json`.
-* `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type and tool to test code. Not required.
-  Defaults to `./d2l-test-reporting.config.json`.
-
-#### [`@web/test-runner`]
-
-Please consult the [official documentation for `@web/test-runner`] to see how to
-use reporters. Below is an example of how to add the reporter provided by this
-package. It assumes you are using the default `web-test-runner.config.js` file
-for configuration.
-
-```js
-import { defaultReporter } from '@web/test-runner';
-import { reporter } from 'd2l-test-reporting/reporters/web-test-runner.js';
-
-export default {
-  reporters: [
-    defaultReporter(),
-    reporter({
-      reportPath: './d2l-test-report.json', // optional
-      reportConfigurationPath: './d2l-test-reporting.config.json' // optional
-    })
-  ],
-  files: 'test/component-*.test.js',
-  groups: [{
-    name: 'group',
-    files: 'test/group/component-*.test.js'
-  }]
-};
-```
-
-##### Inputs
-
-* `reportPath`: path to output the report to, relative to current working
-  directory. Not required. Defaults to `./d2l-test-report.json`.
-* `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type and tool to test code. Not required.
-  Defaults to `./d2l-test-reporting.config.json`.
-
-#### [WebdriverIO]
-
-Please consult the [official documentation for WebdriverIO] to see how to use
-reporters. Below is an example of how to add the reporter provided by this
-package. It assumes you are using the default `wdio.conf.js` file for
-configuration.
-
-```js
-exports.config = {
-  specs: [
-    join(__dirname, '../tests/webdriverio/reporter-1.test.js'),
-    join(__dirname, '../tests/webdriverio/reporter-2.test.js'),
-    join(__dirname, '../tests/webdriverio/reporter-3.test.js')
-  ],
-  maxInstances: 2,
-  capabilities: [{
-    browserName: 'chrome',
-    'goog:chromeOptions': {
-      args: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage']
-    }
-  }],
-  logLevel: 'error',
-  bail: 0,
-  waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
-  framework: 'mocha',
-  reporters: [
-    'spec',
-    [join(__dirname, '../../../../src/reporters/webdriverio.cjs'), {
-      reportPath: './d2l-test-report-webdriverio.json',
-      reportConfigurationPath: './d2l-test-reporting.config.json',
-      verbose: true
-    }]
-  ],
-  mochaOpts: {
-    ui: 'bdd',
-    timeout: 60000,
-    retries: 3
-  },
-  onComplete() {
-    // Merge all worker reports into a single final report
-    mergeReports(
-      './d2l-test-report-webdriverio-*.json',
-      './d2l-test-report-webdriverio.json'
-    );
-  }
-};
-```
-
-##### Inputs
-
-* `reportPath`: path to output the report to, relative to current working
-  directory. Not required. Defaults to `./d2l-test-report.json`.
-* `reportConfigurationPath`: path to the D2L test reporting configuration file
-  for mapping test type and tool to test code. Not required.
-  Defaults to `./d2l-test-reporting.config.json`.
-* `verbose`: enable verbose logging for debugging purposes. Not required.
-  Defaults to `false`.
+* [Mocha]
+* [Playwright]
+* [Web Test Runner]
+* [WebdriverIO]
 
 #### Custom Reporters
 
-If your test framework isn't supported by the built-in reporters, you can build your own using the `ReportBuilder` class.
+If your test framework isn't supported by the built-in reporters, you can build
+your own using the `ReportBuilder` class. See [Report Builder] for a complete
+walkthrough of creating a custom reporter for any test framework.
 
-See the [ReportBuilder Guide](./docs/report-builder-guide.md) for a complete walkthrough of creating a custom reporter for any test framework.
+### Output
 
-## Report Configuration
-
-To have the test type and tool mapped to test code, a D2L test
-reporting configuration file is required when using one of the reporters
-provided in this package.
-
-Below are examples of how to create the config file. Note that the `type` field
-will end up as lowercase in the report. For details on the schema that the
-report configuration file follows, see [Report Configuration Format].
-
-Please see [Automated Testing Definitions] on Confluence for the list of test
-types that should be used when creating the D2L test reporting configuration
-file.
-
-```json
-{
-  "type": "UI Visual Diff",
-  "tool": "Tool"
-}
-```
-
-```json
-{
-  "type": "UI E2E",
-  "overrides": [
-    {
-      "pattern": "tests/feature-a/**/*",
-      "tool": "Feature A"
-    },
-    {
-      "pattern": "tests/feature-b/**/*",
-      "tool": "Feature B"
-    },
-    {
-      "pattern": "tests/feature-c.test.js",
-      "tool": "Feature C"
-    }
-  ]
-}
-```
-
-## Report Format
-
-For details on the schema that the various custom reporters output, see [Report
-Format].
-
-> [!NOTE]
-> This specific JSON structure is required in order to upload reports to the
-> back-end using the corresponding [GitHub Action].
+Reporters in this package output the D2L test report JSON format, which is
+required by the [GitHub Action] to upload results to the back-end. For details
+on the schema, see [Report Format].
 
 ## Developing
 
@@ -316,19 +127,14 @@ refer to the [semantic-release GitHub Action] documentation.
 [Node Version Rules]: ./package.json#L38
 [Release Badge]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml/badge.svg
 [Release Workflow]: https://github.com/Brightspace/test-reporting-node/actions/workflows/release.yml
-[file an issue]: https://github.com/Brightspace/test-reporting-node/issues/new
-[official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
-[official documentation for Playwright]: https://playwright.dev/docs/test-reporters
-[official documentation for `@web/test-runner`]: https://modern-web.dev/docs/test-runner/reporters/overview
-[official documentation for WebdriverIO]: https://webdriver.io/docs/reporter
-[Mocha]: https://mochajs.org
-[Playwright]: https://playwright.dev
-[`@web/test-runner`]: https://modern-web.dev/docs/test-runner/overview
-[WebdriverIO]: https://webdriver.io
-[`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
 [GitHub Action]: https://github.com/Brightspace/test-reporting-action
-[Automated Testing Definitions]: https://desire2learn.atlassian.net/wiki/spaces/QE/pages/4354408450/Automated+Testing+Definitions
 [#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
 [semantic-release GitHub Action]: https://github.com/BrightspaceUI/actions/tree/main/semantic-release
-[Report Format]: ./docs/report-format.md
-[Report Configuration Format]: ./docs/report-configuration-format.md
+[Mocha]: ./docs/reporters/mocha.md
+[Playwright]: ./docs/reporters/playwright.md
+[Web Test Runner]: ./docs/reporters/web-test-runner.md
+[WebdriverIO]: ./docs/reporters/webdriverio.md
+[Report Builder]: ./docs/report-builder.md
+[Report Configuration]: ./docs/report-configuration.md
+[Report Configuration Format]: ./docs/format/report-configuration.md
+[Report Format]: ./docs/format/report.md
