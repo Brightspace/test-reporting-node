@@ -15,7 +15,7 @@
   color: a2eeef
 - name: github-actions
   description: Pull requests that update GitHub Actions workflows
-  color: ffffff
+  color: 000000
 - name: good first issue
   description: Good for newcomers
   color: 7057ff
