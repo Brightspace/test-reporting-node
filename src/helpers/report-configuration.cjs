@@ -8,6 +8,9 @@ const { minimatch } = require('minimatch');
 const { makeRelativeFilePath } = require('./system.cjs');
 
 const defaultConfigurationPath = './d2l-test-reporting.config.json';
+const defaultLogger = {
+	warning: (message) => console.warn(message)
+};
 
 const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
 	const { experience, overrides, ...rest } = configuration;
@@ -46,6 +49,8 @@ const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
 
 class ReportConfiguration {
 	constructor(path, logger) {
+		logger ??= defaultLogger;
+
 		let reportConfiguration;
 		let reportConfigurationPath;
 
