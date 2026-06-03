@@ -2,7 +2,6 @@ const fs = require('node:fs');
 const { resolve } = require('node:path');
 const {
 	formatErrorAjv,
-	validateReportConfigurationV1Ajv,
 	validateReportConfigurationV2Ajv
 } = require('./schema.cjs');
 const { minimatch } = require('minimatch');
@@ -46,11 +45,9 @@ const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
 };
 
 class ReportConfiguration {
-	constructor(path, logger, { configurationVersionLatest = false } = {}) {
+	constructor(path, logger) {
 		let reportConfiguration;
 		let reportConfigurationPath;
-
-		this._configurationVersionLatest = configurationVersionLatest;
 
 		if (path) {
 			path = resolve(path);
@@ -86,16 +83,10 @@ class ReportConfiguration {
 			reportConfigurationPath = makeRelativeFilePath(path);
 		}
 
-		if (configurationVersionLatest) {
-			reportConfiguration = upgradeReportConfigurationV1ToV2(reportConfiguration, logger);
+		reportConfiguration = upgradeReportConfigurationV1ToV2(reportConfiguration, logger);
 
-			if (!validateReportConfigurationV2Ajv(reportConfiguration)) {
-				const { errors } = validateReportConfigurationV2Ajv;
-
-				throw new Error(formatErrorAjv(errors, { dataVar: 'report configuration' }));
-			}
-		} else if (!validateReportConfigurationV1Ajv(reportConfiguration)) {
-			const { errors } = validateReportConfigurationV1Ajv;
+		if (!validateReportConfigurationV2Ajv(reportConfiguration)) {
+			const { errors } = validateReportConfigurationV2Ajv;
 
 			throw new Error(formatErrorAjv(errors, { dataVar: 'report configuration' }));
 		}
@@ -118,17 +109,12 @@ class ReportConfiguration {
 			const {
 				pattern,
 				type: overriddenType,
-				tool: overriddenTool,
-				experience: overriddenExperience
+				tool: overriddenTool
 			} = override;
 
 			if (minimatch(filePath, pattern)) {
 				metadata.type = overriddenType?.toLowerCase();
 				metadata.tool = overriddenTool;
-
-				if (!this._configurationVersionLatest) {
-					metadata.experience = overriddenExperience;
-				}
 
 				break;
 			}
@@ -136,16 +122,11 @@ class ReportConfiguration {
 
 		const {
 			type: defaultType,
-			tool: defaultTool,
-			experience: defaultExperience
+			tool: defaultTool
 		} = this._reportConfiguration;
 
 		metadata.type = metadata.type ?? defaultType?.toLowerCase();
 		metadata.tool = metadata.tool ?? defaultTool;
-
-		if (!this._configurationVersionLatest) {
-			metadata.experience = metadata.experience ?? defaultExperience;
-		}
 
 		return metadata;
 	}
@@ -153,13 +134,7 @@ class ReportConfiguration {
 	hasTaxonomy(filePath) {
 		const taxonomy = this.getTaxonomy(filePath);
 
-		if (this._configurationVersionLatest) {
-			return taxonomy.type != null && taxonomy.tool != null;
-		}
-
-		return taxonomy.type != null &&
-			taxonomy.tool != null &&
-			taxonomy.experience != null;
+		return taxonomy.type != null && taxonomy.tool != null;
 	}
 
 	ignoreFilePath(filePath) {

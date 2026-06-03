@@ -420,7 +420,7 @@ describe('report', () => {
 
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, { upgradeToLatest: true }));
+				const wrapper = () => report = (new Report(testReportPath));
 
 				expect(wrapper).to.not.throw();
 				expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
@@ -436,8 +436,7 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true,
-						upgradeToLatest: true
+						overrideContext: true
 					};
 					let report;
 
@@ -455,8 +454,7 @@ describe('report', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1Full));
 
 					const reportOptions = {
-						context: testContextOther,
-						upgradeToLatest: true
+						context: testContextOther
 					};
 					let report;
 
@@ -477,8 +475,7 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true,
-						upgradeToLatest: true
+						overrideContext: true
 					};
 					let report;
 
@@ -496,8 +493,7 @@ describe('report', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1NoContext));
 
 					const reportOptions = {
-						context: testContextOther,
-						upgradeToLatest: true
+						context: testContextOther
 					};
 					let report;
 
@@ -518,8 +514,7 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true,
-						upgradeToLatest: true
+						overrideContext: true
 					};
 					let report;
 
@@ -537,8 +532,7 @@ describe('report', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1PartialContext));
 
 					const reportOptions = {
-						context: testContextOther,
-						upgradeToLatest: true
+						context: testContextOther
 					};
 					let report;
 
@@ -564,7 +558,7 @@ describe('report', () => {
 
 				let report;
 
-				const wrapper = () => report = (new Report(testReportPath, { upgradeToLatest: true }));
+				const wrapper = () => report = (new Report(testReportPath));
 
 				expect(wrapper).to.not.throw();
 				expect(report.getVersionOriginal()).to.equal(testReportCurrentVersion);
@@ -580,8 +574,7 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true,
-						upgradeToLatest: true
+						overrideContext: true
 					};
 					let report;
 
@@ -599,8 +592,7 @@ describe('report', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
 
 					const reportOptions = {
-						context: testContextOther,
-						upgradeToLatest: true
+						context: testContextOther
 					};
 					let report;
 
@@ -621,8 +613,7 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true,
-						upgradeToLatest: true
+						overrideContext: true
 					};
 					let report;
 
@@ -640,8 +631,7 @@ describe('report', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2NoContext));
 
 					const reportOptions = {
-						context: testContextOther,
-						upgradeToLatest: true
+						context: testContextOther
 					};
 					let report;
 
@@ -662,8 +652,7 @@ describe('report', () => {
 
 					const reportOptions = {
 						context: testContextOther,
-						overrideContext: true,
-						upgradeToLatest: true
+						overrideContext: true
 					};
 					let report;
 
@@ -681,8 +670,7 @@ describe('report', () => {
 					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2PartialContext));
 
 					const reportOptions = {
-						context: testContextOther,
-						upgradeToLatest: true
+						context: testContextOther
 					};
 					let report;
 

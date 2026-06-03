@@ -3,8 +3,6 @@ import { defineConfig, devices } from '@playwright/test';
 const playwrightReporterOptions = {
 	reportPath: './d2l-test-report-playwright.json',
 	reportConfigurationPath: './test/integration/data/d2l-test-reporting.config.json',
-	reportVersionLatest: true,
-	reportConfigurationVersionLatest: true,
 	verbose: true
 };
 

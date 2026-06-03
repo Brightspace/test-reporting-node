@@ -8,8 +8,6 @@ export default {
 		reporter({
 			reportPath: './d2l-test-report-web-test-runner.json',
 			reportConfigurationPath: './test/integration/data/d2l-test-reporting.config.json',
-			reportVersionLatest: true,
-			reportConfigurationVersionLatest: true,
 			verbose: true
 		})
 	],
