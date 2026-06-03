@@ -157,6 +157,25 @@ describe('report configuration', () => {
 		});
 	});
 
+	describe('default logger', () => {
+		const legacyConfig = {
+			type: 'integration',
+			tool: 'Test Reporting',
+			experience: 'Test Framework'
+		};
+
+		for (const logger of [null, undefined]) {
+			it(`uses when logger is \`${logger}\``, () => {
+				const warn = sandbox.stub(console, 'warn');
+
+				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(legacyConfig));
+
+				expect(() => new ReportConfiguration(configPath, logger)).to.not.throw();
+				expect(warn.calledWithMatch(/'experience' is no longer supported/)).to.be.true;
+			});
+		}
+	});
+
 	describe('taxonomy', () => {
 		it('lowercases type', () => {
 			const config = loadConfig({ type: 'UI', tool: 'My Tool' });
