@@ -8,7 +8,7 @@ stored in [AWS Timestream], please see [Storage Schema].
 
 > [!NOTE]
 > All JSON below is simply a pseudo representation of the actual schemas which
-> are stored in the [`schemas`](../schemas) folder.
+> are stored in the [`schemas`](../../schemas) folder.
 
 ## Current
 
