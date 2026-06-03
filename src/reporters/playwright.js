@@ -36,41 +36,46 @@ const getBrowser = (project) => {
 };
 
 export default class Reporter {
+	#hasTests;
+	#logger;
+	#options;
+	#report;
+
 	constructor(options = {}) {
-		this._options = options;
+		this.#options = options;
 	}
 
 	onBegin(_, suite) {
-		this._hasTests = suite.allTests().length !== 0;
+		this.#hasTests = suite.allTests().length !== 0;
 
-		if (!this._hasTests) {
+		if (!this.#hasTests) {
 			return;
 		}
 
-		this._logger = new PlaywrightLogger();
+		this.#logger = new PlaywrightLogger();
 
 		try {
-			this._report = new ReportBuilder('playwright', this._logger, this._options);
+			this.#report = new ReportBuilder('playwright', this.#logger, this.#options);
 		} catch ({ message }) {
-			this._logger.error('Failed to initialize D2L test report builder, report will not be generated');
-			this._logger.error(message);
+			this.#logger.error('Failed to initialize D2L test report builder, report will not be generated');
+			this.#logger.error(message);
 
 			return;
 		}
 
-		this._report
+		this.#report
 			.getSummary()
 			.addContext();
 	}
 
 	onTestEnd(test, result) {
-		if (!this._report || !this._hasTests) {
+		if (!this.#report || !this.#hasTests) {
 			return;
 		}
 
 		const { timeout, location: { file, line, column } } = test;
 
-		if (this._report.ignoreFilePath(file)) {
+		if (this.#report.ignoreFilePath(file)) {
 			return;
 		}
 
@@ -78,7 +83,7 @@ export default class Reporter {
 		const { startTime, retry, status, duration } = result;
 		const project = test.parent.project();
 		const name = makeTestName(test);
-		const detail = this._report
+		const detail = this.#report
 			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
@@ -109,12 +114,12 @@ export default class Reporter {
 	}
 
 	onEnd(result) {
-		if (!this._report || !this._hasTests) {
+		if (!this.#report || !this.#hasTests) {
 			return;
 		}
 
 		const { startTime, duration, status } = result;
-		const summary = this._report
+		const summary = this.#report
 			.getSummary()
 			.setStarted(startTime)
 			.setDurationTotal(Math.round(duration));
@@ -125,14 +130,14 @@ export default class Reporter {
 			summary.setFailed();
 		}
 
-		this._report.finalize();
+		this.#report.finalize();
 	}
 
 	onExit() {
-		if (!this._report || !this._hasTests) {
+		if (!this.#report || !this.#hasTests) {
 			return;
 		}
 
-		this._report.save();
+		this.#report.save();
 	}
 }

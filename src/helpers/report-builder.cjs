@@ -108,10 +108,12 @@ class ReportBuilderBase {
 }
 
 class ReportSummaryBuilder extends ReportBuilderBase {
+	#logger;
+
 	constructor(framework, logger) {
 		super();
 
-		this._logger = logger;
+		this.#logger = logger;
 
 		this._setProperty('operatingSystem', getOperatingSystemType());
 		this._setProperty('framework', framework);
@@ -124,7 +126,7 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 			this._setProperty('github', github, { override: true });
 			this._setProperty('git', git, { override: true });
 		} else {
-			this._logger.warning('D2L test report will not contain GitHub context details');
+			this.#logger.warning('D2L test report will not contain GitHub context details');
 		}
 
 		return this;
@@ -180,11 +182,14 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 }
 
 class ReportDetailBuilder extends ReportBuilderBase {
+	#codeowners;
+	#reportConfiguration;
+
 	constructor(reportConfiguration, codeowners) {
 		super();
 
-		this._codeowners = codeowners;
-		this._reportConfiguration = reportConfiguration;
+		this.#codeowners = codeowners;
+		this.#reportConfiguration = reportConfiguration;
 
 		this._setProperty('retries', 0);
 	}
@@ -206,11 +211,11 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 		this._setNestedProperty('location', 'file', filePath, options);
 
-		if (!this._reportConfiguration) {
+		if (!this.#reportConfiguration) {
 			return this;
 		}
 
-		const { type, tool } = this._reportConfiguration.getTaxonomy(filePath);
+		const { type, tool } = this.#reportConfiguration.getTaxonomy(filePath);
 
 		if (type != null) {
 			this._setNestedProperty('taxonomy', 'type', type, options);
@@ -220,8 +225,8 @@ class ReportDetailBuilder extends ReportBuilderBase {
 			this._setNestedProperty('taxonomy', 'tool', tool, options);
 		}
 
-		if (this._codeowners) {
-			const owners = this._codeowners.getOwner(filePath);
+		if (this.#codeowners) {
+			const owners = this.#codeowners.getOwner(filePath);
 
 			if (owners.length > 0) {
 				this._setNestedProperty('github', 'codeowners', owners, options);
@@ -309,6 +314,12 @@ class ReportDetailBuilder extends ReportBuilderBase {
 class ReportBuilder extends ReportBuilderBase {
 	static SupportedBrowsers = latestSupportedBrowsers;
 
+	#codeowners;
+	#logger;
+	#reportConfiguration;
+	#verbose;
+	#writeReport;
+
 	constructor(framework, logger, options) {
 		super();
 
@@ -319,9 +330,9 @@ class ReportBuilder extends ReportBuilderBase {
 			verbose = false
 		} = options;
 
-		this._logger = logger;
-		this._verbose = verbose;
-		this._reportConfiguration = new ReportConfiguration(
+		this.#logger = logger;
+		this.#verbose = verbose;
+		this.#reportConfiguration = new ReportConfiguration(
 			reportConfigurationPath,
 			logger
 		);
@@ -331,41 +342,41 @@ class ReportBuilder extends ReportBuilderBase {
 				throw new Error('must supply only one of \'reportPath\' or \'reportWriter\'');
 			}
 
-			this._writeReport = (reportData) => {
+			this.#writeReport = (reportData) => {
 				reportWriter(reportData);
 
-				this._logger.info('D2L test report available at output location');
+				this.#logger.info('D2L test report available at output location');
 			};
 		} else {
 			const reportPathFinal = determineReportPath(reportPath);
 
-			this._writeReport = (reportData) => {
+			this.#writeReport = (reportData) => {
 				writeFileSync(reportPathFinal, reportData, 'utf8');
 
-				this._logger.location('D2L test report available at', reportPathFinal);
+				this.#logger.location('D2L test report available at', reportPathFinal);
 			};
 		}
 
 		this._setProperty('id', randomUUID());
 		this._setProperty('version', latestReportVersion);
-		this._setProperty('summary', new ReportSummaryBuilder(framework, this._logger));
+		this._setProperty('summary', new ReportSummaryBuilder(framework, this.#logger));
 		this._setProperty('details', new Map());
 
-		this._codeowners = null;
+		this.#codeowners = null;
 
 		try {
-			this._codeowners = new Codeowners();
+			this.#codeowners = new Codeowners();
 		} catch {
 			// No CODEOWNERS file found, skip
 		}
 	}
 
 	ignoreFilePath(filePath) {
-		if (!this._reportConfiguration) {
+		if (!this.#reportConfiguration) {
 			return false;
 		}
 
-		return this._reportConfiguration.ignoreFilePath(filePath);
+		return this.#reportConfiguration.ignoreFilePath(filePath);
 	}
 
 	getSummary() {
@@ -379,8 +390,8 @@ class ReportBuilder extends ReportBuilderBase {
 			details.set(
 				id,
 				new ReportDetailBuilder(
-					this._reportConfiguration,
-					this._codeowners
+					this.#reportConfiguration,
+					this.#codeowners
 				)
 			);
 		}
@@ -409,18 +420,18 @@ class ReportBuilder extends ReportBuilderBase {
 				countFailed++;
 			}
 
-			if (this._verbose) {
+			if (this.#verbose) {
 				const { name, location } = detail;
 				const prefix = `Test '${name}' at '${location}' is missing`;
 				const type = detail.taxonomy?.type;
 				const tool = detail.taxonomy?.tool;
 
 				if (!type) {
-					this._logger.warning(`${prefix} a 'type'`);
+					this.#logger.warning(`${prefix} a 'type'`);
 				}
 
 				if (!tool) {
-					this._logger.warning(`${prefix} a 'tool'`);
+					this.#logger.warning(`${prefix} a 'tool'`);
 				}
 			}
 		}
@@ -448,9 +459,9 @@ class ReportBuilder extends ReportBuilderBase {
 		try {
 			const reportData = JSON.stringify(this, reportMemberPriority);
 
-			this._writeReport(reportData);
+			this.#writeReport(reportData);
 		} catch {
-			this._logger.error('Failed to generate D2L test report');
+			this.#logger.error('Failed to generate D2L test report');
 		}
 	}
 }

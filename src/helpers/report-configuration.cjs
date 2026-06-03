@@ -48,6 +48,9 @@ const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
 };
 
 class ReportConfiguration {
+	#reportConfiguration;
+	#reportConfigurationPath;
+
 	constructor(path, logger) {
 		logger ??= defaultLogger;
 
@@ -74,7 +77,7 @@ class ReportConfiguration {
 			try {
 				contents = fs.readFileSync(path, 'utf8');
 			} catch {
-				this._reportConfiguration = {};
+				this.#reportConfiguration = {};
 
 				return;
 			}
@@ -96,18 +99,18 @@ class ReportConfiguration {
 			throw new Error(formatErrorAjv(errors, { dataVar: 'report configuration' }));
 		}
 
-		this._reportConfigurationPath = reportConfigurationPath;
-		this._reportConfiguration = reportConfiguration;
+		this.#reportConfigurationPath = reportConfigurationPath;
+		this.#reportConfiguration = reportConfiguration;
 	}
 
 	getPath() {
-		return this._reportConfigurationPath;
+		return this.#reportConfigurationPath;
 	}
 
 	getTaxonomy(filePath) {
 		filePath = makeRelativeFilePath(filePath);
 
-		const { overrides } = this._reportConfiguration;
+		const { overrides } = this.#reportConfiguration;
 		const metadata = {};
 
 		for (const override of overrides ?? []) {
@@ -128,7 +131,7 @@ class ReportConfiguration {
 		const {
 			type: defaultType,
 			tool: defaultTool
-		} = this._reportConfiguration;
+		} = this.#reportConfiguration;
 
 		metadata.type = metadata.type ?? defaultType?.toLowerCase();
 		metadata.tool = metadata.tool ?? defaultTool;
@@ -145,7 +148,7 @@ class ReportConfiguration {
 	ignoreFilePath(filePath) {
 		filePath = makeRelativeFilePath(filePath);
 
-		const { ignorePatterns } = this._reportConfiguration;
+		const { ignorePatterns } = this.#reportConfiguration;
 
 		for (const ignorePattern of ignorePatterns ?? []) {
 			if (minimatch(filePath, ignorePattern)) {
@@ -157,7 +160,7 @@ class ReportConfiguration {
 	}
 
 	toJSON() {
-		return this._reportConfiguration;
+		return this.#reportConfiguration;
 	}
 }
 
