@@ -3,6 +3,16 @@ const { ReportBuilder } = require('../helpers/report-builder.cjs');
 const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
 
 class WebdriverIO extends WDIOReporter {
+	#baseReportPath;
+	#logger;
+	#report;
+	#reportConfigurationPath;
+	#suiteStartTime;
+	#testFiles;
+	#testStartTimes;
+	#totalDuration;
+	#verbose;
+
 	constructor(options) {
 		super({
 			...options,
@@ -16,24 +26,24 @@ class WebdriverIO extends WDIOReporter {
 			location: (msg, loc) => console.log(`[D2L Reporter] ${msg}: ${loc}`)
 		};
 
-		this._baseReportPath = options.reportPath || './d2l-test-report.json';
-		this._reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
-		this._verbose = options.verbose || false;
-		this._logger = logger;
-		this._report = null;
-		this._testStartTimes = new Map();
-		this._testFiles = new Map();
-		this._suiteStartTime = null;
-		this._totalDuration = 0;
+		this.#baseReportPath = options.reportPath || './d2l-test-report.json';
+		this.#reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
+		this.#verbose = options.verbose || false;
+		this.#logger = logger;
+		this.#report = null;
+		this.#testStartTimes = new Map();
+		this.#testFiles = new Map();
+		this.#suiteStartTime = null;
+		this.#totalDuration = 0;
 	}
 
-	_getTestId(test) {
+	#getTestId(test) {
 		const file = test.file || test.parent || 'unknown';
 		const fullName = test.fullTitle || test.title || 'unknown-test';
 		return `${file}[${fullName}]`;
 	}
 
-	_getPlatformName() {
+	#getPlatformName() {
 		const capabilities = this.runnerStat?.capabilities;
 		if (!capabilities) return null;
 
@@ -41,8 +51,8 @@ class WebdriverIO extends WDIOReporter {
 		return platformName ? platformName.toLowerCase().trim() : null;
 	}
 
-	_makeTestName(test) {
-		const platform = this._getPlatformName();
+	#makeTestName(test) {
+		const platform = this.#getPlatformName();
 		let testName = (test.fullTitle || test.title || 'unknown-test');
 
 		testName = testName.split('.').map(part => escapeSpecialCharacters(part.trim())).join(' > ');
@@ -54,51 +64,51 @@ class WebdriverIO extends WDIOReporter {
 		const cid = runner.cid;
 
 		const path = require('path');
-		const dir = path.dirname(this._baseReportPath);
-		const ext = path.extname(this._baseReportPath);
-		const base = path.basename(this._baseReportPath, ext);
+		const dir = path.dirname(this.#baseReportPath);
+		const ext = path.extname(this.#baseReportPath);
+		const base = path.basename(this.#baseReportPath, ext);
 		const workerReportPath = path.join(dir, `${base}-${cid}${ext}`);
 
 		try {
-			this._report = new ReportBuilder('webdriverio', this._logger, {
+			this.#report = new ReportBuilder('webdriverio', this.#logger, {
 				reportPath: workerReportPath,
-				reportConfigurationPath: this._reportConfigurationPath,
-				verbose: this._verbose
+				reportConfigurationPath: this.#reportConfigurationPath,
+				verbose: this.#verbose
 			});
 			console.log('[D2L Reporter] Initialized successfully');
 		} catch (error) {
 			console.error('[D2L Reporter] Failed to initialize:', error.message);
-			this._report = null;
+			this.#report = null;
 			return;
 		}
 
-		this._suiteStartTime = new Date().toISOString();
+		this.#suiteStartTime = new Date().toISOString();
 
-		this._report
+		this.#report
 			.getSummary()
 			.addContext()
-			.setStarted(this._suiteStartTime);
+			.setStarted(this.#suiteStartTime);
 
 		console.log(`[D2L Reporter] Test run started (worker ${cid})`);
 	}
 
 	onTestStart(test) {
-		if (!this._report) return;
+		if (!this.#report) return;
 
 		const filePath = test.file || this.runnerStat?.specs?.[0] || 'unknown';
 
-		if (filePath !== 'unknown' && this._report.ignoreFilePath(filePath)) {
+		if (filePath !== 'unknown' && this.#report.ignoreFilePath(filePath)) {
 			return;
 		}
 
-		const testId = this._getTestId(test);
+		const testId = this.#getTestId(test);
 		const startTime = new Date().toISOString();
 
-		this._testStartTimes.set(testId, startTime);
-		this._testFiles.set(testId, filePath);
+		this.#testStartTimes.set(testId, startTime);
+		this.#testFiles.set(testId, filePath);
 
-		const testName = this._makeTestName(test);
-		const detail = this._report.getDetail(testId);
+		const testName = this.#makeTestName(test);
+		const detail = this.#report.getDetail(testId);
 		detail
 			.setName(testName)
 			.setLocationFile(filePath)
@@ -110,26 +120,26 @@ class WebdriverIO extends WDIOReporter {
 	}
 
 	onTestEnd(test) {
-		if (!this._report) return;
+		if (!this.#report) return;
 
-		const testId = this._getTestId(test);
-		let filePath = this._testFiles.get(testId);
+		const testId = this.#getTestId(test);
+		let filePath = this.#testFiles.get(testId);
 
 		if (!filePath) {
 			filePath = test.file || this.runnerStat?.specs?.[0] || 'unknown';
-			this._testFiles.set(testId, filePath);
+			this.#testFiles.set(testId, filePath);
 		}
 
-		if (filePath !== 'unknown' && this._report.ignoreFilePath(filePath)) {
+		if (filePath !== 'unknown' && this.#report.ignoreFilePath(filePath)) {
 			return;
 		}
 
-		const detail = this._report.getDetail(testId);
+		const detail = this.#report.getDetail(testId);
 
-		if (!this._testStartTimes.has(testId)) {
-			const testName = this._makeTestName(test);
+		if (!this.#testStartTimes.has(testId)) {
+			const testName = this.#makeTestName(test);
 			const startTime = new Date().toISOString();
-			this._testStartTimes.set(testId, startTime);
+			this.#testStartTimes.set(testId, startTime);
 
 			detail
 				.setName(testName)
@@ -145,7 +155,7 @@ class WebdriverIO extends WDIOReporter {
 			detail.setPassed();
 			if (test.duration) {
 				detail.addDuration(test.duration);
-				this._totalDuration += test.duration;
+				this.#totalDuration += test.duration;
 			}
 		} else if (test.state === 'skipped' || test.state === 'pending') {
 			detail.setSkipped();
@@ -154,36 +164,36 @@ class WebdriverIO extends WDIOReporter {
 			detail.setFailed();
 			if (test.duration) {
 				detail.addDuration(test.duration);
-				this._totalDuration += test.duration;
+				this.#totalDuration += test.duration;
 			}
 		}
 	}
 
 	onTestRetry(test) {
-		if (!this._report) return;
+		if (!this.#report) return;
 
-		const testId = this._getTestId(test);
-		const filePath = this._testFiles.get(testId) || test.file || this.runnerStat?.specs?.[0] || 'unknown';
+		const testId = this.#getTestId(test);
+		const filePath = this.#testFiles.get(testId) || test.file || this.runnerStat?.specs?.[0] || 'unknown';
 
-		if (filePath !== 'unknown' && this._report.ignoreFilePath(filePath)) {
+		if (filePath !== 'unknown' && this.#report.ignoreFilePath(filePath)) {
 			return;
 		}
-		const detail = this._report.getDetail(testId);
+		const detail = this.#report.getDetail(testId);
 
 		detail.incrementRetries();
 
 		if (test.duration) {
 			detail.addDuration(test.duration);
-			this._totalDuration += test.duration;
+			this.#totalDuration += test.duration;
 		}
 	}
 
 	onRunnerEnd(runner) {
-		if (!this._report) return;
+		if (!this.#report) return;
 
-		const summary = this._report.getSummary();
+		const summary = this.#report.getSummary();
 
-		summary.setDurationTotal(this._totalDuration);
+		summary.setDurationTotal(this.#totalDuration);
 
 		const stats = runner.failures > 0 ? 'failed' : 'passed';
 		if (stats === 'passed') {
@@ -192,7 +202,7 @@ class WebdriverIO extends WDIOReporter {
 			summary.setFailed();
 		}
 
-		this._report
+		this.#report
 			.finalize()
 			.save();
 

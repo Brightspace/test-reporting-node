@@ -32,57 +32,60 @@ const makeDetailId = (file, name) => {
 };
 
 class TestReportingMochaReporter extends Spec {
+	#logger;
+	#report;
+
 	constructor(runner, options) {
 		super(runner, options);
 
 		const { stats } = runner;
 		const { reporterOptions = {} } = options;
 
-		this._logger = new MochaLogger();
+		this.#logger = new MochaLogger();
 
 		try {
-			const report = new ReportBuilder('mocha', this._logger, reporterOptions);
+			const report = new ReportBuilder('mocha', this.#logger, reporterOptions);
 
-			this._report = report;
+			this.#report = report;
 		} catch ({ message }) {
-			this._logger.error('Failed to initialize D2L test report builder, report will not be generated');
-			this._logger.error(message);
+			this.#logger.error('Failed to initialize D2L test report builder, report will not be generated');
+			this.#logger.error(message);
 
 			return;
 		}
 
 		runner
-			.once(EVENT_RUN_BEGIN, () => this._onRunBegin(stats))
-			.on(EVENT_TEST_PENDING, test => this._onTestPending(test))
-			.on(EVENT_TEST_BEGIN, test => this._onTestBegin(test))
-			.on(EVENT_TEST_END, test => this._onTestEnd(test))
-			.on(EVENT_TEST_FAIL, test => this._onTestFail(test))
-			.on(EVENT_TEST_RETRY, test => this._onTestRetry(test))
-			.once(EVENT_RUN_END, () => this._onRunEnd(stats));
+			.once(EVENT_RUN_BEGIN, () => this.#onRunBegin(stats))
+			.on(EVENT_TEST_PENDING, test => this.#onTestPending(test))
+			.on(EVENT_TEST_BEGIN, test => this.#onTestBegin(test))
+			.on(EVENT_TEST_END, test => this.#onTestEnd(test))
+			.on(EVENT_TEST_FAIL, test => this.#onTestFail(test))
+			.on(EVENT_TEST_RETRY, test => this.#onTestRetry(test))
+			.once(EVENT_RUN_END, () => this.#onRunEnd(stats));
 	}
 
-	_onRunBegin(stats) {
-		this._report
+	#onRunBegin(stats) {
+		this.#report
 			.getSummary()
 			.addContext()
 			.setStarted(stats.start.toISOString());
 	}
 
-	_onTestPending(test) {
-		this._onTestBegin(test);
+	#onTestPending(test) {
+		this.#onTestBegin(test);
 	}
 
-	_onTestBegin(test) {
+	#onTestBegin(test) {
 		const { file, _timeout } = test;
 
-		if (this._report.ignoreFilePath(file)) {
+		if (this.#report.ignoreFilePath(file)) {
 			return;
 		}
 
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
 
-		this._report
+		this.#report
 			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
@@ -90,10 +93,10 @@ class TestReportingMochaReporter extends Spec {
 			.setTimeout(_timeout); // using internal property, not ideal
 	}
 
-	_onTestRetry(test) {
+	#onTestRetry(test) {
 		const { file } = test;
 
-		if (this._report.ignoreFilePath(file)) {
+		if (this.#report.ignoreFilePath(file)) {
 			return;
 		}
 
@@ -101,23 +104,23 @@ class TestReportingMochaReporter extends Spec {
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
 
-		this._report
+		this.#report
 			.getDetail(id)
 			.incrementRetries()
 			.addDuration(duration);
 	}
 
-	_onTestEnd(test) {
+	#onTestEnd(test) {
 		const { file, _timeout } = test;
 
-		if (this._report.ignoreFilePath(file)) {
+		if (this.#report.ignoreFilePath(file)) {
 			return;
 		}
 
 		const { duration, state } = test;
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
-		const detail = this._report
+		const detail = this.#report
 			.getDetail(id)
 			.setTimeout(_timeout, { override: true });
 
@@ -137,7 +140,7 @@ class TestReportingMochaReporter extends Spec {
 		}
 	}
 
-	_onTestFail(test) {
+	#onTestFail(test) {
 		if (test.type !== 'hook') {
 			return;
 		}
@@ -150,13 +153,13 @@ class TestReportingMochaReporter extends Spec {
 
 		const { file, _timeout } = affectedTest;
 
-		if (!file || this._report.ignoreFilePath(file)) {
+		if (!file || this.#report.ignoreFilePath(file)) {
 			return;
 		}
 
 		const name = makeDetailName(affectedTest);
 		const id = makeDetailId(file, name);
-		const detail = this._report.getDetail(id);
+		const detail = this.#report.getDetail(id);
 
 		if (!detail.getStatus()) {
 			detail
@@ -169,9 +172,9 @@ class TestReportingMochaReporter extends Spec {
 		}
 	}
 
-	_onRunEnd(stats) {
+	#onRunEnd(stats) {
 		const { duration, failures } = stats;
-		const summary = this._report
+		const summary = this.#report
 			.getSummary()
 			.setDurationTotal(duration);
 
@@ -181,7 +184,7 @@ class TestReportingMochaReporter extends Spec {
 			summary.setFailed();
 		}
 
-		this._report
+		this.#report
 			.finalize()
 			.save();
 	}

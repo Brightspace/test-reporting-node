@@ -417,6 +417,10 @@ const upgradeReport = (report) => {
 };
 
 class Report {
+	#report;
+	#reportPath;
+	#reportVersionOriginal;
+
 	constructor(path, { context, lmsInfo, overrideContext = false } = {}) {
 		let report;
 
@@ -446,7 +450,7 @@ class Report {
 
 		validateReport(report, `report (v${reportVersionOriginal})`);
 
-		this._reportVersionOriginal = reportVersionOriginal;
+		this.#reportVersionOriginal = reportVersionOriginal;
 
 		if (reportVersionOriginal < 2) {
 			report = upgradeReportToV2(report);
@@ -462,34 +466,34 @@ class Report {
 			throw new Error(`Unsupported report version specified: ${reportVersionOriginal}`);
 		}
 
-		this._report = report;
-		this._reportPath = makeRelativeFilePath(path);
+		this.#report = report;
+		this.#reportPath = makeRelativeFilePath(path);
 	}
 
 	getPath() {
-		return this._reportPath;
+		return this.#reportPath;
 	}
 
 	getId() {
-		return this._report.id;
+		return this.#report.id;
 	}
 
 	getVersionOriginal() {
-		return this._reportVersionOriginal;
+		return this.#reportVersionOriginal;
 	}
 
 	getVersion() {
-		return this._report.version;
+		return this.#report.version;
 	}
 
 	getContext() {
-		const { summary: { github, git } } = this._report;
+		const { summary: { github, git } } = this.#report;
 
 		return { github, git };
 	}
 
 	toJSON() {
-		return this._report;
+		return this.#report;
 	}
 }
 
