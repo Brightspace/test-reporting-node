@@ -47,7 +47,29 @@ const validateReportV3ContextAjv = ajv.getSchema('/test-reporting/schemas/report
 const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
 const validateReportV2Ajv = ajv.getSchema('/test-reporting/schemas/report/v2.json');
 const validateReportV3Ajv = ajv.getSchema('/test-reporting/schemas/report/v3.json');
-const formatErrorAjv = ajv.errorsText;
+
+const decodeInstancePathAjv = (instancePath = '') => {
+	if (!instancePath) {
+		return '';
+	}
+
+	return instancePath
+		.replace(/\//g, '.')
+		.replace(/~1/g, '/')
+		.replace(/~0/g, '~');
+};
+
+const formatErrorAjv = (errors, options = {}) => {
+	const { dataVar = 'data' } = options;
+	const messages = [...new Set((errors ?? []).map(({ instancePath, message }) => {
+		const decodedPath = decodeInstancePathAjv(instancePath);
+
+		return `[${dataVar}]${decodedPath}: ${message}`;
+	}))];
+
+	return messages.sort().reverse().join('\n');
+};
+
 const { properties: latestReportSchemaProperties } = latestReportSchema;
 const { version: { const: latestReportVersion } } = latestReportSchemaProperties;
 const { details: { items: { properties: { browser: { enum: latestSupportedBrowsers } } } } } = latestReportSchemaProperties;

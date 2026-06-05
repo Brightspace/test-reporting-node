@@ -6,7 +6,14 @@ import { SESSION_STATUS } from '@web/test-runner-core';
 const { yellow, red, cyan, bold } = chalk;
 
 class WebTestRunnerLogger {
-	info(message) { console.log(`\n${message}\n`); }
+	info(message) {
+		const lines = `${message}`.split(/\r?\n/u);
+
+		for (const line of lines) {
+			console.log(`\n${line}\n`);
+		}
+	}
+
 	warning(message) { this.info(yellow(bold(message))); }
 	error(message) { this.info(red(bold(message))); }
 	location(message, location) { this.info(`${message}: ${cyan(bold(location))}`); }
@@ -24,11 +31,6 @@ const makeDetailId = (sessionId, file, name) => {
 	return `${sessionId}/${file}/${name}`;
 };
 
-const nullReporter = {
-	start() {},
-	stop() {}
-};
-
 export function reporter(options = {}) {
 	let overallStarted;
 	let testConfig;
@@ -42,7 +44,12 @@ export function reporter(options = {}) {
 		logger.error('Failed to initialize D2L test report builder, report will not be generated');
 		logger.error(message);
 
-		return nullReporter;
+		return {
+			start() {},
+			stop() {
+				logger.error('D2L test report was not generated due to initialization failure');
+			}
+		};
 	}
 
 	const summary = report

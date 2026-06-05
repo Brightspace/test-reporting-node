@@ -4,11 +4,20 @@
   "$ref": "#/$defs/taxonomyObject",
   "type": "object",
   "unevaluatedProperties": false,
+  "errorMessage": {
+    "type": "should be an object",
+    "unevaluatedProperties": "should only include supported report configuration properties"
+  },
   "properties": {
     "ignorePatterns": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
+      "errorMessage": {
+        "type": "should be an array of ignore patterns",
+        "minItems": "should contain at least one ignore pattern",
+        "uniqueItems": "should not contain duplicate ignore patterns"
+      },
       "items": {
         "$ref": "#/$defs/nonEmptyUnpaddedString"
       }
@@ -17,11 +26,24 @@
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
+      "errorMessage": {
+        "type": "should be an array of override objects",
+        "minItems": "should contain at least one override",
+        "uniqueItems": "should not contain duplicate overrides"
+      },
       "items": {
         "type": "object",
         "unevaluatedProperties": false,
         "minProperties": 2,
         "$ref": "#/$defs/taxonomyObject",
+        "errorMessage": {
+          "type": "should be an object",
+          "minProperties": "should include pattern and at least one taxonomy override",
+          "required": {
+            "pattern": "should include pattern and at least one taxonomy override"
+          },
+          "unevaluatedProperties": "should only include supported override properties"
+        },
         "properties": {
           "pattern": {
             "$ref": "#/$defs/nonEmptyUnpaddedString"
@@ -35,6 +57,9 @@
   },
   "allOf": [
     {
+      "errorMessage": {
+        "if": "should include type in each override when top-level type is null"
+      },
       "if": {
         "properties": {
           "type": {
@@ -53,6 +78,11 @@
                   "$ref": "#/$defs/taxonomyObject/properties/type"
                 }
               },
+              "errorMessage": {
+                "required": {
+                  "type": "should include type in each override when top-level type is null"
+                }
+              },
               "required": [
                 "type"
               ]
@@ -62,6 +92,9 @@
       }
     },
     {
+      "errorMessage": {
+        "if": "should include tool in each override when top-level tool is null"
+      },
       "if": {
         "properties": {
           "tool": {
@@ -80,6 +113,11 @@
                   "$ref": "#/$defs/taxonomyObject/properties/tool"
                 }
               },
+              "errorMessage": {
+                "required": {
+                  "tool": "should include tool in each override when top-level tool is null"
+                }
+              },
               "required": [
                 "tool"
               ]
@@ -89,6 +127,9 @@
       }
     },
     {
+      "errorMessage": {
+        "if": "should include experience in each override when top-level experience is null"
+      },
       "if": {
         "properties": {
           "experience": {
@@ -107,6 +148,11 @@
                   "$ref": "#/$defs/taxonomyObject/properties/experience"
                 }
               },
+              "errorMessage": {
+                "required": {
+                  "experience": "should include experience in each override when top-level experience is null"
+                }
+              },
               "required": [
                 "experience"
               ]
@@ -116,6 +162,9 @@
       }
     },
     {
+      "errorMessage": {
+        "if": "should include overrides when all taxonomy properties are null"
+      },
       "if": {
         "properties": {
           "type": {
@@ -130,6 +179,11 @@
         }
       },
       "then": {
+        "errorMessage": {
+          "required": {
+            "overrides": "should include overrides when all taxonomy properties are null"
+          }
+        },
         "required": [
           "overrides"
         ]
@@ -140,7 +194,12 @@
     "nonEmptyUnpaddedString": {
       "type": "string",
       "minLength": 1,
-      "pattern": "^(?!\\s).+(?<!\\s)$"
+      "pattern": "^(?!\\s).+(?<!\\s)$",
+      "errorMessage": {
+        "type": "should be a string",
+        "minLength": "should be non-empty without leading or trailing whitespace",
+        "pattern": "should be non-empty without leading or trailing whitespace"
+      }
     },
     "taxonomyObject": {
       "type": "object",

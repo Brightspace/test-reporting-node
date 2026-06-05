@@ -90,30 +90,28 @@ describe('report configuration', () => {
 				expect(warningMessages().some(msg => msg.includes('**/special.test.js') && msg.includes('\'experience\''))).to.be.true;
 			});
 
-			it('drops override with only pattern', () => {
-				const config = loadConfig({
+			it('throws for override with only pattern after experience removed', () => {
+				expect(() => loadConfig({
 					type: 'integration',
 					tool: 'Test Reporting',
 					overrides: [{
 						pattern: '**/special.test.js',
 						experience: 'Special Experience'
 					}]
-				});
-
-				expect(config.toJSON()).to.not.have.property('overrides');
+				})).to.throw(/report configuration/);
 			});
 
-			it('warns when override dropped', () => {
-				loadConfig({
+			it('warns before throwing when experience stripped leaves empty override', () => {
+				expect(() => loadConfig({
 					type: 'integration',
 					tool: 'Test Reporting',
 					overrides: [{
 						pattern: '**/special.test.js',
 						experience: 'Special Experience'
 					}]
-				});
+				})).to.throw();
 
-				expect(warningMessages().some(msg => msg.includes('**/special.test.js') && msg.includes('will be dropped'))).to.be.true;
+				expect(warningMessages().some(msg => msg.includes('**/special.test.js') && msg.includes('\'experience\''))).to.be.true;
 			});
 		});
 

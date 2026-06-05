@@ -30,12 +30,6 @@ const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
 				logger.warning(`Report configuration override for pattern '${override.pattern}' has field 'experience' which is no longer supported and will be ignored`);
 			}
 
-			if (Object.keys(overrideRest).length < 2) {
-				logger.warning(`Report configuration override for pattern '${override.pattern}' has no remaining fields after upgrade and will be dropped`);
-
-				continue;
-			}
-
 			upgradedOverrides.push(overrideRest);
 		}
 

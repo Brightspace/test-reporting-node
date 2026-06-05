@@ -9,7 +9,14 @@ const { ReportBuilder } = require('../helpers/report-builder.cjs');
 const { cyan, red, yellow } = colors;
 
 class PlaywrightLogger {
-	info(message) { console.log(`\n${message}\n`); }
+	info(message) {
+		const lines = `${message}`.split(/\r?\n/u);
+
+		for (const line of lines) {
+			console.log(`\n${line}\n`);
+		}
+	}
+
 	warning(message) { this.info(yellow(message)); }
 	error(message) { this.info(red(message)); }
 	location(message, location) { this.info(`${message}: ${cyan(location)}`); }
@@ -59,6 +66,7 @@ export default class Reporter {
 		} catch ({ message }) {
 			this.#logger.error('Failed to initialize D2L test report builder, report will not be generated');
 			this.#logger.error(message);
+			this.#report = null;
 
 			return;
 		}
@@ -135,6 +143,10 @@ export default class Reporter {
 
 	onExit() {
 		if (!this.#report || !this.#hasTests) {
+			if (this.#hasTests && !this.#report) {
+				this.#logger.error('D2L test report was not generated due to initialization failure');
+			}
+
 			return;
 		}
 
