@@ -20,7 +20,13 @@ class WebdriverIO extends WDIOReporter {
 		});
 
 		const logger = {
-			info: (msg) => console.log(`[D2L Reporter] ${msg}`),
+			info: (msg) => {
+				const lines = `${msg}`.split(/\r?\n/u);
+
+				for (const line of lines) {
+					console.log(`[D2L Reporter] ${line}`);
+				}
+			},
 			warning: (msg) => console.warn(`[D2L Reporter] ${msg}`),
 			error: (msg) => console.error(`[D2L Reporter] ${msg}`),
 			location: (msg, loc) => console.log(`[D2L Reporter] ${msg}: ${loc}`)
@@ -189,7 +195,11 @@ class WebdriverIO extends WDIOReporter {
 	}
 
 	onRunnerEnd(runner) {
-		if (!this.#report) return;
+		if (!this.#report) {
+			this.#logger.error('D2L test report was not generated due to initialization failure');
+
+			return;
+		}
 
 		const summary = this.#report.getSummary();
 

@@ -14,7 +14,14 @@ const {
 } = constants;
 
 class MochaLogger {
-	info(message) { consoleLog(`  ${message}`); }
+	info(message) {
+		const lines = `${message}`.split(/\r?\n/u);
+
+		for (const line of lines) {
+			consoleLog(`  ${line}`);
+		}
+	}
+
 	warning(message) { this.info(color('bright yellow', message)); }
 	error(message) { this.info(color('fail', message)); }
 	location(message, location) { this.info(`${message}: ${color('pending', location)}`); }
@@ -48,8 +55,13 @@ class TestReportingMochaReporter extends Spec {
 
 			this.#report = report;
 		} catch ({ message }) {
-			this.#logger.error('Failed to initialize D2L test report builder, report will not be generated');
+			this.#logger.error('\nFailed to initialize D2L test report builder, report will not be generated\n');
 			this.#logger.error(message);
+
+			runner.once(
+				EVENT_RUN_END,
+				() => this.#logger.error('\nD2L test report was not generated due to initialization failure')
+			);
 
 			return;
 		}
