@@ -2,11 +2,11 @@
   "tool": "Test Tooling",
   "overrides": [
     {
-      "pattern": "./test/unit/**",
+      "pattern": "test/unit/**",
       "type": "unit"
     },
     {
-      "pattern": "./test/integration/**",
+      "pattern": "test/integration/**",
       "type": "integration"
     }
   ]
