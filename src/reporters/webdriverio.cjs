@@ -1,6 +1,7 @@
 const WDIOReporter = require('@wdio/reporter').default;
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
 const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
+const { getNowISOString } = require('../helpers/system.cjs');
 
 class WebdriverIO extends WDIOReporter {
 	#baseReportPath;
@@ -88,7 +89,7 @@ class WebdriverIO extends WDIOReporter {
 			return;
 		}
 
-		this.#suiteStartTime = new Date().toISOString();
+		this.#suiteStartTime = getNowISOString();
 
 		this.#report
 			.getSummary()
@@ -108,7 +109,7 @@ class WebdriverIO extends WDIOReporter {
 		}
 
 		const testId = this.#getTestId(test);
-		const startTime = new Date().toISOString();
+		const startTime = getNowISOString();
 
 		this.#testStartTimes.set(testId, startTime);
 		this.#testFiles.set(testId, filePath);
@@ -144,7 +145,7 @@ class WebdriverIO extends WDIOReporter {
 
 		if (!this.#testStartTimes.has(testId)) {
 			const testName = this.#makeTestName(test);
-			const startTime = new Date().toISOString();
+			const startTime = getNowISOString();
 			this.#testStartTimes.set(testId, startTime);
 
 			detail

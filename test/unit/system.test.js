@@ -1,4 +1,4 @@
-import { getOperatingSystemType, makeRelativeFilePath } from '../../src/helpers/system.cjs';
+import { getNow, getNowISOString, getOperatingSystemType, makeRelativeFilePath } from '../../src/helpers/system.cjs';
 import { createSandbox } from 'sinon';
 import { expect } from 'chai';
 import os from 'node:os';
@@ -48,6 +48,20 @@ describe('system', () => {
 			const fileUrl = new URL(`file://${process.cwd().replace(/\\/g, '/')}/src/file.js`).href;
 
 			expect(makeRelativeFilePath(fileUrl)).to.eq('src/file.js');
+		});
+	});
+
+	describe('now', () => {
+		const fakeNow = 1234567890;
+
+		beforeEach(() => sandbox.useFakeTimers(fakeNow));
+
+		it('date', () => {
+			expect(getNow().getTime()).to.be.greaterThan(fakeNow);
+		});
+
+		it('iso string', () => {
+			expect(Date.parse(getNowISOString())).to.be.greaterThan(fakeNow);
 		});
 	});
 });

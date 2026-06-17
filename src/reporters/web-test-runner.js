@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { escapeSpecialCharacters } from '../helpers/strings.cjs';
 import { ReportBuilder } from '../helpers/report-builder.cjs';
+import { getNow, getNowISOString } from '../helpers/system.cjs';
 import { SESSION_STATUS } from '@web/test-runner-core';
 
 const { yellow, red, cyan, bold } = chalk;
@@ -58,7 +59,7 @@ export function reporter(options = {}) {
 
 	const collectTests = (session, prefix, tests) => {
 		const { id: sessionId, browser: { name: browserName }, testFile } = session;
-		const started = sessionStarts.get(sessionId) ?? (new Date()).toISOString();
+		const started = sessionStarts.get(sessionId) ?? getNowISOString();
 
 		if (report.ignoreFilePath(testFile)) {
 			return;
@@ -149,7 +150,7 @@ export function reporter(options = {}) {
 			}
 
 			const started = new Date(overallStarted);
-			const ended = new Date();
+			const ended = getNow();
 			const duration = Math.abs(ended - started);
 
 			summary.setDurationTotal(duration);
@@ -166,14 +167,14 @@ export function reporter(options = {}) {
 					case SESSION_STATUS.SCHEDULED:
 					case SESSION_STATUS.INITIALIZING:
 					case SESSION_STATUS.TEST_STARTED:
-						sessionStarts.set(id, (new Date()).toISOString());
+						sessionStarts.set(id, getNowISOString());
 
 						break;
 					case SESSION_STATUS.TEST_FINISHED:
 					case SESSION_STATUS.FINISHED:
 					default:
 						if (!sessionStarts.has(id)) {
-							sessionStarts.set(id, (new Date()).toISOString());
+							sessionStarts.set(id, getNowISOString());
 						}
 
 						break;
