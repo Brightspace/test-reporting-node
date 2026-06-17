@@ -53,7 +53,8 @@ report.getSummary().setStarted(time).setPassed();
 > for actual hook names and parameters.
 
 ```js
-const { ReportBuilder } = require('d2l-test-reporting/helpers/report-builder.cjs');
+const { ReportBuilder } = require('../helpers/report-builder.cjs');
+const { getNowISOString } = require('../helpers/system.cjs');
 
 class CustomReporter {
   constructor(options = {}) {
@@ -83,7 +84,7 @@ class CustomReporter {
     this._report.getDetail(testId)
       .setName(test.name)
       .setLocationFile(test.file)
-      .setStarted(new Date().toISOString())
+      .setStarted(getNowISOString())
       .setTimeout(test.timeout);
   }
 
@@ -225,7 +226,9 @@ report.finalize().save();
 * Call `finalize()` before `save()`
 * Check `ignoreFilePath()` before processing each test
 * Use a consistent test ID format throughout
-* Use ISO 8601 timestamps: `new Date().toISOString()`
+* Use `getNowISOString()` from `helpers/system.cjs` for ISO 8601 timestamps so
+  reports are unaffected by anything in user tests that mutates time
+  (e.g. `sinon.useFakeTimers`)
 * Wrap `new ReportBuilder()` in try-catch
 
 ## See Also

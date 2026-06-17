@@ -3,6 +3,18 @@ const { relative, sep: platformSeparator } = require('node:path');
 const { join } = require('node:path/posix');
 const { fileURLToPath } = require('node:url');
 
+// Captured at module load so reporter timestamps survive sinon.useFakeTimers,
+// which reassigns globalThis.Date but does not mutate the original constructor
+const RealDate = Date;
+
+const getNow = () => {
+	return new RealDate();
+};
+
+const getNowISOString = () => {
+	return new RealDate().toISOString();
+};
+
 const getOperatingSystemType = () => {
 	switch (os.type()) {
 		case 'Linux':
@@ -27,4 +39,9 @@ const makeRelativeFilePath = (filePath) => {
 	return join(...pathParts);
 };
 
-module.exports = { getOperatingSystemType, makeRelativeFilePath };
+module.exports = {
+	getNow,
+	getNowISOString,
+	getOperatingSystemType,
+	makeRelativeFilePath
+};

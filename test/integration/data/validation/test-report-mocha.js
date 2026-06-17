@@ -5,7 +5,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'mocha',
-		count: { passed: 9, failed: 6, skipped: 2, flaky: 2 }
+		count: { passed: 10, failed: 7, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: 'custom timeout > suite level timeout',
@@ -21,6 +21,20 @@ export const testReportLatestPartial = {
 		configuration: { timeout: 10000 },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
+	}, {
+		name: 'fake timers > passed',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/mocha/fake-timers.test.js' },
+		configuration: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'fake timers > failed',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/mocha/fake-timers.test.js' },
+		configuration: { timeout: 2000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 3
 	}, {
 		name: 'hook failures > before all failure > test with before all failure',
 		status: 'failed',

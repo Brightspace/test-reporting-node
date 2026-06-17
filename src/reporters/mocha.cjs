@@ -1,6 +1,7 @@
 const { reporters: { Base, Spec }, Runner: { constants } } = require('mocha');
 const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
+const { getNowISOString } = require('../helpers/system.cjs');
 
 const { consoleLog, color } = Base;
 const {
@@ -101,7 +102,7 @@ class TestReportingMochaReporter extends Spec {
 			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
-			.setStarted((new Date()).toISOString())
+			.setStarted(getNowISOString())
 			.setTimeout(_timeout); // using internal property, not ideal
 	}
 
@@ -177,7 +178,7 @@ class TestReportingMochaReporter extends Spec {
 			detail
 				.setName(name)
 				.setLocationFile(file)
-				.setStarted((new Date()).toISOString())
+				.setStarted(getNowISOString())
 				.setTimeout(_timeout)
 				.addDuration(0)
 				.setFailed();
