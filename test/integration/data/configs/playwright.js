@@ -34,7 +34,6 @@ export default defineConfig({
 		dependencies: ['setup']
 	}, {
 		name: 'firefox',
-		testMatch: 'reporter-2.test.js',
 		use: deviceTypeFirefox,
 		dependencies: ['setup'],
 		metadata: {
