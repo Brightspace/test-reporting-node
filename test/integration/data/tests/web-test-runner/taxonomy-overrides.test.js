@@ -2,7 +2,7 @@ const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-describe('reporter 1', () => {
+describe('taxonomy overrides', () => {
 	before(async() => { await delay(250); });
 
 	beforeEach(async() => { await delay(250); });
@@ -12,8 +12,6 @@ describe('reporter 1', () => {
 	it.skip('skipped', () => {});
 
 	it('failed', () => { throw new Error('fail'); });
-
-	it(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
 
 	afterEach(async() => { await delay(250); });
 

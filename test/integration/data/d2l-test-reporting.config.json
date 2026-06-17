@@ -6,7 +6,7 @@
     "**/tests/playwright/reporter-3.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
-    "**/tests/web-test-runner/reporter-3.test.js"
+    "**/tests/web-test-runner/ignored.test.js"
   ],
   "overrides": [
     {
@@ -28,12 +28,14 @@
       "type": "visual diff"
     },
     {
-      "pattern": "**/tests/web-test-runner/reporter-1.test.js",
+      "pattern": "**/tests/web-test-runner/statuses.test.js",
+      "type": "ui",
       "tool": "WebTestRunner 1 Test Reporting"
     },
     {
-      "pattern": "**/tests/web-test-runner/reporter-2.test.js",
-      "type": "accessibility"
+      "pattern": "**/tests/web-test-runner/hook-failures.test.js",
+      "type": "ui",
+      "tool": "WebTestRunner Hook Failures Test Reporting"
     },
     {
       "pattern": "**/tests/webdriverio/reporter-1.test.js",
