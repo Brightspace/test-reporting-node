@@ -201,6 +201,23 @@ describe('report configuration', () => {
 			});
 		});
 
+		it('normalizes leading ./', () => {
+			const config = loadConfig({
+				type: 'integration',
+				tool: 'Default Tool',
+				overrides: [{
+					pattern: './test/**/*.test.js',
+					type: 'UI',
+					tool: 'Special Tool'
+				}]
+			});
+
+			expect(config.getTaxonomy('test/special.test.js')).to.deep.equal({
+				type: 'ui',
+				tool: 'Special Tool'
+			});
+		});
+
 		it('omits experience', () => {
 			const config = loadConfig({
 				type: 'integration',
@@ -251,6 +268,16 @@ describe('report configuration', () => {
 			});
 
 			expect(config.ignoreFilePath('test/example.test.js')).to.be.false;
+		});
+
+		it('normalizes leading ./', () => {
+			const config = loadConfig({
+				type: 'integration',
+				tool: 'Test Reporting',
+				ignorePatterns: ['./test/ignored/**']
+			});
+
+			expect(config.ignoreFilePath('test/ignored/example.test.js')).to.be.true;
 		});
 	});
 });

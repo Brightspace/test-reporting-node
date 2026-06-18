@@ -2,7 +2,7 @@
   "type": "integration",
   "tool": "Test Reporting",
   "ignorePatterns": [
-    "**/tests/mocha/ignored.test.js",
+    "./test/integration/data/tests/mocha/ignored.test.js",
     "**/tests/playwright/ignored.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
@@ -15,7 +15,7 @@
       "tool": "Mocha 1 Test Reporting"
     },
     {
-      "pattern": "**/tests/mocha/hook-failures.test.js",
+      "pattern": "./test/integration/data/tests/mocha/hook-failures.test.js",
       "type": "ui",
       "tool": "Mocha Hook Failures Test Reporting"
     },
