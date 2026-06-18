@@ -160,19 +160,17 @@ class WebdriverIO extends WDIOReporter {
 
 		if (test.state === 'passed') {
 			detail.setPassed();
-			if (test.duration) {
-				detail.addDuration(test.duration);
-				this.#totalDuration += test.duration;
-			}
+			const duration = test.duration ?? 0;
+			detail.addDuration(duration);
+			this.#totalDuration += duration;
 		} else if (test.state === 'skipped' || test.state === 'pending') {
 			detail.setSkipped();
 			detail.setDurationFinal(0).setDurationTotal(0);
 		} else {
 			detail.setFailed();
-			if (test.duration) {
-				detail.addDuration(test.duration);
-				this.#totalDuration += test.duration;
-			}
+			const duration = test.duration ?? 0;
+			detail.addDuration(duration);
+			this.#totalDuration += duration;
 		}
 	}
 
@@ -195,12 +193,55 @@ class WebdriverIO extends WDIOReporter {
 		}
 	}
 
+	#recordHookFailures() {
+		if (!this.#report) return;
+
+		const fallbackFile = this.runnerStat?.specs?.[0] ?? 'unknown';
+
+		for (const suite of Object.values(this.suites ?? {})) {
+			const suiteFile = suite.file ?? fallbackFile;
+
+			if (suiteFile === 'unknown' || this.#report.ignoreFilePath(suiteFile)) {
+				continue;
+			}
+
+			const beforeHookFailed = (suite.hooks ?? []).some(hook =>
+				hook.state === 'failed' && /\bbefore (all|each)\b/.test(hook.title ?? '')
+			);
+
+			if (!beforeHookFailed) {
+				continue;
+			}
+
+			for (const test of suite.tests ?? []) {
+				const testForId = test.parent ? test : { ...test, parent: suite.title };
+				const testId = this.#getTestId(testForId);
+				const detail = this.#report.getDetail(testId);
+
+				if (detail.getStatus()) {
+					continue;
+				}
+
+				const testName = this.#makeTestName(test);
+
+				detail
+					.setName(testName)
+					.setLocationFile(suiteFile)
+					.setStarted(getNowISOString())
+					.addDuration(0)
+					.setFailed();
+			}
+		}
+	}
+
 	onRunnerEnd(runner) {
 		if (!this.#report) {
 			this.#logger.error('D2L test report was not generated due to initialization failure');
 
 			return;
 		}
+
+		this.#recordHookFailures();
 
 		const summary = this.#report.getSummary();
 

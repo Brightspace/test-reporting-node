@@ -3,9 +3,7 @@ const { mergeReports } = require('../../../../src/helpers/merge-reports.cjs');
 
 exports.config = {
 	specs: [
-		join(__dirname, '../tests/webdriverio/reporter-1.test.js'),
-		join(__dirname, '../tests/webdriverio/reporter-2.test.js'),
-		join(__dirname, '../tests/webdriverio/reporter-3.test.js')
+		join(__dirname, '../tests/webdriverio/*.test.js')
 	],
 	maxInstances: 2,
 	capabilities: [{
