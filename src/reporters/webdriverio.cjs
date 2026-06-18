@@ -154,12 +154,18 @@ class WebdriverIO extends WDIOReporter {
 		const frame = this.#getActiveSuite();
 
 		if (frame && !frame.ignored) {
-			const failedBeforeHook = (suite.hooks ?? []).some(hook =>
+			const failedBeforeHooks = (suite.hooks ?? []).filter(hook =>
 				hook.state === 'failed' && isBeforeHook(hook.title)
 			);
 
-			if (failedBeforeHook) {
-				for (const test of suite.tests ?? []) {
+			if (failedBeforeHooks.length !== 0) {
+				const tests = suite.tests?.length ? suite.tests : failedBeforeHooks
+					.filter(hook => hook.currentTest)
+					.map(hook => ({
+						fullTitle: `${suite.fullTitle}.${hook.currentTest}`
+					}));
+
+				for (const test of tests) {
 					const fullTitle = test.fullTitle ?? `${suite.fullTitle}.${test.title}`;
 					const detail = this.#report.getDetail(makeDetailId(frame.file, fullTitle));
 
