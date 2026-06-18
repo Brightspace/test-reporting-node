@@ -31,12 +31,16 @@ const makeTestName = (test) => {
 		.join(' > ');
 };
 
-const getBrowser = (project) => {
+const getBrowser = (project, logger) => {
 	const { name, use: { browserName, defaultBrowserType } = {} } = project;
 	const browser = (browserName ?? defaultBrowserType ?? name)?.trim().toLowerCase();
 
 	if (ReportBuilder.SupportedBrowsers.includes(browser)) {
 		return browser;
+	}
+
+	if (browser) {
+		logger.warning(`Unsupported browser '${browser}', omitting from test report detail`);
 	}
 
 	return null;
@@ -106,7 +110,7 @@ export default class Reporter {
 			detail.incrementRetries();
 		}
 
-		const browser = getBrowser(project);
+		const browser = getBrowser(project, this.#logger);
 
 		if (browser) {
 			detail.setBrowser(browser);
