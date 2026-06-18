@@ -3,7 +3,7 @@
   "tool": "Test Reporting",
   "ignorePatterns": [
     "**/tests/mocha/ignored.test.js",
-    "**/tests/playwright/reporter-3.test.js",
+    "**/tests/playwright/ignored.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
     "**/tests/web-test-runner/ignored.test.js"
@@ -20,12 +20,14 @@
       "tool": "Mocha Hook Failures Test Reporting"
     },
     {
-      "pattern": "**/tests/playwright/reporter-1.test.js",
+      "pattern": "**/tests/playwright/statuses.test.js",
+      "type": "ui",
       "tool": "Playwright 1 Test Reporting"
     },
     {
-      "pattern": "**/tests/playwright/reporter-2.test.js",
-      "type": "visual diff"
+      "pattern": "**/tests/playwright/hook-failures.test.js",
+      "type": "ui",
+      "tool": "Playwright Hook Failures Test Reporting"
     },
     {
       "pattern": "**/tests/web-test-runner/statuses.test.js",
