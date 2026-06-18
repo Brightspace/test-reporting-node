@@ -12,6 +12,8 @@ const defaultLogger = {
 	warning: (message) => console.warn(message)
 };
 
+const normalizePattern = (pattern) => pattern.replace(/^(?:\.\/)+/, '');
+
 const upgradeReportConfigurationV1ToV2 = (configuration, logger) => {
 	const { experience, overrides, ...rest } = configuration;
 	const upgraded = { ...rest };
@@ -114,7 +116,7 @@ class ReportConfiguration {
 				tool: overriddenTool
 			} = override;
 
-			if (minimatch(filePath, pattern)) {
+			if (minimatch(filePath, normalizePattern(pattern))) {
 				metadata.type = overriddenType?.toLowerCase();
 				metadata.tool = overriddenTool;
 
@@ -145,7 +147,7 @@ class ReportConfiguration {
 		const { ignorePatterns } = this.#reportConfiguration;
 
 		for (const ignorePattern of ignorePatterns ?? []) {
-			if (minimatch(filePath, ignorePattern)) {
+			if (minimatch(filePath, normalizePattern(ignorePattern))) {
 				return true;
 			}
 		}
