@@ -4,7 +4,7 @@ const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-test.describe('reporter 1', () => {
+test.describe('statuses', () => {
 	test.beforeAll(async() => { await delay(250); });
 
 	test.beforeEach(async() => { await delay(250); });
@@ -58,6 +58,4 @@ test.describe('reporter 1', () => {
 
 		throw new Error('fail');
 	});
-
-	test(' special/characters "(\n\r\t\b\f)" ', async() => { await delay(); });
 });
