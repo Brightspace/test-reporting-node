@@ -32,6 +32,20 @@ const makeDetailId = (sessionId, file, name) => {
 	return `${sessionId}/${file}/${name}`;
 };
 
+const getBrowser = (browserName, logger) => {
+	const browser = browserName?.trim().toLowerCase();
+
+	if (ReportBuilder.SupportedBrowsers.includes(browser)) {
+		return browser;
+	}
+
+	if (browser) {
+		logger.warning(`Unsupported browser '${browser}', omitting from test report detail`);
+	}
+
+	return null;
+};
+
 export function reporter(options = {}) {
 	let overallStarted;
 	let testConfig;
@@ -65,7 +79,7 @@ export function reporter(options = {}) {
 			return;
 		}
 
-		const browser = browserName.toLowerCase();
+		const browser = getBrowser(browserName, logger);
 		const { testsFinishTimeout } = testConfig;
 
 		for (const test of tests) {
@@ -77,8 +91,11 @@ export function reporter(options = {}) {
 				.setName(testName)
 				.setLocationFile(testFile)
 				.setStarted(started)
-				.setBrowser(browser)
 				.setTimeout(testsFinishTimeout);
+
+			if (browser) {
+				detail.setBrowser(browser);
+			}
 
 			if (passed) {
 				detail.setPassed();
