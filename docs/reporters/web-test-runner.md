@@ -61,5 +61,12 @@ export default {
 };
 ```
 
+> [!NOTE]
+> `@web/test-runner` does not report per-test retries or source line and column
+> information, so each detail records `0` retries and only the file path under
+> `location`. The configured global `testsFinishTimeout` value is used for the
+> timeout rather than a per-test timeout. Browsers not supported by the report
+> schema are omitted from the detail.
+
 <!-- links -->
 [official documentation for `@web/test-runner`]: https://modern-web.dev/docs/test-runner/reporters/overview/
