@@ -1,18 +1,44 @@
+const { basename, dirname, extname, join } = require('node:path');
 const WDIOReporter = require('@wdio/reporter').default;
 const { ReportBuilder } = require('../helpers/report-builder.cjs');
 const { escapeSpecialCharacters } = require('../helpers/strings.cjs');
 const { getNowISOString } = require('../helpers/system.cjs');
 
+const makeDetailId = (file, fullTitle) => {
+	return `${file}[${fullTitle}]`;
+};
+
+const isBeforeHook = (title) => {
+	return /\bbefore (all|each)\b/.test(title ?? '');
+};
+
+class WebdriverIOLogger {
+	info(message) {
+		const lines = `${message}`.split(/\r?\n/u);
+
+		for (const line of lines) {
+			console.log(`[D2L Reporter] ${line}`);
+		}
+	}
+
+	warning(message) {
+		console.warn(`[D2L Reporter] ${message}`);
+	}
+
+	error(message) {
+		console.error(`[D2L Reporter] ${message}`);
+	}
+
+	location(message, location) {
+		this.info(`[D2L Reporter] ${message}: ${location}`);
+	}
+}
+
 class WebdriverIO extends WDIOReporter {
-	#baseReportPath;
 	#logger;
+	#options;
 	#report;
-	#reportConfigurationPath;
-	#suiteStartTime;
-	#testFiles;
-	#testStartTimes;
-	#totalDuration;
-	#verbose;
+	#suiteStack;
 
 	constructor(options) {
 		super({
@@ -20,218 +46,189 @@ class WebdriverIO extends WDIOReporter {
 			stdout: false
 		});
 
-		const logger = {
-			info: (msg) => {
-				const lines = `${msg}`.split(/\r?\n/u);
-
-				for (const line of lines) {
-					console.log(`[D2L Reporter] ${line}`);
-				}
-			},
-			warning: (msg) => console.warn(`[D2L Reporter] ${msg}`),
-			error: (msg) => console.error(`[D2L Reporter] ${msg}`),
-			location: (msg, loc) => console.log(`[D2L Reporter] ${msg}: ${loc}`)
+		this.#logger = new WebdriverIOLogger();
+		this.#options = {
+			reportPath: options.reportPath ?? './d2l-test-report.json',
+			reportConfigurationPath: options.reportConfigurationPath ?? './d2l-test-reporting.config.json',
+			verbose: options.verbose ?? false
 		};
-
-		this.#baseReportPath = options.reportPath || './d2l-test-report.json';
-		this.#reportConfigurationPath = options.reportConfigurationPath || './d2l-test-reporting.config.json';
-		this.#verbose = options.verbose || false;
-		this.#logger = logger;
 		this.#report = null;
-		this.#testStartTimes = new Map();
-		this.#testFiles = new Map();
-		this.#suiteStartTime = null;
-		this.#totalDuration = 0;
+		this.#suiteStack = [];
 	}
 
-	#getTestId(test) {
-		const file = test.file || test.parent || 'unknown';
-		const fullName = test.fullTitle || test.title || 'unknown-test';
-		return `${file}[${fullName}]`;
+	#getActiveSuite() {
+		return this.#suiteStack[this.#suiteStack.length - 1] ?? null;
 	}
 
 	#getPlatformName() {
 		const capabilities = this.runnerStat?.capabilities;
-		if (!capabilities) return null;
 
-		const platformName = capabilities.platformName || capabilities['appium:platformName'] || capabilities.platform;
+		if (!capabilities) {
+			return null;
+		}
+
+		const platformName = capabilities.platformName ?? capabilities['appium:platformName'] ?? capabilities.platform;
+
 		return platformName ? platformName.toLowerCase().trim() : null;
 	}
 
-	#makeTestName(test) {
+	#makeTestName(fullTitle) {
 		const platform = this.#getPlatformName();
-		let testName = (test.fullTitle || test.title || 'unknown-test');
+		const name = fullTitle
+			.split('.')
+			.map(part => escapeSpecialCharacters(part.trim()))
+			.join(' > ');
 
-		testName = testName.split('.').map(part => escapeSpecialCharacters(part.trim())).join(' > ');
-
-		return platform ? `[${platform}] > ${testName}` : testName;
+		return platform ? `[${platform}] > ${name}` : name;
 	}
 
-	onRunnerStart(runner) {
-		const cid = runner.cid;
-
-		const path = require('path');
-		const dir = path.dirname(this.#baseReportPath);
-		const ext = path.extname(this.#baseReportPath);
-		const base = path.basename(this.#baseReportPath, ext);
-		const workerReportPath = path.join(dir, `${base}-${cid}${ext}`);
-
-		try {
-			this.#report = new ReportBuilder('webdriverio', this.#logger, {
-				reportPath: workerReportPath,
-				reportConfigurationPath: this.#reportConfigurationPath,
-				verbose: this.#verbose
-			});
-			console.log('[D2L Reporter] Initialized successfully');
-		} catch (error) {
-			console.error('[D2L Reporter] Failed to initialize:', error.message);
-			this.#report = null;
-			return;
-		}
-
-		this.#suiteStartTime = getNowISOString();
-
-		this.#report
-			.getSummary()
-			.addContext()
-			.setStarted(this.#suiteStartTime);
-
-		console.log(`[D2L Reporter] Test run started (worker ${cid})`);
-	}
-
-	onTestStart(test) {
-		if (!this.#report) return;
-
-		const filePath = test.file || this.runnerStat?.specs?.[0] || 'unknown';
-
-		if (filePath !== 'unknown' && this.#report.ignoreFilePath(filePath)) {
-			return;
-		}
-
-		const testId = this.#getTestId(test);
-		const startTime = getNowISOString();
-
-		this.#testStartTimes.set(testId, startTime);
-		this.#testFiles.set(testId, filePath);
-
-		const testName = this.#makeTestName(test);
-		const detail = this.#report.getDetail(testId);
-		detail
-			.setName(testName)
-			.setLocationFile(filePath)
-			.setStarted(startTime);
+	#openDetail(suite, test) {
+		const id = makeDetailId(suite.file, test.fullTitle);
+		const detail = this.#report
+			.getDetail(id)
+			.setName(this.#makeTestName(test.fullTitle))
+			.setLocationFile(suite.file)
+			.setStarted(getNowISOString());
 
 		if (test.timeout) {
 			detail.setTimeout(test.timeout);
 		}
+
+		return detail;
 	}
 
-	onTestEnd(test) {
-		if (!this.#report) return;
+	#detailFor(test) {
+		const suite = this.#getActiveSuite();
 
-		const testId = this.#getTestId(test);
-		let filePath = this.#testFiles.get(testId);
-
-		if (!filePath) {
-			filePath = test.file || this.runnerStat?.specs?.[0] || 'unknown';
-			this.#testFiles.set(testId, filePath);
+		if (!suite || suite.ignored) {
+			return null;
 		}
 
-		if (filePath !== 'unknown' && this.#report.ignoreFilePath(filePath)) {
+		return this.#report.getDetail(makeDetailId(suite.file, test.fullTitle));
+	}
+
+	onRunnerStart(runner) {
+		const { cid } = runner;
+		const { reportPath, reportConfigurationPath, verbose } = this.#options;
+		const dir = dirname(reportPath);
+		const ext = extname(reportPath);
+		const base = basename(reportPath, ext);
+		const workerReportPath = join(dir, `${base}-${cid}${ext}`);
+
+		try {
+			this.#report = new ReportBuilder('webdriverio', this.#logger, {
+				reportPath: workerReportPath,
+				reportConfigurationPath,
+				verbose
+			});
+		} catch ({ message }) {
+			this.#logger.error('Failed to initialize D2L test report builder, report will not be generated');
+			this.#logger.error(message);
+			this.#report = null;
+
 			return;
 		}
 
-		const detail = this.#report.getDetail(testId);
+		this.#report
+			.getSummary()
+			.addContext()
+			.setStarted(getNowISOString());
+	}
 
-		if (!this.#testStartTimes.has(testId)) {
-			const testName = this.#makeTestName(test);
-			const startTime = getNowISOString();
-			this.#testStartTimes.set(testId, startTime);
+	onSuiteStart(suite) {
+		if (!this.#report) {
+			return;
+		}
 
-			detail
-				.setName(testName)
-				.setLocationFile(filePath)
-				.setStarted(startTime);
+		const file = suite.file ?? this.runnerStat?.specs?.[0];
+		const ignored = !file || this.#report.ignoreFilePath(file);
 
-			if (test.timeout) {
-				detail.setTimeout(test.timeout);
+		this.#suiteStack.push({ file, ignored });
+	}
+
+	onSuiteEnd(suite) {
+		if (!this.#report) {
+			return;
+		}
+
+		const frame = this.#getActiveSuite();
+
+		if (frame && !frame.ignored) {
+			const failedBeforeHooks = (suite.hooks ?? []).filter(hook =>
+				hook.state === 'failed' && isBeforeHook(hook.title)
+			);
+
+			if (failedBeforeHooks.length !== 0) {
+				const tests = suite.tests?.length ? suite.tests : failedBeforeHooks
+					.filter(hook => hook.currentTest)
+					.map(hook => ({
+						fullTitle: `${suite.fullTitle}.${hook.currentTest}`
+					}));
+
+				for (const test of tests) {
+					const fullTitle = test.fullTitle ?? `${suite.fullTitle}.${test.title}`;
+					const detail = this.#report.getDetail(makeDetailId(frame.file, fullTitle));
+
+					if (!detail.getStatus()) {
+						detail
+							.setName(this.#makeTestName(fullTitle))
+							.setLocationFile(frame.file)
+							.setStarted(getNowISOString())
+							.addDuration(0)
+							.setFailed();
+					}
+				}
 			}
 		}
 
+		this.#suiteStack.pop();
+	}
+
+	onTestStart(test) {
+		const suite = this.#getActiveSuite();
+
+		if (!suite || suite.ignored) {
+			return;
+		}
+
+		this.#openDetail(suite, test);
+	}
+
+	onTestEnd(test) {
+		const suite = this.#getActiveSuite();
+
+		if (!suite || suite.ignored) {
+			return;
+		}
+
+		const detail = this.#openDetail(suite, test);
+
 		if (test.state === 'passed') {
-			detail.setPassed();
-			const duration = test.duration ?? 0;
-			detail.addDuration(duration);
-			this.#totalDuration += duration;
+			detail
+				.setPassed()
+				.addDuration(test.duration ?? 0);
 		} else if (test.state === 'skipped' || test.state === 'pending') {
-			detail.setSkipped();
-			detail.setDurationFinal(0).setDurationTotal(0);
+			detail
+				.setSkipped()
+				.setDurationFinal(0)
+				.setDurationTotal(0);
 		} else {
-			detail.setFailed();
-			const duration = test.duration ?? 0;
-			detail.addDuration(duration);
-			this.#totalDuration += duration;
+			detail
+				.setFailed()
+				.addDuration(test.duration ?? 0);
 		}
 	}
 
 	onTestRetry(test) {
-		if (!this.#report) return;
+		const detail = this.#detailFor(test);
 
-		const testId = this.#getTestId(test);
-		const filePath = this.#testFiles.get(testId) || test.file || this.runnerStat?.specs?.[0] || 'unknown';
-
-		if (filePath !== 'unknown' && this.#report.ignoreFilePath(filePath)) {
+		if (!detail) {
 			return;
 		}
-		const detail = this.#report.getDetail(testId);
 
-		detail.incrementRetries();
-
-		if (test.duration) {
-			detail.addDuration(test.duration);
-			this.#totalDuration += test.duration;
-		}
-	}
-
-	#recordHookFailures() {
-		if (!this.#report) return;
-
-		const fallbackFile = this.runnerStat?.specs?.[0] ?? 'unknown';
-
-		for (const suite of Object.values(this.suites ?? {})) {
-			const suiteFile = suite.file ?? fallbackFile;
-
-			if (suiteFile === 'unknown' || this.#report.ignoreFilePath(suiteFile)) {
-				continue;
-			}
-
-			const beforeHookFailed = (suite.hooks ?? []).some(hook =>
-				hook.state === 'failed' && /\bbefore (all|each)\b/.test(hook.title ?? '')
-			);
-
-			if (!beforeHookFailed) {
-				continue;
-			}
-
-			for (const test of suite.tests ?? []) {
-				const testForId = test.parent ? test : { ...test, parent: suite.title };
-				const testId = this.#getTestId(testForId);
-				const detail = this.#report.getDetail(testId);
-
-				if (detail.getStatus()) {
-					continue;
-				}
-
-				const testName = this.#makeTestName(test);
-
-				detail
-					.setName(testName)
-					.setLocationFile(suiteFile)
-					.setStarted(getNowISOString())
-					.addDuration(0)
-					.setFailed();
-			}
-		}
+		detail
+			.incrementRetries()
+			.addDuration(test.duration ?? 0);
 	}
 
 	onRunnerEnd(runner) {
@@ -241,24 +238,19 @@ class WebdriverIO extends WDIOReporter {
 			return;
 		}
 
-		this.#recordHookFailures();
+		const summary = this.#report
+			.getSummary()
+			.setDurationTotal(runner.duration ?? 0);
 
-		const summary = this.#report.getSummary();
-
-		summary.setDurationTotal(this.#totalDuration);
-
-		const stats = runner.failures > 0 ? 'failed' : 'passed';
-		if (stats === 'passed') {
-			summary.setPassed();
-		} else {
+		if (runner.failures > 0) {
 			summary.setFailed();
+		} else {
+			summary.setPassed();
 		}
 
 		this.#report
 			.finalize()
 			.save();
-
-		console.log('[D2L Reporter] Test report saved');
 	}
 }
 

@@ -9,7 +9,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'webdriverio',
-		count: { passed: 10, failed: 5, skipped: 2, flaky: 2 }
+		count: { passed: 10, failed: 7, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: `[${platform}] > taxonomy overrides > passed`,
@@ -66,6 +66,12 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
+		name: `[${platform}] > hook failures > before all failure > test with before all failure`,
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/webdriverio/hook-failures.test.js' },
+		taxonomy: { tool: 'WebdriverIO Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
 		name: `[${platform}] > hook failures > before each failure > test with before each failure`,
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/webdriverio/hook-failures.test.js' },
@@ -80,6 +86,12 @@ export const testReportLatestPartial = {
 	}, {
 		name: `[${platform}] > hook failures > after all failure > test with after all failure`,
 		status: 'passed',
+		location: { file: 'test/integration/data/tests/webdriverio/hook-failures.test.js' },
+		taxonomy: { tool: 'WebdriverIO Hook Failures Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
+		name: `[${platform}] > hook failures > flaky before all > test with flaky before all`,
+		status: 'failed',
 		location: { file: 'test/integration/data/tests/webdriverio/hook-failures.test.js' },
 		taxonomy: { tool: 'WebdriverIO Hook Failures Test Reporting', type: 'ui' },
 		retries: 0
