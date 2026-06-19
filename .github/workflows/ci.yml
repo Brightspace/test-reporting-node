@@ -176,6 +176,18 @@ jobs:
           path: d2l-test-report-webdriverio.json
           archive: false
           if-no-files-found: ignore
+      - name: Upload test report (jest)
+        if: >
+          !cancelled() && (
+            steps.tests.conclusion == 'failure' ||
+            steps.tests.outcome == 'success'
+          )
+        id: upload-jest
+        uses: Brightspace/third-party-actions@actions/upload-artifact
+        with:
+          path: d2l-test-report-jest.json
+          archive: false
+          if-no-files-found: ignore
       - name: Generate test summary
         id: summary
         if: >
@@ -241,7 +253,8 @@ jobs:
               "node": "${{steps.upload-node.outputs.artifact-url}}",
               "playwright": "${{steps.upload-playwright.outputs.artifact-url}}",
               "@web/test-runner": "${{steps.upload-web-test-runner.outputs.artifact-url}}",
-              "webdriverio": "${{steps.upload-webdriverio.outputs.artifact-url}}"
+              "webdriverio": "${{steps.upload-webdriverio.outputs.artifact-url}}",
+              "jest": "${{steps.upload-jest.outputs.artifact-url}}"
             }
       - name: Leave comment
         if: (!cancelled()) && steps.summary.outcome == 'success'

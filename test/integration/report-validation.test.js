@@ -6,6 +6,7 @@ import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { latestReportVersion } from '../../src/helpers/schema.cjs';
 import { Report } from '../../src/helpers/report.cjs';
+import { testReportLatestPartial as testReportLatestPartialJest } from './data/validation/test-report-jest.js';
 import { testReportLatestPartial as testReportLatestPartialMocha } from './data/validation/test-report-mocha.js';
 import { testReportLatestPartial as testReportLatestPartialNodeTest } from './data/validation/test-report-node.js';
 import { testReportLatestPartial as testReportLatestPartialPlaywright } from './data/validation/test-report-playwright.js';
@@ -31,6 +32,11 @@ const testContext = {
 	}
 };
 const reportTests = [{
+	name: 'jest',
+	version: latestReportVersion,
+	path: './d2l-test-report-jest.json',
+	expected: testReportLatestPartialJest
+}, {
 	name: 'mocha',
 	version: latestReportVersion,
 	path: './d2l-test-report-mocha.json',

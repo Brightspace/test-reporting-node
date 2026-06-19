@@ -45,6 +45,7 @@ schema details.
 Each reporter wraps your test framework and emits a D2L test report JSON file
 when the test run completes. The following frameworks are supported.
 
+* [Jest]
 * [Mocha]
 * [Node.js Test Runner]
 * [Playwright]
@@ -131,6 +132,7 @@ refer to the [semantic-release GitHub Action] documentation.
 [GitHub Action]: https://github.com/Brightspace/test-reporting-action
 [#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
 [semantic-release GitHub Action]: https://github.com/BrightspaceUI/actions/tree/main/semantic-release
+[Jest]: ./docs/reporters/jest.md
 [Mocha]: ./docs/reporters/mocha.md
 [Node.js Test Runner]: ./docs/reporters/node.md
 [Playwright]: ./docs/reporters/playwright.md
