@@ -42,5 +42,9 @@ module.exports = {
 };
 ```
 
+> [!NOTE]
+> Mocha does not expose source line and column information, so each test detail
+> records only the file path under `location`.
+
 <!-- links -->
 [official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
