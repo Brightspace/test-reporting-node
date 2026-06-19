@@ -72,6 +72,26 @@ class WebdriverIO extends WDIOReporter {
 		return platformName ? platformName.toLowerCase().trim() : null;
 	}
 
+	#getBrowserName() {
+		const capabilities = this.runnerStat?.capabilities;
+
+		if (!capabilities) {
+			return null;
+		}
+
+		const browser = capabilities.browserName?.toLowerCase().trim();
+
+		if (browser && ReportBuilder.SupportedBrowsers.includes(browser)) {
+			return browser;
+		}
+
+		if (browser) {
+			this.#logger.warning(`Unsupported browser '${browser}', omitting from test report detail`);
+		}
+
+		return null;
+	}
+
 	#makeTestName(fullTitle) {
 		const platform = this.#getPlatformName();
 		const name = fullTitle
@@ -84,11 +104,16 @@ class WebdriverIO extends WDIOReporter {
 
 	#openDetail(suite, test) {
 		const id = makeDetailId(suite.file, test.fullTitle);
+		const browser = this.#getBrowserName();
 		const detail = this.#report
 			.getDetail(id)
 			.setName(this.#makeTestName(test.fullTitle))
 			.setLocationFile(suite.file)
 			.setStarted(getNowISOString());
+
+		if (browser) {
+			detail.setBrowser(browser);
+		}
 
 		if (test.timeout) {
 			detail.setTimeout(test.timeout);
@@ -159,6 +184,7 @@ class WebdriverIO extends WDIOReporter {
 			);
 
 			if (failedBeforeHooks.length !== 0) {
+				const browser = this.#getBrowserName();
 				const tests = suite.tests?.length ? suite.tests : failedBeforeHooks
 					.filter(hook => hook.currentTest)
 					.map(hook => ({
@@ -176,6 +202,10 @@ class WebdriverIO extends WDIOReporter {
 							.setStarted(getNowISOString())
 							.addDuration(0)
 							.setFailed();
+
+						if (browser) {
+							detail.setBrowser(browser);
+						}
 					}
 				}
 			}
