@@ -72,6 +72,9 @@ export default defineConfig({
 });
 ```
 
+> [!NOTE]
+> Browsers not supported by the report schema are omitted from the detail.
+
 <!-- links -->
 [official documentation for Playwright]: https://playwright.dev/docs/test-reporters
 [`merge-reports`]: https://playwright.dev/docs/test-sharding#merge-reports-cli
