@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import checkFilePlugin from 'eslint-plugin-check-file';
 import importPlugin from 'eslint-plugin-import';
 import { includeIgnoreFile } from '@eslint/compat';
+import jestPlugin from 'eslint-plugin-jest';
 import jsonPlugin from 'eslint-plugin-json';
 import mochaPlugin from 'eslint-plugin-mocha';
 import playwrightPlugin from 'eslint-plugin-playwright';
@@ -132,6 +133,20 @@ const webTestRunnerConfigs = addExtensions(
 	],
 	fileExtensions
 );
+const jestConfigs = addExtensions(
+	[
+		...globalConfigs,
+		jestPlugin.configs['flat/recommended'],
+		{
+			rules: {
+				'jest/expect-expect': 'off',
+				'jest/no-disabled-tests': 'off',
+				'jest/valid-title': 'off'
+			}
+		}
+	],
+	fileExtensions
+);
 export default [
 	includeIgnoreFile(gitignorePath),
 	...setDirectoryConfigs(
@@ -140,6 +155,7 @@ export default [
 			'test/unit': testConfigs,
 			'test/integration': testConfigs,
 			'test/integration/data': globalConfigs,
+			'test/integration/data/tests/jest': jestConfigs,
 			'test/integration/data/tests/mocha': mochaConfigs,
 			'test/integration/data/tests/playwright': playwrightConfigs,
 			'test/integration/data/tests/web-test-runner': webTestRunnerConfigs,

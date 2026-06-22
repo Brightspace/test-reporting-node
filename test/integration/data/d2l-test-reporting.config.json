@@ -3,6 +3,7 @@
   "tool": "Test Reporting",
   "ignorePatterns": [
     "./test/integration/data/tests/mocha/ignored.test.js",
+    "./test/integration/data/tests/jest/ignored.test.cjs",
     "**/tests/playwright/ignored.test.js",
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
@@ -20,6 +21,16 @@
       "pattern": "./test/integration/data/tests/mocha/hook-failures.test.js",
       "type": "ui",
       "tool": "Mocha Hook Failures Test Reporting"
+    },
+    {
+      "pattern": "**/tests/jest/statuses.test.cjs",
+      "type": "ui",
+      "tool": "Jest 1 Test Reporting"
+    },
+    {
+      "pattern": "**/tests/jest/hook-failures.test.cjs",
+      "type": "ui",
+      "tool": "Jest Hook Failures Test Reporting"
     },
     {
       "pattern": "**/tests/playwright/statuses.test.js",
