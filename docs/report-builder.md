@@ -3,8 +3,8 @@
 ## When to Use
 
 Use the `ReportBuilder` class when your test framework isn't supported by one of
-the existing reporters ([Mocha Reporter], [Playwright Reporter], [Web Test
-Runner Reporter], [WebdriverIO Reporter]).
+the existing reporters ([Mocha Reporter], [Node.js Test Runner Reporter],
+[Playwright Reporter], [Web Test Runner Reporter], [WebdriverIO Reporter]).
 
 ## Quick Start
 
@@ -239,6 +239,7 @@ report.finalize().save();
 
 <!-- links -->
 [Mocha Reporter]: ./reporters/mocha.md
+[Node.js Test Runner Reporter]: ./reporters/node.md
 [Playwright Reporter]: ./reporters/playwright.md
 [Web Test Runner Reporter]: ./reporters/web-test-runner.md
 [WebdriverIO Reporter]: ./reporters/webdriverio.md

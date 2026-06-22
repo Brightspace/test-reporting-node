@@ -46,6 +46,7 @@ Each reporter wraps your test framework and emits a D2L test report JSON file
 when the test run completes. The following frameworks are supported.
 
 * [Mocha]
+* [Node.js Test Runner]
 * [Playwright]
 * [Web Test Runner]
 * [WebdriverIO]
@@ -131,6 +132,7 @@ refer to the [semantic-release GitHub Action] documentation.
 [#test-reporting]: https://d2l.slack.com/archives/C05MMC7H7EK
 [semantic-release GitHub Action]: https://github.com/BrightspaceUI/actions/tree/main/semantic-release
 [Mocha]: ./docs/reporters/mocha.md
+[Node.js Test Runner]: ./docs/reporters/node.md
 [Playwright]: ./docs/reporters/playwright.md
 [Web Test Runner]: ./docs/reporters/web-test-runner.md
 [WebdriverIO]: ./docs/reporters/webdriverio.md
