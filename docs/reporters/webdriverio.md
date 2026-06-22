@@ -73,7 +73,10 @@ export const config = {
 > [!NOTE]
 > WebdriverIO does not expose source line and column information, so each test
 > detail records only the file path under `location`. Browsers not supported by
-> the report schema are omitted from the detail.
+> the report schema are omitted from the detail. WebdriverIO also does not retry
+> failing hooks, and only `before all` and `before each` hook failures are
+> attributed to the affected test; a failing `after` hook is not recorded as a
+> test failure.
 
 <!-- links -->
 [official documentation for WebdriverIO]: https://webdriver.io/docs/customreporter
