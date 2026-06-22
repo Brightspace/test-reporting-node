@@ -116,79 +116,7 @@ jobs:
           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
           report-path: ./d2l-test-report-validation.json
-      - name: Upload test report (mocha)
-        if: >
-          !cancelled() && (
-            steps.tests.conclusion == 'failure' ||
-            steps.tests.outcome == 'success'
-          )
-        id: upload-mocha
-        uses: Brightspace/third-party-actions@actions/upload-artifact
-        with:
-          path: d2l-test-report-mocha.json
-          archive: false
-          if-no-files-found: ignore
-      - name: Upload test report (node)
-        if: >
-          !cancelled() && (
-            steps.tests.conclusion == 'failure' ||
-            steps.tests.outcome == 'success'
-          )
-        id: upload-node
-        uses: Brightspace/third-party-actions@actions/upload-artifact
-        with:
-          path: d2l-test-report-node.json
-          archive: false
-          if-no-files-found: ignore
-      - name: Upload test report (playwright)
-        if: >
-          !cancelled() && (
-            steps.tests.conclusion == 'failure' ||
-            steps.tests.outcome == 'success'
-          )
-        id: upload-playwright
-        uses: Brightspace/third-party-actions@actions/upload-artifact
-        with:
-          path: d2l-test-report-playwright.json
-          archive: false
-          if-no-files-found: ignore
-      - name: Upload test report (@web/test-runner)
-        if: >
-          !cancelled() && (
-            steps.tests.conclusion == 'failure' ||
-            steps.tests.outcome == 'success'
-          )
-        id: upload-web-test-runner
-        uses: Brightspace/third-party-actions@actions/upload-artifact
-        with:
-          path: d2l-test-report-web-test-runner.json
-          archive: false
-          if-no-files-found: ignore
-      - name: Upload test report (webdriverio)
-        if: >
-          !cancelled() && (
-            steps.tests.conclusion == 'failure' ||
-            steps.tests.outcome == 'success'
-          )
-        id: upload-webdriverio
-        uses: Brightspace/third-party-actions@actions/upload-artifact
-        with:
-          path: d2l-test-report-webdriverio.json
-          archive: false
-          if-no-files-found: ignore
-      - name: Upload test report (jest)
-        if: >
-          !cancelled() && (
-            steps.tests.conclusion == 'failure' ||
-            steps.tests.outcome == 'success'
-          )
-        id: upload-jest
-        uses: Brightspace/third-party-actions@actions/upload-artifact
-        with:
-          path: d2l-test-report-jest.json
-          archive: false
-          if-no-files-found: ignore
-      - name: Generate test summary
+      - name: Upload test reports and generate summary
         id: summary
         if: >
           !cancelled() && (
@@ -199,13 +127,52 @@ jobs:
         with:
           script: |
             const { existsSync } = await import('node:fs');
+            const { join } = await import('node:path');
+            const { pathToFileURL } = await import('node:url');
             const { env } = await import('node:process');
             const {
               COVERAGE_REPORT_URL: coverageReportUrl,
               REPORT_VALIDATION_RESULTS: reportValidationResultsPath,
-              REPORT_ARTIFACT_URLS: reportArtifactUrlsRaw
+              GITHUB_SERVER_URL,
+              GITHUB_REPOSITORY,
+              GITHUB_RUN_ID,
+              GITHUB_WORKSPACE
             } = env;
-            const reportArtifactUrls = JSON.parse(reportArtifactUrlsRaw || '{}');
+            const artifactEntry = join(GITHUB_WORKSPACE, 'node_modules', '@actions', 'artifact', 'lib', 'artifact.js');
+            const { DefaultArtifactClient } = await import(pathToFileURL(artifactEntry).href);
+            const client = new DefaultArtifactClient();
+            const reportFile = (framework) => `d2l-test-report-${framework.replace('@', '').replace('/', '-')}.json`;
+            // Reconstruct per-framework validation results from report details
+            const validationResults = {};
+            if (existsSync(reportValidationResultsPath)) {
+              const reportData = require(reportValidationResultsPath);
+              if (reportData.details && Array.isArray(reportData.details)) {
+                for (const detail of reportData.details) {
+                  const nameParts = detail.name.split(' > ');
+                  if (nameParts.length === 3 && nameParts[0] === 'report validation') {
+                    const framework = nameParts[1];
+                    const check = nameParts[2];
+                    if (['exists', 'schema', 'contents'].includes(check)) {
+                      validationResults[framework] = validationResults[framework] || {
+                        exists: false,
+                        schema: false,
+                        contents: false
+                      };
+                      validationResults[framework][check] = detail.status === 'passed';
+                    }
+                  }
+                }
+              }
+            }
+            // Upload each report up front so summary generation has no async gaps
+            const reportArtifactUrls = {};
+            for (const framework of Object.keys(validationResults)) {
+              const file = reportFile(framework);
+              if (existsSync(file)) {
+                const { id } = await client.uploadArtifact(file, [file], process.cwd(), { skipArchive: true });
+                reportArtifactUrls[framework] = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts/${id}`;
+              }
+            }
             const { summary } = core;
             summary.clear();
             summary.addHeading('Coverage Report', 3);
@@ -216,10 +183,10 @@ jobs:
               summary.addEOL();
             }
             summary.addHeading('Report Validation', 3);
-            if (existsSync(reportValidationResultsPath)) {
-              const validationResults = require(reportValidationResultsPath);
+            if (Object.keys(validationResults).length > 0) {
               for (const [framework, result] of Object.entries(validationResults)) {
                 const { exists, schema, contents } = result;
+                const reportArtifactUrl = reportArtifactUrls[framework];
                 const failed = !exists || !schema || !contents;
                 const headerIcon = failed ? ':red_circle:' : ':green_circle:';
                 const header = `<code>${framework}</code> ${headerIcon}`;
@@ -229,7 +196,6 @@ jobs:
                   const contentsIcon = contents ? ':green_circle:' : ':red_circle:';
                   body += `Schema: ${schema ? '**PASSED**' : '**FAILED**'} ${schemaIcon}\n`;
                   body += `Contents: ${contents ? '**PASSED**' : '**FAILED**'} ${contentsIcon}\n`;
-                  const reportArtifactUrl = reportArtifactUrls[framework];
                   if (reportArtifactUrl) {
                     body += `\n[Report](${reportArtifactUrl})\n`;
                   }
@@ -242,20 +208,12 @@ jobs:
             } else {
               summary.addRaw('No report validation results found :fire:', true);
             }
-            summary.write({ overwrite: true });
-            core.setOutput('report', summary.stringify());
+            const report = summary.stringify();
+            core.setOutput('report', report);
+            await summary.write({ overwrite: true });
         env:
           COVERAGE_REPORT_URL: ${{steps.coverage.outputs.url}}
-          REPORT_VALIDATION_RESULTS: ./report-validation-results.json
-          REPORT_ARTIFACT_URLS: >
-            {
-              "mocha": "${{steps.upload-mocha.outputs.artifact-url}}",
-              "node": "${{steps.upload-node.outputs.artifact-url}}",
-              "playwright": "${{steps.upload-playwright.outputs.artifact-url}}",
-              "@web/test-runner": "${{steps.upload-web-test-runner.outputs.artifact-url}}",
-              "webdriverio": "${{steps.upload-webdriverio.outputs.artifact-url}}",
-              "jest": "${{steps.upload-jest.outputs.artifact-url}}"
-            }
+          REPORT_VALIDATION_RESULTS: ./d2l-test-report-validation.json
       - name: Leave comment
         if: (!cancelled()) && steps.summary.outcome == 'success'
         uses: BrightspaceUI/actions/comment-on-pr@main
