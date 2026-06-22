@@ -5,7 +5,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'node',
-		count: { passed: 8, failed: 9, skipped: 2, flaky: 0 }
+		count: { passed: 8, failed: 11, skipped: 2, flaky: 0 }
 	},
 	details: [{
 		name: 'custom timeout > suite level timeout',
@@ -98,6 +98,12 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Node 1 Test Reporting', type: 'ui' },
 		retries: 0
 	}, {
+		name: 'statuses > flaky',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/node/statuses.test.js' },
+		taxonomy: { tool: 'Node 1 Test Reporting', type: 'ui' },
+		retries: 0
+	}, {
 		name: 'statuses > failed',
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/node/statuses.test.js' },
@@ -112,6 +118,12 @@ export const testReportLatestPartial = {
 	}, {
 		name: 'taxonomy overrides > skipped',
 		status: 'skipped',
+		location: { file: 'test/integration/data/tests/node/taxonomy-overrides.test.js' },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'taxonomy overrides > flaky',
+		status: 'failed',
 		location: { file: 'test/integration/data/tests/node/taxonomy-overrides.test.js' },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0

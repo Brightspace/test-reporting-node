@@ -3,6 +3,8 @@ const delay = (ms = 50) => {
 };
 
 describe('statuses', () => {
+	let count = 0;
+
 	before(async() => { await delay(250); });
 
 	beforeEach(async() => { await delay(250); });
@@ -10,6 +12,18 @@ describe('statuses', () => {
 	it('passed', async() => { await delay(); });
 
 	it.skip('skipped', () => {});
+
+	it('flaky', async() => {
+		if (count < 2) {
+			await delay();
+
+			count++;
+
+			throw new Error('flaky test failure');
+		}
+
+		await delay();
+	});
 
 	it('failed', () => { throw new Error('fail'); });
 
