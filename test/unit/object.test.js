@@ -1,3 +1,4 @@
+import { describe, it } from 'node:test';
 import { expect } from 'chai';
 import { flatten } from '../../src/helpers/object.cjs';
 
