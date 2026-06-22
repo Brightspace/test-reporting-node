@@ -128,6 +128,18 @@ jobs:
           path: d2l-test-report-mocha.json
           archive: false
           if-no-files-found: ignore
+      - name: Upload test report (node)
+        if: >
+          !cancelled() && (
+            steps.tests.conclusion == 'failure' ||
+            steps.tests.outcome == 'success'
+          )
+        id: upload-node
+        uses: Brightspace/third-party-actions@actions/upload-artifact
+        with:
+          path: d2l-test-report-node.json
+          archive: false
+          if-no-files-found: ignore
       - name: Upload test report (playwright)
         if: >
           !cancelled() && (
@@ -226,6 +238,7 @@ jobs:
           REPORT_ARTIFACT_URLS: >
             {
               "mocha": "${{steps.upload-mocha.outputs.artifact-url}}",
+              "node": "${{steps.upload-node.outputs.artifact-url}}",
               "playwright": "${{steps.upload-playwright.outputs.artifact-url}}",
               "@web/test-runner": "${{steps.upload-web-test-runner.outputs.artifact-url}}",
               "webdriverio": "${{steps.upload-webdriverio.outputs.artifact-url}}"

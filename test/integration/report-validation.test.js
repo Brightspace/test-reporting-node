@@ -7,6 +7,7 @@ import { hasContext } from '../../src/helpers/github.cjs';
 import { latestReportVersion } from '../../src/helpers/schema.cjs';
 import { Report } from '../../src/helpers/report.cjs';
 import { testReportLatestPartial as testReportLatestPartialMocha } from './data/validation/test-report-mocha.js';
+import { testReportLatestPartial as testReportLatestPartialNodeTest } from './data/validation/test-report-node.js';
 import { testReportLatestPartial as testReportLatestPartialPlaywright } from './data/validation/test-report-playwright.js';
 import { testReportLatestPartial as testReportLatestPartialWebTestRunner } from './data/validation/test-report-web-test-runner.js';
 import { testReportLatestPartial as testReportLatestPartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
@@ -34,6 +35,11 @@ const reportTests = [{
 	version: latestReportVersion,
 	path: './d2l-test-report-mocha.json',
 	expected: testReportLatestPartialMocha
+}, {
+	name: 'node',
+	version: latestReportVersion,
+	path: './d2l-test-report-node.json',
+	expected: testReportLatestPartialNodeTest
 }, {
 	name: 'playwright',
 	version: latestReportVersion,

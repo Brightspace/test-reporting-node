@@ -7,7 +7,8 @@
     "**/tests/playwright/setup.js",
     "**/tests/playwright/teardown.js",
     "**/tests/web-test-runner/ignored.test.js",
-    "**/tests/webdriverio/ignored.test.js"
+    "**/tests/webdriverio/ignored.test.js",
+    "**/tests/node/ignored.test.js"
   ],
   "overrides": [
     {
@@ -49,6 +50,16 @@
       "pattern": "**/tests/webdriverio/hook-failures.test.js",
       "type": "ui",
       "tool": "WebdriverIO Hook Failures Test Reporting"
+    },
+    {
+      "pattern": "**/tests/node/statuses.test.js",
+      "type": "ui",
+      "tool": "Node 1 Test Reporting"
+    },
+    {
+      "pattern": "**/tests/node/hook-failures.test.js",
+      "type": "ui",
+      "tool": "Node Hook Failures Test Reporting"
     }
   ]
 }
