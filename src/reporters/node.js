@@ -52,16 +52,17 @@ class NodeReporter extends Transform {
 	constructor(options = {}) {
 		super({ writableObjectMode: true });
 
-		const resolvedOptions = { ...options };
+		const resolvedOptions = {
+			reportConfigurationPath: options.reportConfigurationPath,
+			verbose: options.verbose,
+			reportWriter: (reportData) => {
+				this.push(reportData);
+			}
+		};
 		const {
-			D2L_TEST_REPORTING_REPORT_PATH,
 			D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH,
 			D2L_TEST_REPORTING_VERBOSE
 		} = env;
-
-		if (D2L_TEST_REPORTING_REPORT_PATH) {
-			resolvedOptions.reportPath ??= D2L_TEST_REPORTING_REPORT_PATH;
-		}
 
 		if (D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH) {
 			resolvedOptions.reportConfigurationPath ??= D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH;
