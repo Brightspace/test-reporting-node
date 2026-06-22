@@ -44,7 +44,10 @@ module.exports = {
 
 > [!NOTE]
 > Mocha does not expose source line and column information, so each test detail
-> records only the file path under `location`.
+> records only the file path under `location`. Mocha also does not retry failing
+> hooks, so a `before` or `after` hook failure is recorded against the affected
+> test as a single failure with no retries, even when the test is configured
+> with retries.
 
 <!-- links -->
 [official documentation for Mocha]: https://mochajs.org/api/mocha#reporter
