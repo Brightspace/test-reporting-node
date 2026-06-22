@@ -1,5 +1,8 @@
 import { createRequire } from 'node:module';
+import { env } from 'node:process';
 import { Transform } from 'node:stream';
+import { styleText } from 'node:util';
+import yn from 'yn';
 
 const require = createRequire(import.meta.url);
 
@@ -12,20 +15,20 @@ class NodeTestLogger {
 		const lines = `${message}`.split(/\r?\n/u);
 
 		for (const line of lines) {
-			console.log(`[D2L Reporter] ${line}`);
+			console.log(styleText('blue', `\u2139 ${line}`));
 		}
 	}
 
 	warning(message) {
-		console.warn(`[D2L Reporter] ${message}`);
+		console.warn(styleText('yellow', `\u26A0 ${message}`));
 	}
 
 	error(message) {
-		console.error(`[D2L Reporter] ${message}`);
+		console.error(styleText('red', `\u2716 ${message}`));
 	}
 
 	location(message, location) {
-		this.info(`${message}: ${location}`);
+		console.log(styleText('blue', `\u2139 ${message}: ${location}`));
 	}
 }
 
@@ -37,61 +40,51 @@ const makeDetailId = (file, name) => {
 	return `${file}[${name}]`;
 };
 
-const getOptionsFromEnvironment = () => {
-	const {
-		D2L_TEST_REPORTING_REPORT_PATH,
-		D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH,
-		D2L_TEST_REPORTING_VERBOSE
-	} = process.env;
-	const options = {};
-
-	if (D2L_TEST_REPORTING_REPORT_PATH) {
-		options.reportPath = D2L_TEST_REPORTING_REPORT_PATH;
-	}
-
-	if (D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH) {
-		options.reportConfigurationPath = D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH;
-	}
-
-	if (D2L_TEST_REPORTING_VERBOSE) {
-		options.verbose = ['1', 'true', 'yes'].includes(D2L_TEST_REPORTING_VERBOSE.trim().toLowerCase());
-	}
-
-	return options;
-};
-
-class NodeTestReporter extends Transform {
-	#anyFailure;
-	#logger;
-	#nameStacks;
-	#report;
-	#runStarted;
-	#startTimes;
-	#summary;
+class NodeReporter extends Transform {
+	#logger = new NodeTestLogger();
+	#nameStacks = new Map();
+	#startTimes = new Map();
+	#report = null;
+	#summary = null;
+	#runStarted = null;
+	#anyFailure = false;
 
 	constructor(options = {}) {
-		super({ objectMode: true });
+		super({ writableObjectMode: true });
 
-		this.#logger = new NodeTestLogger();
-		this.#nameStacks = new Map();
-		this.#startTimes = new Map();
-		this.#anyFailure = false;
-		this.#report = null;
+		const resolvedOptions = { ...options };
+		const {
+			D2L_TEST_REPORTING_REPORT_PATH,
+			D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH,
+			D2L_TEST_REPORTING_VERBOSE
+		} = env;
+
+		if (D2L_TEST_REPORTING_REPORT_PATH) {
+			resolvedOptions.reportPath ??= D2L_TEST_REPORTING_REPORT_PATH;
+		}
+
+		if (D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH) {
+			resolvedOptions.reportConfigurationPath ??= D2L_TEST_REPORTING_REPORT_CONFIGURATION_PATH;
+		}
+
+		if (D2L_TEST_REPORTING_VERBOSE) {
+			resolvedOptions.verbose ??= yn(D2L_TEST_REPORTING_VERBOSE, { default: false });
+		}
 
 		try {
-			this.#report = new ReportBuilder('node', this.#logger, options);
+			this.#report = new ReportBuilder('node', this.#logger, resolvedOptions);
 		} catch ({ message }) {
 			this.#logger.error('Failed to initialize D2L test report builder, report will not be generated');
 			this.#logger.error(message);
-
-			return;
 		}
 
-		this.#runStarted = getNow();
-		this.#summary = this.#report
-			.getSummary()
-			.addContext()
-			.setStarted(this.#runStarted.toISOString());
+		if (this.#report) {
+			this.#runStarted = getNow();
+			this.#summary = this.#report
+				.getSummary()
+				.addContext()
+				.setStarted(this.#runStarted.toISOString());
+		}
 	}
 
 	#getNameStack(file) {
@@ -184,10 +177,16 @@ class NodeTestReporter extends Transform {
 			return;
 		}
 
-		if (type === 'test:start') {
-			this.#handleStart(data);
-		} else if (type === 'test:pass' || type === 'test:fail') {
-			this.#handleResult(type, data);
+		switch (type) {
+			case 'test:start':
+				this.#handleStart(data);
+
+				break;
+			case 'test:pass':
+			case 'test:fail':
+				this.#handleResult(type, data);
+
+				break;
 		}
 
 		callback();
@@ -208,6 +207,8 @@ class NodeTestReporter extends Transform {
 
 		if (this.#anyFailure) {
 			this.#summary.setFailed();
+
+			process.exitCode = 1;
 		} else {
 			this.#summary.setPassed();
 		}
@@ -220,8 +221,4 @@ class NodeTestReporter extends Transform {
 	}
 }
 
-export const reporter = (options = {}) => {
-	return new NodeTestReporter(options);
-};
-
-export default new NodeTestReporter(getOptionsFromEnvironment());
+export default NodeReporter;
