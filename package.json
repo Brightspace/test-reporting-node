@@ -54,13 +54,14 @@
     "ajv-errors": "^3",
     "ajv-formats": "^3",
     "chalk": "^5",
-    "codeowners": "^5.1.1",
+    "codeowners": "^5",
     "lodash": "^4",
     "minimatch": "^10",
     "mocha": "^11",
     "playwright-core": "^1"
   },
   "devDependencies": {
+    "@actions/artifact": "^6",
     "@eslint/compat": "^2",
     "@playwright/test": "^1",
     "@wdio/cli": "^9",
