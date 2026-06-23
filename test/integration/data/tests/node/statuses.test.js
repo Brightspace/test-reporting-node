@@ -1,17 +1,39 @@
-import { describe, it } from 'node:test';
+import { after, afterEach, before, beforeEach, describe, it } from 'node:test';
 
 const delay = (ms = 50) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 describe('statuses', () => {
+	let count = 0;
+
+	before(async() => { await delay(250); });
+
+	beforeEach(async() => { await delay(250); });
+
 	it('passed', async() => { await delay(); });
 
 	it('skipped', { skip: true }, () => {});
+
+	it('flaky', async() => {
+		if (count < 2) {
+			await delay();
+
+			count++;
+
+			throw new Error('flaky test failure');
+		}
+
+		await delay();
+	});
 
 	it('failed', async() => {
 		await delay();
 
 		throw new Error('fail');
 	});
+
+	afterEach(async() => { await delay(250); });
+
+	after(async() => { await delay(250); });
 });

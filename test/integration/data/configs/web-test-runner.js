@@ -11,13 +11,14 @@ export default {
 			verbose: true
 		})
 	],
-	files: './test/integration/data/tests/web-test-runner/*.test.js',
 	nodeResolve: true,
+	files: './test/integration/data/tests/web-test-runner/*.test.js',
+	browsers: [
+		playwrightLauncher({ product: 'chromium', launchOptions: { args: ['--no-sandbox'] } })
+	],
 	groups: [{
 		name: 'group 1',
-		files: './test/integration/data/tests/web-test-runner/*.test.js',
 		browsers: [
-			playwrightLauncher({ product: 'chromium', launchOptions: { args: ['--no-sandbox'] } }),
 			playwrightLauncher({ product: 'firefox' })
 		]
 	}, {
