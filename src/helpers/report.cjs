@@ -1,8 +1,7 @@
 const schema = require('./schema.cjs');
-const { flatten } = require('./object.cjs');
+const { flatten, omit } = require('./object.cjs');
 const fs = require('node:fs');
 const { makeRelativeFilePath } = require('./system.cjs');
-const { omit } = require('lodash');
 const { resolve } = require('node:path');
 
 const {
