@@ -1,3 +1,4 @@
+import { describe, it } from 'node:test';
 import { existsSync } from 'node:fs';
 import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
