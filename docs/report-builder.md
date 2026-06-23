@@ -234,7 +234,10 @@ report.finalize().save();
 ## See Also
 
 * [Mocha Reporter]
+* [Node.js Test Runner Reporter]
 * [Playwright Reporter]
+* [Web Test Runner Reporter]
+* [WebdriverIO Reporter]
 * [Report Format]
 
 <!-- links -->
