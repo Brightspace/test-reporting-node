@@ -26,4 +26,14 @@ const flatten = (obj) => {
 	return result;
 };
 
-module.exports = { flatten };
+const omit = (object, keys) => {
+	const result = { ...object };
+
+	for (const key of keys) {
+		delete result[key];
+	}
+
+	return result;
+};
+
+module.exports = { flatten, omit };
