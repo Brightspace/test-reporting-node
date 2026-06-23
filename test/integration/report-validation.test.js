@@ -14,6 +14,7 @@ import { testReportLatestPartial as testReportLatestPartialWebTestRunner } from 
 import { testReportLatestPartial as testReportLatestPartialWebdriverIO } from './data/validation/test-report-webdriverio.js';
 
 use(chaiSubset);
+
 const testContext = {
 	github: {
 		organization: 'TestOrganization',

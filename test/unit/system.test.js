@@ -1,38 +1,36 @@
-import { afterEach, before, beforeEach, describe, it } from 'node:test';
+import { afterEach, beforeEach, describe, it, mock } from 'node:test';
 import { getNow, getNowISOString, getOperatingSystemType, makeRelativeFilePath } from '../../src/helpers/system.cjs';
-import { createSandbox } from 'sinon';
 import { expect } from 'chai';
 import os from 'node:os';
 import { join } from 'node:path';
 
 describe('system', () => {
-	let sandbox;
-
-	before(() => sandbox = createSandbox());
-
-	afterEach(() => sandbox.restore());
+	afterEach(() => {
+		mock.reset();
+		mock.timers.reset();
+	});
 
 	describe('os type', () => {
 		it('linux', () => {
-			sandbox.stub(os, 'type').returns('Linux');
+			mock.method(os, 'type', () => 'Linux');
 
 			expect(getOperatingSystemType()).to.eq('linux');
 		});
 
 		it('macos', () => {
-			sandbox.stub(os, 'type').returns('Darwin');
+			mock.method(os, 'type', () => 'Darwin');
 
 			expect(getOperatingSystemType()).to.eq('macos');
 		});
 
 		it('windows', () => {
-			sandbox.stub(os, 'type').returns('Windows_NT');
+			mock.method(os, 'type', () => 'Windows_NT');
 
 			expect(getOperatingSystemType()).to.eq('windows');
 		});
 
 		it('unknown throws', () => {
-			sandbox.stub(os, 'type').returns('FreeBSD');
+			mock.method(os, 'type', () => 'FreeBSD');
 
 			expect(getOperatingSystemType).to.throw('Unknown operating system');
 		});
@@ -55,7 +53,7 @@ describe('system', () => {
 	describe('now', () => {
 		const fakeNow = 1234567890;
 
-		beforeEach(() => sandbox.useFakeTimers(fakeNow));
+		beforeEach(() => mock.timers.enable({ apis: ['Date'], now: fakeNow }));
 
 		it('date', () => {
 			expect(getNow().getTime()).to.be.greaterThan(fakeNow);
