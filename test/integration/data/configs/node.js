@@ -1,6 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { reporter } from '../../../../src/reporters/node.js';
+import NodeReporter from '../../../../src/reporters/node.js';
 import { run } from 'node:test';
 
 const testDirectory = 'test/integration/data/tests/node';
@@ -11,7 +11,7 @@ const files = readdirSync(testDirectory)
 const stream = run({
 	files,
 	concurrency: true
-}).compose(reporter({
+}).compose(new NodeReporter({
 	reportPath: './d2l-test-report-node.json',
 	reportConfigurationPath: './test/integration/data/d2l-test-reporting.config.json',
 	verbose: true

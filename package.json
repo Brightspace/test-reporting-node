@@ -1,6 +1,6 @@
 {
   "name": "d2l-test-reporting",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "description": "Helper package for generating reports for use with the D2L test reporting framework",
   "keywords": [
     "d2l",
@@ -57,7 +57,8 @@
     "codeowners": "^5",
     "minimatch": "^10",
     "mocha": "^11",
-    "playwright-core": "^1"
+    "playwright-core": "^1",
+    "yn": "^5"
   },
   "devDependencies": {
     "@actions/artifact": "^6",
@@ -88,8 +89,7 @@
     "npm-run-all": "^4",
     "playwright": "^1",
     "sinon": "^22",
-    "webdriverio": "^9",
-    "yn": "^5"
+    "webdriverio": "^9"
   },
   "engines": {
     "node": ">=22"
