@@ -31,13 +31,13 @@ variables.
 
 ## Programmatic Usage
 
-For finer control, use the named `reporter` factory with the [`run()`] API and
-compose it onto the test stream.
+For finer control, use the default export with the [`run()`] API and compose an
+instance onto the test stream.
 
 ```js
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { reporter } from 'd2l-test-reporting/reporters/node.js';
+import NodeReporter from 'd2l-test-reporting/reporters/node.js';
 import { run } from 'node:test';
 
 const testDirectory = 'test';
@@ -45,7 +45,7 @@ const files = readdirSync(testDirectory)
   .filter(name => name.endsWith('.test.js'))
   .map(name => join(testDirectory, name));
 
-const stream = run({ files }).compose(reporter());
+const stream = run({ files }).compose(new NodeReporter());
 
 stream.on('data', () => {});
 stream.on('error', () => {});
@@ -53,7 +53,7 @@ stream.on('error', () => {});
 
 ## Inputs
 
-The `reporter` factory accepts the following options. When running through the
+The reporter constructor accepts the following options. When running through the
 CLI, the corresponding environment variable is used instead.
 
 * `reportPath` / `D2L_TEST_REPORTING_REPORT_PATH` (default:
@@ -74,14 +74,14 @@ reference if any values need to be customized.
 ```js
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { reporter } from 'd2l-test-reporting/reporters/node.js';
+import NodeReporter from 'd2l-test-reporting/reporters/node.js';
 import { run } from 'node:test';
 
 const testDirectory = 'test';
 const files = readdirSync(testDirectory)
   .filter(name => name.endsWith('.test.js'))
   .map(name => join(testDirectory, name));
-const stream = run({ files }).compose(reporter({
+const stream = run({ files }).compose(new NodeReporter({
   reportPath: './d2l-test-report.json',
   reportConfigurationPath: './d2l-test-reporting.config.json',
   verbose: true
