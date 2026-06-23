@@ -26,4 +26,60 @@ describe('hook failures', () => {
 
 		it('test with after all failure', async() => { await delay(); });
 	});
+
+	describe('flaky before all', () => {
+		let beforeAllCount = 0;
+
+		before(() => {
+			if (beforeAllCount < 2) {
+				beforeAllCount++;
+
+				throw new Error('flaky before all');
+			}
+		});
+
+		it('test with flaky before all', async() => { await delay(); });
+	});
+
+	describe('flaky before each', () => {
+		let beforeEachCount = 0;
+
+		beforeEach(() => {
+			if (beforeEachCount < 2) {
+				beforeEachCount++;
+
+				throw new Error('flaky before each');
+			}
+		});
+
+		it('test with flaky before each', async() => { await delay(); });
+	});
+
+	describe('flaky after each', () => {
+		let afterEachCount = 0;
+
+		afterEach(() => {
+			if (afterEachCount < 2) {
+				afterEachCount++;
+
+				throw new Error('flaky after each');
+			}
+		});
+
+		it('test with flaky after each', async() => { await delay(); });
+	});
+
+	describe('flaky after all', () => {
+		let afterAllCount = 0;
+
+		after(() => {
+			if (afterAllCount < 2) {
+				afterAllCount++;
+
+				throw new Error('flaky after all');
+			}
+		});
+
+		it('test with flaky after all', async() => { await delay(); });
+	});
 });

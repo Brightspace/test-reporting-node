@@ -19,7 +19,6 @@ export default defineConfig({
 	fullyParallel: true,
 	testDir: '../tests/playwright/',
 	testMatch: '*.test.js',
-	use: deviceTypeChrome,
 	globalSetup: '../tests/playwright/global.setup.js',
 	globalTeardown: '../tests/playwright/global.teardown.js',
 	projects: [{
@@ -31,6 +30,7 @@ export default defineConfig({
 		testMatch: 'teardown.js'
 	}, {
 		name: 'chromium',
+		use: deviceTypeChrome,
 		dependencies: ['setup']
 	}, {
 		name: 'firefox',
