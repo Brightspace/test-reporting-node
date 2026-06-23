@@ -1,5 +1,4 @@
-import { afterEach, before, beforeEach, describe, it } from 'node:test';
-import { createSandbox } from 'sinon';
+import { afterEach, beforeEach, describe, it, mock } from 'node:test';
 import { expect } from 'chai';
 import fs from 'node:fs';
 import { ReportConfiguration } from '../../src/helpers/report-configuration.cjs';
@@ -7,29 +6,26 @@ import { ReportConfiguration } from '../../src/helpers/report-configuration.cjs'
 const configPath = './d2l-test-reporting.config.json';
 
 describe('report configuration', () => {
-	let sandbox;
 	let logger;
-
-	before(() => sandbox = createSandbox());
 
 	beforeEach(() => {
 		logger = {
-			info: sandbox.spy(),
-			warning: sandbox.spy(),
-			error: sandbox.spy(),
-			location: sandbox.spy()
+			info: mock.fn(),
+			warning: mock.fn(),
+			error: mock.fn(),
+			location: mock.fn()
 		};
 	});
 
-	afterEach(() => sandbox.restore());
+	afterEach(() => mock.reset());
 
 	const loadConfig = (config) => {
-		sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(config));
+		mock.method(fs, 'readFileSync', () => JSON.stringify(config));
 
 		return new ReportConfiguration(configPath, logger);
 	};
 
-	const warningMessages = () => logger.warning.getCalls().map(call => call.args[0]);
+	const warningMessages = () => logger.warning.mock.calls.map(call => call.arguments[0]);
 
 	describe('legacy (v1, upgrades to v2)', () => {
 		describe('top-level', () => {
@@ -128,27 +124,27 @@ describe('report configuration', () => {
 			const config = loadConfig(input);
 
 			expect(config.toJSON()).to.deep.equal(input);
-			expect(logger.warning.called).to.be.false;
+			expect(logger.warning.mock.callCount()).to.eq(0);
 		});
 	});
 
 	describe('validation', () => {
 		describe('throws', () => {
 			it('for invalid config', () => {
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify({}));
+				mock.method(fs, 'readFileSync', () => JSON.stringify({}));
 
 				expect(() => new ReportConfiguration(configPath, logger)).to.throw(/report configuration/);
 			});
 
 			it('when unparseable', () => {
-				sandbox.stub(fs, 'readFileSync').returns('not json');
+				mock.method(fs, 'readFileSync', () => 'not json');
 
 				expect(() => new ReportConfiguration(configPath, logger)).to.throw('Unable to read/parse');
 			});
 		});
 
 		it('empty without config file', () => {
-			sandbox.stub(fs, 'readFileSync').throws(new Error('ENOENT'));
+			mock.method(fs, 'readFileSync', () => { throw new Error('ENOENT'); });
 
 			const config = new ReportConfiguration(undefined, logger);
 
@@ -165,12 +161,12 @@ describe('report configuration', () => {
 
 		for (const logger of [null, undefined]) {
 			it(`uses when logger is \`${logger}\``, () => {
-				const warn = sandbox.stub(console, 'warn');
+				const warn = mock.method(console, 'warn', () => {});
 
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(legacyConfig));
+				mock.method(fs, 'readFileSync', () => JSON.stringify(legacyConfig));
 
 				expect(() => new ReportConfiguration(configPath, logger)).to.not.throw();
-				expect(warn.calledWithMatch(/'experience' is no longer supported/)).to.be.true;
+				expect(warn.mock.calls.some(c => /'experience' is no longer supported/.test(c.arguments[0]))).to.be.true;
 			});
 		}
 	});

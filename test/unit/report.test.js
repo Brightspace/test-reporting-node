@@ -1,5 +1,4 @@
-import { afterEach, before, describe, it } from 'node:test';
-import { createSandbox } from 'sinon';
+import { afterEach, describe, it, mock } from 'node:test';
 import { expect } from 'chai';
 import { flatten } from '../../src/helpers/object.cjs';
 import fs from 'node:fs';
@@ -406,18 +405,14 @@ const testReportOldV3ConfigOnly = {
 };
 
 describe('report', () => {
-	let sandbox;
-
-	before(() => sandbox = createSandbox());
-
-	afterEach(() => sandbox.restore());
+	afterEach(() => mock.reset());
 
 	describe(`legacy (v1, upgrades to v${latestReportVersion})`, () => {
 		const testReportCurrentVersion = 1;
 
 		describe('construction', () => {
 			it('don\'t override context', () => {
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1Full));
+				mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1Full));
 
 				let report;
 
@@ -433,7 +428,7 @@ describe('report', () => {
 
 			describe('full report', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1Full));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1Full));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -452,7 +447,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1Full));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1Full));
 
 					const reportOptions = {
 						context: testContextOther
@@ -472,7 +467,7 @@ describe('report', () => {
 
 			describe('no context', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1NoContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1NoContext));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -491,7 +486,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1NoContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1NoContext));
 
 					const reportOptions = {
 						context: testContextOther
@@ -511,7 +506,7 @@ describe('report', () => {
 
 			describe('partial context', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1PartialContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1PartialContext));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -530,7 +525,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV1PartialContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV1PartialContext));
 
 					const reportOptions = {
 						context: testContextOther
@@ -555,7 +550,7 @@ describe('report', () => {
 
 		describe('construction', () => {
 			it('don\'t override context', () => {
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
+				mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2Full));
 
 				let report;
 
@@ -571,7 +566,7 @@ describe('report', () => {
 
 			describe('full report', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2Full));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -590,7 +585,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2Full));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2Full));
 
 					const reportOptions = {
 						context: testContextOther
@@ -610,7 +605,7 @@ describe('report', () => {
 
 			describe('no context', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2NoContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2NoContext));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -629,7 +624,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2NoContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2NoContext));
 
 					const reportOptions = {
 						context: testContextOther
@@ -649,7 +644,7 @@ describe('report', () => {
 
 			describe('partial context', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2PartialContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2PartialContext));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -668,7 +663,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportV2PartialContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportV2PartialContext));
 
 					const reportOptions = {
 						context: testContextOther
@@ -691,7 +686,7 @@ describe('report', () => {
 	describe(`latest (v${latestReportVersion}, no upgrade)`, () => {
 		describe('construction', () => {
 			it('don\'t override context', () => {
-				sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestFull));
+				mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestFull));
 
 				let report;
 
@@ -707,7 +702,7 @@ describe('report', () => {
 
 			describe('full report', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestFull));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestFull));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -726,7 +721,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestFull));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestFull));
 
 					const reportOptions = { context: testContextOther };
 					let report;
@@ -744,7 +739,7 @@ describe('report', () => {
 
 			describe('no context', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestNoContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestNoContext));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -763,7 +758,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestNoContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestNoContext));
 
 					const reportOptions = { context: testContextOther };
 					let report;
@@ -781,7 +776,7 @@ describe('report', () => {
 
 			describe('partial context', () => {
 				it('override context', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestPartialContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestPartialContext));
 
 					const reportOptions = {
 						context: testContextOther,
@@ -800,7 +795,7 @@ describe('report', () => {
 				});
 
 				it('inject context if needed', () => {
-					sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestPartialContext));
+					mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestPartialContext));
 
 					const reportOptions = { context: testContextOther };
 					let report;
@@ -820,7 +815,7 @@ describe('report', () => {
 
 	describe(`legacy (old v3, cleans to v${latestReportVersion})`, () => {
 		it('cleans config to configuration', () => {
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3ConfigOnly));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(testReportOldV3ConfigOnly));
 
 			let report;
 
@@ -833,7 +828,7 @@ describe('report', () => {
 		});
 
 		it('cleans flat taxonomy to nested taxonomy', () => {
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3Full));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(testReportOldV3Full));
 
 			let report;
 
@@ -852,7 +847,7 @@ describe('report', () => {
 		});
 
 		it('strips experience', () => {
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3Full));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(testReportOldV3Full));
 
 			let report;
 
@@ -866,7 +861,7 @@ describe('report', () => {
 		});
 
 		it('cleans all old v3 properties at once', () => {
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportOldV3Full));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(testReportOldV3Full));
 
 			let report;
 
@@ -879,7 +874,7 @@ describe('report', () => {
 		});
 
 		it('preserves already-clean v3 report', () => {
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(testReportLatestFull));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(testReportLatestFull));
 
 			let report;
 
@@ -897,7 +892,7 @@ describe('report', () => {
 			}));
 			const mixedReport = { ...testReportLatestFull, details: mixedDetails };
 
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(mixedReport));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(mixedReport));
 
 			let report;
 
@@ -922,7 +917,7 @@ describe('report', () => {
 			}));
 			const mixedReport = { ...testReportLatestFull, details: mixedDetails };
 
-			sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(mixedReport));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(mixedReport));
 
 			let report;
 

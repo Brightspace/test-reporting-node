@@ -1,8 +1,9 @@
-import { afterEach, before, describe, it } from 'node:test';
+import { afterEach, describe, it } from 'node:test';
 import { getContext, hasContext } from '../../src/helpers/github.cjs';
-import { createSandbox } from 'sinon';
+import { env } from 'node:process';
 import { expect } from 'chai';
 
+const originalEnv = { ...env };
 const validContext = {
 	github: {
 		organization: 'TestOrganization',
@@ -17,22 +18,26 @@ const validContext = {
 	}
 };
 
+const setEnv = (values) => {
+	for (const key of Object.keys(env)) {
+		delete env[key];
+	}
+
+	Object.assign(env, values);
+};
+
 describe('github', () => {
-	let sandbox;
-
-	before(() => sandbox = createSandbox());
-
-	afterEach(() => sandbox.restore());
+	afterEach(() => setEnv(originalEnv));
 
 	describe('has context', () => {
 		it('false outside actions', () => {
-			sandbox.stub(process, 'env').value({});
+			setEnv({});
 
 			expect(hasContext()).to.be.false;
 		});
 
 		it('true in actions', () => {
-			sandbox.stub(process, 'env').value({ 'GITHUB_ACTIONS': '1' });
+			setEnv({ 'GITHUB_ACTIONS': '1' });
 
 			expect(hasContext()).to.be.true;
 		});
@@ -50,13 +55,13 @@ describe('github', () => {
 		};
 
 		it('throws outside actions', () => {
-			sandbox.stub(process, 'env').value({});
+			setEnv({});
 
 			expect(getContext).to.throw('GitHub context unavailable');
 		});
 
 		it('on pull request', () => {
-			sandbox.stub(process, 'env').value({
+			setEnv({
 				...commonEnvironment,
 				'GITHUB_HEAD_REF': 'test/branch'
 			});
@@ -67,7 +72,7 @@ describe('github', () => {
 		});
 
 		it('on branch', () => {
-			sandbox.stub(process, 'env').value({
+			setEnv({
 				...commonEnvironment,
 				'GITHUB_REF': 'test/branch'
 			});
@@ -78,7 +83,7 @@ describe('github', () => {
 		});
 
 		it('strips prefix', () => {
-			sandbox.stub(process, 'env').value({
+			setEnv({
 				...commonEnvironment,
 				'GITHUB_REF': 'refs/heads/test/branch'
 			});
@@ -89,7 +94,7 @@ describe('github', () => {
 		});
 
 		it('strips prefix (case-insensitive)', () => {
-			sandbox.stub(process, 'env').value({
+			setEnv({
 				...commonEnvironment,
 				'GITHUB_REF': 'Refs/Heads/test/branch'
 			});
@@ -100,7 +105,7 @@ describe('github', () => {
 		});
 
 		it('prefers head ref', () => {
-			sandbox.stub(process, 'env').value({
+			setEnv({
 				...commonEnvironment,
 				'GITHUB_HEAD_REF': 'pr/branch',
 				'GITHUB_REF': 'refs/heads/main'

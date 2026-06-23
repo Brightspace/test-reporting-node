@@ -1,16 +1,16 @@
-import { afterEach, before, beforeEach, describe, it } from 'node:test';
+import { afterEach, beforeEach, describe, it, mock } from 'node:test';
 import chaiUuid from 'chai-uuid';
-import { createSandbox, match } from 'sinon';
 import { expect, use } from 'chai';
 import fs from 'node:fs';
 import { latestReportVersion } from '../../src/helpers/schema.cjs';
 import { ReportBuilder } from '../../src/helpers/report-builder.cjs';
 import { Report } from '../../src/helpers/report.cjs';
+
 const noopLogger = {
-	info() { },
-	warning() { },
-	error() { },
-	location() { }
+	info: () => { },
+	warning: () => { },
+	error: () => { },
+	location: () => { }
 };
 const testContext = {
 	github: {
@@ -25,6 +25,7 @@ const testContext = {
 		sha: '0000000000000000000000000000000000000000'
 	}
 };
+
 use(chaiUuid);
 
 const buildValidReport = (options = {}) => {
@@ -55,31 +56,26 @@ const buildValidReport = (options = {}) => {
 	return builder;
 };
 
-const configPathMatcher = match(
-	path => typeof path === 'string' &&
-		path.includes('d2l-test-reporting.config')
-);
+const configPathPredicate = (path) => typeof path === 'string' && path.includes('d2l-test-reporting.config');
 const testConfig = JSON.stringify({
 	type: 'unit',
 	tool: 'Test Reporting'
 });
 
 describe('report builder', () => {
-	let sandbox;
-	let readFileSyncStub;
-
-	before(() => {
-		sandbox = createSandbox();
-	});
-
 	beforeEach(() => {
-		readFileSyncStub = sandbox.stub(fs, 'readFileSync').callThrough();
-		readFileSyncStub
-			.withArgs(configPathMatcher)
-			.returns(testConfig);
+		const originalReadFileSync = fs.readFileSync;
+
+		mock.method(fs, 'readFileSync', (filePath) => {
+			if (configPathPredicate(filePath)) {
+				return testConfig;
+			}
+
+			return originalReadFileSync(filePath);
+		});
 	});
 
-	afterEach(() => sandbox.restore());
+	afterEach(() => mock.reset());
 
 	describe('constructor', () => {
 		it('throws with both output options', () => {
@@ -117,7 +113,7 @@ describe('report builder', () => {
 		it('produces loadable report', () => {
 			const builder = buildValidReport();
 
-			readFileSyncStub.returns(JSON.stringify(builder));
+			mock.method(fs, 'readFileSync', () => JSON.stringify(builder));
 
 			const report = new Report('./test-report.json', { context: testContext });
 
@@ -551,20 +547,19 @@ describe('report builder', () => {
 
 		describe('save', () => {
 			it('writes valid JSON', () => {
-				const spy = sandbox.spy();
+				const spy = mock.fn();
 				const builder = buildValidReport({ reportWriter: spy });
 
 				builder.save();
 
-				expect(spy.calledOnce).to.be.true;
+				expect(spy.mock.callCount()).to.eq(1);
 
-				const reportData = spy.firstCall.args[0];
-
+				const reportData = spy.mock.calls[0].arguments[0];
 				expect(() => JSON.parse(reportData)).to.not.throw();
 			});
 
 			it('logs error on failure', () => {
-				const errorSpy = sandbox.spy();
+				const errorSpy = mock.fn();
 				const logger = { ...noopLogger, error: errorSpy };
 				const builder = new ReportBuilder('mocha', logger, {
 					reportWriter: () => { throw new Error('write failed'); }
@@ -574,8 +569,8 @@ describe('report builder', () => {
 				builder.finalize();
 				builder.save();
 
-				expect(errorSpy.calledOnce).to.be.true;
-				expect(errorSpy.firstCall.args[0]).to.include('Failed to generate');
+				expect(errorSpy.mock.callCount()).to.eq(1);
+				expect(errorSpy.mock.calls[0].arguments[0]).to.include('Failed to generate');
 			});
 		});
 	});
@@ -594,9 +589,7 @@ describe('report builder', () => {
 				ignorePatterns: ['**/ignored/**']
 			});
 
-			readFileSyncStub
-				.withArgs(configPathMatcher)
-				.returns(config);
+			mock.method(fs, 'readFileSync', () => config);
 
 			const builder = new ReportBuilder('mocha', noopLogger, {
 				reportWriter: () => { },
@@ -613,9 +606,7 @@ describe('report builder', () => {
 				ignorePatterns: ['**/ignored/**']
 			});
 
-			readFileSyncStub
-				.withArgs(configPathMatcher)
-				.returns(config);
+			mock.method(fs, 'readFileSync', () => config);
 
 			const builder = new ReportBuilder('mocha', noopLogger, {
 				reportWriter: () => { },
