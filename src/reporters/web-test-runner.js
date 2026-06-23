@@ -1,10 +1,8 @@
-import chalk from 'chalk';
 import { escapeSpecialCharacters } from '../helpers/strings.cjs';
 import { ReportBuilder } from '../helpers/report-builder.cjs';
 import { getNow, getNowISOString } from '../helpers/system.cjs';
 import { SESSION_STATUS } from '@web/test-runner-core';
-
-const { yellow, red, cyan, bold } = chalk;
+import { styleText } from 'node:util';
 
 class WebTestRunnerLogger {
 	info(message) {
@@ -15,9 +13,17 @@ class WebTestRunnerLogger {
 		}
 	}
 
-	warning(message) { this.info(yellow(bold(message))); }
-	error(message) { this.info(red(bold(message))); }
-	location(message, location) { this.info(`${message}: ${cyan(bold(location))}`); }
+	warning(message) {
+		this.info(styleText('yellow', styleText('bold', `${message}`)));
+	}
+
+	error(message) {
+		this.info(styleText('red', styleText('bold', `${message}`)));
+	}
+
+	location(message, location) {
+		this.info(`${message}: ${styleText('cyan', styleText('bold', `${location}`))}`);
+	}
 }
 
 const sanitizeName = (name) => {
