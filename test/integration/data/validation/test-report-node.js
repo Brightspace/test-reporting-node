@@ -5,7 +5,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'node',
-		count: { passed: 8, failed: 11, skipped: 2, flaky: 0 }
+		count: { passed: 9, failed: 12, skipped: 2, flaky: 0 }
 	},
 	details: [{
 		name: 'custom timeout > suite level timeout',
@@ -20,13 +20,25 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
-		name: 'fake timers > passed',
+		name: 'fake timers > sinon > passed',
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/node/fake-timers.test.js' },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
-		name: 'fake timers > failed',
+		name: 'fake timers > sinon > failed',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/node/fake-timers.test.js' },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'fake timers > node > passed',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/node/fake-timers.test.js' },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: 'fake timers > node > failed',
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/node/fake-timers.test.js' },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
