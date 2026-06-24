@@ -5,7 +5,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'playwright',
-		count: { passed: 24, failed: 33, skipped: 21, flaky: 6 }
+		count: { passed: 27, failed: 36, skipped: 21, flaky: 6 }
 	},
 	details: [{
 		name: '[chromium] > hook failures > before each failure > test with before each failure',
@@ -44,12 +44,24 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Playwright Hook Failures Test Reporting', type: 'ui' },
 		retries: 3
 	}, {
-		name: '[chromium] > fake timers > failed',
+		name: '[chromium] > fake timers > sinon > failed',
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
-			line: 25,
-			column: 2
+			line: 27,
+			column: 3
+		},
+		browser: 'chromium',
+		configuration: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 3
+	}, {
+		name: '[chromium] > fake timers > node > failed',
+		status: 'failed',
+		location: {
+			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
+			line: 37,
+			column: 3
 		},
 		browser: 'chromium',
 		configuration: { timeout: 30000 },
@@ -92,12 +104,24 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Playwright Hook Failures Test Reporting', type: 'ui' },
 		retries: 3
 	}, {
-		name: '[chromium] > fake timers > passed',
+		name: '[chromium] > fake timers > sinon > passed',
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
-			line: 23,
-			column: 2
+			line: 25,
+			column: 3
+		},
+		browser: 'chromium',
+		configuration: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: '[chromium] > fake timers > node > passed',
+		status: 'passed',
+		location: {
+			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
+			line: 35,
+			column: 3
 		},
 		browser: 'chromium',
 		configuration: { timeout: 30000 },
@@ -308,12 +332,24 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
-		name: '[firefox] > fake timers > failed',
+		name: '[firefox] > fake timers > sinon > failed',
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
-			line: 25,
-			column: 2
+			line: 27,
+			column: 3
+		},
+		browser: 'firefox',
+		configuration: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 3
+	}, {
+		name: '[firefox] > fake timers > node > failed',
+		status: 'failed',
+		location: {
+			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
+			line: 37,
+			column: 3
 		},
 		browser: 'firefox',
 		configuration: { timeout: 30000 },
@@ -380,12 +416,24 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 3
 	}, {
-		name: '[firefox] > fake timers > passed',
+		name: '[firefox] > fake timers > sinon > passed',
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
-			line: 23,
-			column: 2
+			line: 25,
+			column: 3
+		},
+		browser: 'firefox',
+		configuration: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: '[firefox] > fake timers > node > passed',
+		status: 'passed',
+		location: {
+			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
+			line: 35,
+			column: 3
 		},
 		browser: 'firefox',
 		configuration: { timeout: 30000 },
@@ -644,12 +692,24 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
-		name: '[webkit] > fake timers > passed',
+		name: '[webkit] > fake timers > sinon > passed',
 		status: 'passed',
 		location: {
 			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
-			line: 23,
-			column: 2
+			line: 25,
+			column: 3
+		},
+		browser: 'webkit',
+		configuration: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: '[webkit] > fake timers > node > passed',
+		status: 'passed',
+		location: {
+			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
+			line: 35,
+			column: 3
 		},
 		browser: 'webkit',
 		configuration: { timeout: 30000 },
@@ -704,12 +764,24 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'Playwright 1 Test Reporting', type: 'ui' },
 		retries: 0
 	}, {
-		name: '[webkit] > fake timers > failed',
+		name: '[webkit] > fake timers > sinon > failed',
 		status: 'failed',
 		location: {
 			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
-			line: 25,
-			column: 2
+			line: 27,
+			column: 3
+		},
+		browser: 'webkit',
+		configuration: { timeout: 30000 },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 3
+	}, {
+		name: '[webkit] > fake timers > node > failed',
+		status: 'failed',
+		location: {
+			file: 'test/integration/data/tests/playwright/fake-timers.test.js',
+			line: 37,
+			column: 3
 		},
 		browser: 'webkit',
 		configuration: { timeout: 30000 },

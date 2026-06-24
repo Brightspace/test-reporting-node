@@ -1,4 +1,5 @@
 import { createSandbox } from 'sinon';
+import { mock } from 'node:test';
 
 const realSetTimeout = setTimeout;
 
@@ -9,17 +10,29 @@ const delay = (ms = 50) => {
 const fakeNow = 1234567890;
 
 describe('fake timers', () => {
-	let sandbox;
+	describe('sinon', () => {
+		let sandbox;
 
-	before(() => {
-		sandbox = createSandbox();
+		before(() => {
+			sandbox = createSandbox();
 
-		sandbox.useFakeTimers(fakeNow);
+			sandbox.useFakeTimers(fakeNow);
+		});
+
+		after(() => sandbox.restore());
+
+		it('passed', async() => { await delay(); });
+
+		it('failed', () => { throw new Error('fail'); });
 	});
 
-	after(() => sandbox.restore());
+	describe('node', () => {
+		before(() => mock.timers.enable({ apis: ['Date'], now: fakeNow }));
 
-	it('passed', async() => { await delay(); });
+		after(() => mock.timers.reset());
 
-	it('failed', () => { throw new Error('fail'); });
+		it('passed', async() => { await delay(); });
+
+		it('failed', () => { throw new Error('fail'); });
+	});
 });

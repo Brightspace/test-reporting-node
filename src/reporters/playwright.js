@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module';
 import { colors } from 'playwright-core/lib/utilsBundle';
 import { escapeSpecialCharacters } from '../helpers/strings.cjs';
+import { getNow, getNowISOString } from '../helpers/system.cjs';
 
 const require = createRequire(import.meta.url);
 
@@ -51,6 +52,7 @@ export default class Reporter {
 	#logger;
 	#options;
 	#report;
+	#runStarted;
 
 	constructor(options = {}) {
 		this.#options = options;
@@ -63,6 +65,7 @@ export default class Reporter {
 			return;
 		}
 
+		this.#runStarted = getNow();
 		this.#logger = new PlaywrightLogger();
 
 		try {
@@ -95,13 +98,16 @@ export default class Reporter {
 		const { startTime, retry, status, duration } = result;
 		const project = test.parent.project();
 		const name = makeTestName(test);
+		const started = startTime < this.#runStarted ?
+			getNowISOString() :
+			startTime.toISOString();
 		const detail = this.#report
 			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
 			.setLocationLine(line)
 			.setLocationColumn(column)
-			.setStarted(startTime)
+			.setStarted(started)
 			.setTimeout(Math.round(timeout))
 			.addDuration(Math.round(duration));
 		const isRetry = retry !== 0;
@@ -133,7 +139,7 @@ export default class Reporter {
 		const { startTime, duration, status } = result;
 		const summary = this.#report
 			.getSummary()
-			.setStarted(startTime)
+			.setStarted(startTime.toISOString())
 			.setDurationTotal(Math.round(duration));
 
 		if (status === 'passed') {

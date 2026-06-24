@@ -9,7 +9,7 @@ export const testReportLatestPartial = {
 	summary: {
 		status: 'failed',
 		framework: 'webdriverio',
-		count: { passed: 10, failed: 7, skipped: 2, flaky: 2 }
+		count: { passed: 11, failed: 8, skipped: 2, flaky: 2 }
 	},
 	details: [{
 		name: `[${platform}] > taxonomy overrides > passed`,
@@ -131,14 +131,28 @@ export const testReportLatestPartial = {
 		taxonomy: { tool: 'WebdriverIO Hook Failures Test Reporting', type: 'ui' },
 		retries: 0
 	}, {
-		name: `[${platform}] > fake timers > passed`,
+		name: `[${platform}] > fake timers > sinon > passed`,
 		browser: 'chrome',
 		status: 'passed',
 		location: { file: 'test/integration/data/tests/webdriverio/fake-timers.test.js' },
 		taxonomy: { tool: 'Test Reporting', type: 'integration' },
 		retries: 0
 	}, {
-		name: `[${platform}] > fake timers > failed`,
+		name: `[${platform}] > fake timers > sinon > failed`,
+		browser: 'chrome',
+		status: 'failed',
+		location: { file: 'test/integration/data/tests/webdriverio/fake-timers.test.js' },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 3
+	}, {
+		name: `[${platform}] > fake timers > node > passed`,
+		browser: 'chrome',
+		status: 'passed',
+		location: { file: 'test/integration/data/tests/webdriverio/fake-timers.test.js' },
+		taxonomy: { tool: 'Test Reporting', type: 'integration' },
+		retries: 0
+	}, {
+		name: `[${platform}] > fake timers > node > failed`,
 		browser: 'chrome',
 		status: 'failed',
 		location: { file: 'test/integration/data/tests/webdriverio/fake-timers.test.js' },
