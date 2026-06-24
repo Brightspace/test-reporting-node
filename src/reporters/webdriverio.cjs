@@ -133,7 +133,7 @@ class WebdriverIO extends WDIOReporter {
 	}
 
 	onRunnerStart(runner) {
-		const { cid } = runner;
+		const { cid, start } = runner;
 		const { reportPath, reportConfigurationPath, verbose } = this.#options;
 		const dir = dirname(reportPath);
 		const ext = extname(reportPath);
@@ -154,10 +154,12 @@ class WebdriverIO extends WDIOReporter {
 			return;
 		}
 
+		const started = start ? start.toISOString() : getNowISOString();
+
 		this.#report
 			.getSummary()
 			.addContext()
-			.setStarted(getNowISOString());
+			.setStarted(started);
 	}
 
 	onSuiteStart(suite) {
