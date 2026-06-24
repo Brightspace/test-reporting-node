@@ -9,4 +9,4 @@ github-actions:
 javascript:
   - changed-files:
     - any-glob-to-any-file:
-      - '**/*.js'
+      - '**/*.{js,cjs}'
