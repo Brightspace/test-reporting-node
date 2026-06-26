@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module';
 import { colors } from 'playwright-core/lib/utilsBundle';
 import { escapeSpecialCharacters } from '../helpers/strings.cjs';
-import { getNow, getNowISOString } from '../helpers/system.cjs';
+import { getNowISOString } from '../helpers/system.cjs';
 
 const require = createRequire(import.meta.url);
 
@@ -52,7 +52,7 @@ export default class Reporter {
 	#logger;
 	#options;
 	#report;
-	#runStarted;
+	#testStarted;
 
 	constructor(options = {}) {
 		this.#options = options;
@@ -65,8 +65,8 @@ export default class Reporter {
 			return;
 		}
 
-		this.#runStarted = getNow();
 		this.#logger = new PlaywrightLogger();
+		this.#testStarted = new Map();
 
 		try {
 			this.#report = new ReportBuilder('playwright', this.#logger, this.#options);
@@ -83,6 +83,20 @@ export default class Reporter {
 			.addContext();
 	}
 
+	onTestBegin(test) {
+		if (!this.#report || !this.#hasTests) {
+			return;
+		}
+
+		const { id, location: { file } } = test;
+
+		if (this.#report.ignoreFilePath(file)) {
+			return;
+		}
+
+		this.#testStarted.set(id, getNowISOString());
+	}
+
 	onTestEnd(test, result) {
 		if (!this.#report || !this.#hasTests) {
 			return;
@@ -95,12 +109,10 @@ export default class Reporter {
 		}
 
 		const { id, expectedStatus } = test;
-		const { startTime, retry, status, duration } = result;
+		const { retry, status, duration } = result;
 		const project = test.parent.project();
 		const name = makeTestName(test);
-		const started = startTime < this.#runStarted ?
-			getNowISOString() :
-			startTime.toISOString();
+		const started = this.#testStarted.get(id) ?? getNowISOString();
 		const detail = this.#report
 			.getDetail(id)
 			.setName(name)
@@ -129,6 +141,8 @@ export default class Reporter {
 		} else {
 			detail.setPassed({ override: isRetry });
 		}
+
+		this.#testStarted.delete(id);
 	}
 
 	onEnd(result) {
