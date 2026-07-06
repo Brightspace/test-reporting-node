@@ -16,6 +16,7 @@
     "./helpers/merge-reports.js": "./src/helpers/merge-reports.cjs",
     "./helpers/report.js": "./src/helpers/report.cjs",
     "./helpers/report-configuration.js": "./src/helpers/report-configuration.cjs",
+    "./helpers/report-builder.js": "./src/helpers/report-builder.cjs",
     "./reporters/jest.js": "./src/reporters/jest.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/node.js": "./src/reporters/node.js",
