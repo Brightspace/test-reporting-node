@@ -70,7 +70,7 @@
     "@wdio/spec-reporter": "^9",
     "@web/test-runner": "^1",
     "@web/test-runner-playwright": "^1",
-    "c8": "^11",
+    "c8": "^12",
     "chai": "^6",
     "chai-subset": "^1",
     "chai-uuid": "^1",
