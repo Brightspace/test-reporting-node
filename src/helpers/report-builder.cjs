@@ -317,7 +317,6 @@ class ReportBuilder extends ReportBuilderBase {
 	#codeowners;
 	#logger;
 	#reportConfiguration;
-	#verbose;
 	#writeReport;
 
 	constructor(framework, logger, options) {
@@ -326,12 +325,10 @@ class ReportBuilder extends ReportBuilderBase {
 		const {
 			reportPath,
 			reportConfigurationPath,
-			reportWriter,
-			verbose = false
+			reportWriter
 		} = options;
 
 		this.#logger = logger;
-		this.#verbose = verbose;
 		this.#reportConfiguration = new ReportConfiguration(
 			reportConfigurationPath,
 			logger
@@ -404,6 +401,7 @@ class ReportBuilder extends ReportBuilderBase {
 		let countFailed = 0;
 		let countSkipped = 0;
 		let countFlaky = 0;
+		const missingConfigWarnings = [];
 
 		for (const [, { data: detail }] of this._data.details) {
 			const { status, retries } = detail;
@@ -420,19 +418,17 @@ class ReportBuilder extends ReportBuilderBase {
 				countFailed++;
 			}
 
-			if (this.#verbose) {
-				const { name, location } = detail;
-				const prefix = `Test '${name}' at '${location}' is missing`;
-				const type = detail.taxonomy?.type;
-				const tool = detail.taxonomy?.tool;
+			const { name, location } = detail;
+			const prefix = `Test '${name}' at '${location?.file}' is missing`;
+			const type = detail.taxonomy?.type;
+			const tool = detail.taxonomy?.tool;
 
-				if (!type) {
-					this.#logger.warning(`${prefix} a 'type'`);
-				}
+			if (!type) {
+				missingConfigWarnings.push(`${prefix} a 'type'`);
+			}
 
-				if (!tool) {
-					this.#logger.warning(`${prefix} a 'tool'`);
-				}
+			if (!tool) {
+				missingConfigWarnings.push(`${prefix} a 'tool'`);
 			}
 		}
 
@@ -441,6 +437,11 @@ class ReportBuilder extends ReportBuilderBase {
 			.setCountFlaky(countFlaky)
 			.setCountSkipped(countSkipped)
 			.setCountFailed(countFailed);
+
+		// collect missing type/tool warnings and report them together at the end of the run
+		for (const message of missingConfigWarnings) {
+			this.#logger.warning(message);
+		}
 
 		return this;
 	}
