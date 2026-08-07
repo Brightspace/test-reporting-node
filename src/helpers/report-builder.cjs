@@ -406,7 +406,7 @@ class ReportBuilder extends ReportBuilderBase {
 		let countFailed = 0;
 		let countSkipped = 0;
 		let countFlaky = 0;
-		const missingConfigWarnings = [];
+		const missingConfigByFile = new Map();
 
 		for (const [, { data: detail }] of this._data.details) {
 			const { status, retries } = detail;
@@ -423,17 +423,18 @@ class ReportBuilder extends ReportBuilderBase {
 				countFailed++;
 			}
 
-			const { name, location } = detail;
-			const prefix = `Test '${name}' at '${location?.file}' is missing`;
-			const type = detail.taxonomy?.type;
-			const tool = detail.taxonomy?.tool;
+			const { location } = detail;
+			const file = location?.file ?? 'unknown location';
+			const missingType = !detail.taxonomy?.type;
+			const missingTool = !detail.taxonomy?.tool;
 
-			if (!type) {
-				missingConfigWarnings.push(`${prefix} a 'type'`);
-			}
+			if (missingType || missingTool) {
+				const entry = missingConfigByFile.get(file) ?? { count: 0, missingTool: 0, missingType: 0 };
 
-			if (!tool) {
-				missingConfigWarnings.push(`${prefix} a 'tool'`);
+				entry.count++;
+				entry.missingType += missingType ? 1 : 0;
+				entry.missingTool += missingTool ? 1 : 0;
+				missingConfigByFile.set(file, entry);
 			}
 		}
 
@@ -443,16 +444,49 @@ class ReportBuilder extends ReportBuilderBase {
 			.setCountSkipped(countSkipped)
 			.setCountFailed(countFailed);
 
-		// collect missing type/tool warnings and report them together at the end of the run
-		if (missingConfigWarnings.length > 0) {
-			this.#logger.warning('The following tests are missing taxonomy in the report configuration file, update it to ensure they are reported correctly:');
-
-			for (const message of missingConfigWarnings) {
-				this.#logger.warning(message);
-			}
-		}
+		this.#logMissingConfigWarnings(missingConfigByFile);
 
 		return this;
+	}
+
+	// summarize missing taxonomy across the whole run instead of one line per test, capped so huge suites stay readable
+	#logMissingConfigWarnings(missingConfigByFile) {
+		if (missingConfigByFile.size === 0) {
+			return;
+		}
+
+		const maxFilesShown = 10;
+		const files = [...missingConfigByFile.entries()];
+		const pluralize = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`;
+		let totalTests = 0;
+		let totalMissingType = 0;
+		let totalMissingTool = 0;
+
+		for (const [, { count, missingType, missingTool }] of files) {
+			totalTests += count;
+			totalMissingType += missingType;
+			totalMissingTool += missingTool;
+		}
+
+		const fieldCounts = [
+			totalMissingType > 0 ? `type (${totalMissingType})` : null,
+			totalMissingTool > 0 ? `tool (${totalMissingTool})` : null
+		].filter(Boolean).join(', ');
+
+		this.#logger.warning(`${pluralize(totalTests, 'test')} missing taxonomy fields: ${fieldCounts}.`);
+		this.#logger.warning(`Affected files: ${files.length}${files.length > maxFilesShown ? `. First ${maxFilesShown}` : ''}:`);
+
+		for (const [file, { count }] of files.slice(0, maxFilesShown)) {
+			this.#logger.warning(`- ${file} (${pluralize(count, 'test')})`);
+		}
+
+		if (files.length > maxFilesShown) {
+			this.#logger.warning(`${pluralize(files.length - maxFilesShown, 'additional file')} omitted.`);
+		}
+
+		const configPath = this.#reportConfiguration?.getPath() ?? 'd2l-test-reporting.config.json';
+
+		this.#logger.warning(`Check ${configPath} to configure missing taxonomy fields.`);
 	}
 
 	toJSON() {
