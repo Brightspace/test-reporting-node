@@ -317,6 +317,9 @@ class ReportBuilder extends ReportBuilderBase {
 	#codeowners;
 	#logger;
 	#reportConfiguration;
+	// retained for backwards compatibility with the 'verbose' option, no longer read internally
+	// eslint-disable-next-line no-unused-private-class-members
+	#verbose;
 	#writeReport;
 
 	constructor(framework, logger, options) {
@@ -325,10 +328,12 @@ class ReportBuilder extends ReportBuilderBase {
 		const {
 			reportPath,
 			reportConfigurationPath,
-			reportWriter
+			reportWriter,
+			verbose = false
 		} = options;
 
 		this.#logger = logger;
+		this.#verbose = verbose;
 		this.#reportConfiguration = new ReportConfiguration(
 			reportConfigurationPath,
 			logger
