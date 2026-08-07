@@ -444,8 +444,12 @@ class ReportBuilder extends ReportBuilderBase {
 			.setCountFailed(countFailed);
 
 		// collect missing type/tool warnings and report them together at the end of the run
-		for (const message of missingConfigWarnings) {
-			this.#logger.warning(message);
+		if (missingConfigWarnings.length > 0) {
+			this.#logger.warning('The following tests are missing taxonomy in the report configuration file, update it to ensure they are reported correctly:');
+
+			for (const message of missingConfigWarnings) {
+				this.#logger.warning(message);
+			}
 		}
 
 		return this;
