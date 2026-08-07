@@ -328,12 +328,10 @@ class ReportBuilder extends ReportBuilderBase {
 		const {
 			reportPath,
 			reportConfigurationPath,
-			reportWriter,
-			verbose = false
+			reportWriter
 		} = options;
 
 		this.#logger = logger;
-		this.#verbose = verbose;
 		this.#reportConfiguration = new ReportConfiguration(
 			reportConfigurationPath,
 			logger
