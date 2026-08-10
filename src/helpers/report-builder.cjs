@@ -449,7 +449,6 @@ class ReportBuilder extends ReportBuilderBase {
 		return this;
 	}
 
-	// summarize missing taxonomy across the whole run instead of one line per test, capped so huge suites stay readable
 	#logMissingConfigWarnings(missingConfigByFile) {
 		if (missingConfigByFile.size === 0) {
 			return;
