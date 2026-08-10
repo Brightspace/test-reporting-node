@@ -512,6 +512,69 @@ describe('report builder', () => {
 			expect(builder.getSummary().data.count.skipped).to.eq(1);
 			expect(builder.getSummary().data.count.flaky).to.eq(1);
 		});
+
+		describe('missing config warnings', () => {
+			it('does not warn when type and tool are configured', () => {
+				const warningSpy = mock.fn();
+				const logger = { ...noopLogger, warning: warningSpy };
+				const builder = new ReportBuilder('mocha', logger, { reportWriter: () => { } });
+
+				builder.getSummary().setStarted(new Date().toISOString()).setDurationTotal(0).setStatus('passed');
+				builder.getDetail('t1').setName('test').setStatus('passed').setStarted(new Date().toISOString()).setLocationFile('t.js').addDuration(0).setTimeout(0);
+				builder.finalize();
+
+				expect(warningSpy.mock.callCount()).to.eq(0);
+			});
+
+			it('summarizes missing type and tool grouped by file', () => {
+				mock.method(fs, 'readFileSync', () => JSON.stringify({
+					overrides: [{ pattern: '**/nonexistent/**', type: 'unused', tool: 'unused' }]
+				}));
+
+				const warningSpy = mock.fn();
+				const logger = { ...noopLogger, warning: warningSpy };
+				const builder = new ReportBuilder('mocha', logger, { reportWriter: () => { } });
+				const started = new Date().toISOString();
+
+				builder.getSummary().setStarted(started).setDurationTotal(0).setStatus('passed');
+				builder.getDetail('t1').setName('test one').setStatus('passed').setStarted(started).setLocationFile('a.js').addDuration(0).setTimeout(0);
+				builder.getDetail('t2').setName('test two').setStatus('passed').setStarted(started).setLocationFile('a.js').addDuration(0).setTimeout(0);
+				builder.getDetail('t3').setName('test three').setStatus('passed').setStarted(started).setLocationFile('b.js').addDuration(0).setTimeout(0);
+				builder.finalize();
+
+				const messages = warningSpy.mock.calls.map(call => call.arguments[0]);
+
+				expect(messages[0]).to.eq('3 tests missing taxonomy fields: type (3), tool (3).');
+				expect(messages[1]).to.eq('Affected files: 2:');
+				expect(messages[2]).to.eq('- a.js (2 tests)');
+				expect(messages[3]).to.eq('- b.js (1 test)');
+				expect(messages[4]).to.include('Check');
+				expect(messages[4]).to.include('to configure missing taxonomy fields.');
+			});
+
+			it('caps the file list and reports omitted files beyond the limit', () => {
+				mock.method(fs, 'readFileSync', () => JSON.stringify({ tool: 'Test Reporting' }));
+
+				const warningSpy = mock.fn();
+				const logger = { ...noopLogger, warning: warningSpy };
+				const builder = new ReportBuilder('mocha', logger, { reportWriter: () => { } });
+				const started = new Date().toISOString();
+
+				builder.getSummary().setStarted(started).setDurationTotal(0).setStatus('passed');
+
+				for (let i = 0; i < 12; i++) {
+					builder.getDetail(`t${i}`).setName('test').setStatus('passed').setStarted(started).setLocationFile(`file${i}.js`).addDuration(0).setTimeout(0);
+				}
+
+				builder.finalize();
+
+				const messages = warningSpy.mock.calls.map(call => call.arguments[0]);
+
+				expect(messages[1]).to.eq('Affected files: 12. First 10:');
+				expect(messages).to.have.lengthOf(14);
+				expect(messages[12]).to.eq('2 additional files omitted.');
+			});
+		});
 	});
 
 	describe('output', () => {
