@@ -14,3 +14,9 @@ javascript:
   - changed-files:
     - any-glob-to-any-file:
       - '**/*.{js,cjs}'
+npm:
+  - changed-files:
+    - any-glob-to-any-file:
+      - .npmrc
+      - package-lock.json
+      - package.json
