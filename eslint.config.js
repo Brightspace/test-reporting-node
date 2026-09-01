@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import checkFilePlugin from 'eslint-plugin-check-file';
 import importPlugin from 'eslint-plugin-import';
-import { includeIgnoreFile } from '@eslint/compat';
+import { includeIgnoreFile } from '@eslint/config-helpers';
 import jestPlugin from 'eslint-plugin-jest';
 import jsonPlugin from 'eslint-plugin-json';
 import mochaPlugin from 'eslint-plugin-mocha';
@@ -148,7 +148,7 @@ const jestConfigs = addExtensions(
 	fileExtensions
 );
 export default [
-	includeIgnoreFile(gitignorePath),
+	includeIgnoreFile(gitignorePath, { gitignoreResolution: true }),
 	...setDirectoryConfigs(
 		globalConfigs,
 		{
