@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@actions/artifact": "^6",
-    "@eslint/compat": "^2",
+    "@eslint/config-helpers": "^0.7",
     "@playwright/test": "^1",
     "@wdio/cli": "^9",
     "@wdio/local-runner": "^9",
