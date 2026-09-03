@@ -6,6 +6,7 @@ import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
 import { latestReportVersion } from '../../src/helpers/schema.cjs';
 import { Report } from '../../src/helpers/report.cjs';
+import { ReportBuilder } from '../../src/helpers/report-builder.cjs';
 import { testReportLatestPartial as testReportLatestPartialJest } from './data/validation/test-report-jest.js';
 import { testReportLatestPartial as testReportLatestPartialMocha } from './data/validation/test-report-mocha.js';
 import { testReportLatestPartial as testReportLatestPartialNodeTest } from './data/validation/test-report-node.js';
@@ -61,6 +62,28 @@ const reportTests = [{
 }];
 
 describe('report validation', () => {
+	it('applies available defaults to details without locations', () => {
+		const warnings = [];
+		const logger = {
+			error: () => {},
+			info: () => {},
+			location: () => {},
+			warning: message => warnings.push(message)
+		};
+		const builder = new ReportBuilder('node', logger, { reportWriter: () => {} });
+		const detail = builder.getDetail('locationless').setPassed();
+
+		builder.finalize();
+
+		expect(detail.data.taxonomy).to.deep.equal({ tool: 'Test Tooling' });
+		expect(warnings).to.deep.equal([
+			'1 test missing taxonomy fields: type (1).',
+			'Affected files: 1:',
+			'- unknown location (1 test)',
+			'Check d2l-test-reporting.config.json to configure missing taxonomy fields.'
+		]);
+	});
+
 	for (const reportTest of reportTests) {
 		describe(reportTest.name, () => {
 			it('exists', () => {

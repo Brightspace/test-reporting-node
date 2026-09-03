@@ -409,6 +409,8 @@ class ReportBuilder extends ReportBuilderBase {
 		const missingConfigByFile = new Map();
 
 		for (const [, { data: detail }] of this._data.details) {
+			this.#applyDefaultTaxonomy(detail);
+
 			const { status, retries } = detail;
 
 			if (status === 'passed') {
@@ -447,6 +449,28 @@ class ReportBuilder extends ReportBuilderBase {
 		this.#logMissingConfigWarnings(missingConfigByFile);
 
 		return this;
+	}
+
+	#applyDefaultTaxonomy(detail) {
+		if (detail.location?.file != null) {
+			return;
+		}
+
+		const { type, tool } = this.#reportConfiguration.getDefaultTaxonomy();
+
+		if (type == null && tool == null) {
+			return;
+		}
+
+		detail.taxonomy ??= {};
+
+		if (type != null) {
+			detail.taxonomy.type ??= type;
+		}
+
+		if (tool != null) {
+			detail.taxonomy.tool ??= tool;
+		}
 	}
 
 	#logMissingConfigWarnings(missingConfigByFile) {

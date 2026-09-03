@@ -407,6 +407,33 @@ const testReportOldV3ConfigOnly = {
 describe('report', () => {
 	afterEach(() => mock.reset());
 
+	describe('LMS information', () => {
+		const lmsInfo = {
+			buildNumber: '20.26.9.12345',
+			instanceUrl: 'https://example.brightspace.com'
+		};
+		const reports = [{
+			name: 'v1',
+			report: testReportV1Full
+		}, {
+			name: 'v2',
+			report: testReportV2Full
+		}, {
+			name: 'v3',
+			report: testReportLatestFull
+		}];
+
+		for (const { name, report: reportData } of reports) {
+			it(`adds LMS information to ${name} reports`, () => {
+				mock.method(fs, 'readFileSync', () => JSON.stringify(reportData));
+
+				const report = new Report(testReportPath, { lmsInfo });
+
+				expect(report.toJSON().summary.lms).to.deep.equal(lmsInfo);
+			});
+		}
+	});
+
 	describe(`legacy (v1, upgrades to v${latestReportVersion})`, () => {
 		const testReportCurrentVersion = 1;
 

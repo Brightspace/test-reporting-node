@@ -638,6 +638,84 @@ describe('report builder', () => {
 		});
 	});
 
+	describe('taxonomy', () => {
+		it('applies defaults to a detail without a location', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+			const detail = builder.getDetail('test');
+
+			builder.finalize();
+
+			expect(detail.data.taxonomy).to.deep.equal({ type: 'unit', tool: 'Test Reporting' });
+		});
+
+		it('does not override file taxonomy with defaults', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+			const detail = builder.getDetail('test');
+
+			detail.setLocationFile('test/example.test.js');
+			builder.finalize();
+
+			expect(detail.data.taxonomy).to.deep.equal({ type: 'unit', tool: 'Test Reporting' });
+		});
+
+		it('applies available default taxonomy fields', () => {
+			mock.method(fs, 'readFileSync', () => JSON.stringify({ type: 'unit' }));
+
+			const builder = new ReportBuilder('mocha', noopLogger, {
+				reportConfigurationPath: './d2l-test-reporting.config.json',
+				reportWriter: () => { }
+			});
+			const detail = builder.getDetail('test');
+
+			builder.finalize();
+
+			expect(detail.data.taxonomy).to.deep.equal({ type: 'unit' });
+		});
+
+		it('applies a tool-only default', () => {
+			mock.method(fs, 'readFileSync', () => JSON.stringify({ tool: 'Test Reporting' }));
+
+			const builder = new ReportBuilder('mocha', noopLogger, {
+				reportConfigurationPath: './d2l-test-reporting.config.json',
+				reportWriter: () => { }
+			});
+			const detail = builder.getDetail('test');
+
+			builder.finalize();
+
+			expect(detail.data.taxonomy).to.deep.equal({ tool: 'Test Reporting' });
+		});
+
+		it('preserves existing taxonomy fields', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+			const detail = builder.getDetail('test');
+
+			detail.data.taxonomy = { type: 'custom', tool: 'custom' };
+			builder.finalize();
+
+			expect(detail.data.taxonomy).to.deep.equal({
+				type: 'custom',
+				tool: 'custom'
+			});
+		});
+
+		it('does not create taxonomy without defaults', () => {
+			mock.method(fs, 'readFileSync', () => JSON.stringify({
+				overrides: [{ pattern: '**', type: 'unit', tool: 'Test Reporting' }]
+			}));
+
+			const builder = new ReportBuilder('mocha', noopLogger, {
+				reportConfigurationPath: './d2l-test-reporting.config.json',
+				reportWriter: () => { }
+			});
+			const detail = builder.getDetail('test');
+
+			builder.finalize();
+
+			expect(detail.data).to.not.have.property('taxonomy');
+		});
+	});
+
 	describe('ignore', () => {
 		it('false without config', () => {
 			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
