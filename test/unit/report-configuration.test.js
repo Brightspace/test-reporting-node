@@ -172,6 +172,28 @@ describe('report configuration', () => {
 	});
 
 	describe('taxonomy', () => {
+		describe('defaults', () => {
+			it('lowercases type and preserves tool', () => {
+				const config = loadConfig({ type: 'UI', tool: 'My Tool' });
+
+				expect(config.getDefaultTaxonomy()).to.deep.equal({
+					type: 'ui',
+					tool: 'My Tool'
+				});
+			});
+
+			it('omits absent values', () => {
+				const config = loadConfig({
+					overrides: [{ pattern: '**', type: 'unit', tool: 'Test Reporting' }]
+				});
+
+				expect(config.getDefaultTaxonomy()).to.deep.equal({
+					type: undefined,
+					tool: undefined
+				});
+			});
+		});
+
 		it('lowercases type', () => {
 			const config = loadConfig({ type: 'UI', tool: 'My Tool' });
 
@@ -195,6 +217,22 @@ describe('report configuration', () => {
 			expect(config.getTaxonomy('test/special.test.js')).to.deep.equal({
 				type: 'ui',
 				tool: 'Special Tool'
+			});
+		});
+
+		it('inherits missing fields from defaults', () => {
+			const config = loadConfig({
+				type: 'integration',
+				tool: 'Default Tool',
+				overrides: [{
+					pattern: '**/special.test.js',
+					type: 'UI'
+				}]
+			});
+
+			expect(config.getTaxonomy('test/special.test.js')).to.deep.equal({
+				type: 'ui',
+				tool: 'Default Tool'
 			});
 		});
 

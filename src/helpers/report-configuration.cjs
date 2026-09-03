@@ -104,14 +104,9 @@ class ReportConfiguration {
 	}
 
 	getDefaultTaxonomy() {
-		const {
-			type,
-			tool
-		} = this.#reportConfiguration;
-
 		return {
-			type: type?.toLowerCase(),
-			tool
+			type: this.#reportConfiguration.type?.toLowerCase(),
+			tool: this.#reportConfiguration.tool
 		};
 	}
 

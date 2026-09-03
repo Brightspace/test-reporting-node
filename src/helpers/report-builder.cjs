@@ -463,8 +463,14 @@ class ReportBuilder extends ReportBuilderBase {
 		}
 
 		detail.taxonomy ??= {};
-		detail.taxonomy.type ??= type;
-		detail.taxonomy.tool ??= tool;
+
+		if (type != null) {
+			detail.taxonomy.type ??= type;
+		}
+
+		if (tool != null) {
+			detail.taxonomy.tool ??= tool;
+		}
 	}
 
 	#logMissingConfigWarnings(missingConfigByFile) {
