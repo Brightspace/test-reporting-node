@@ -45,7 +45,7 @@ jobs:
           script: |
             const targets = [
               'test-reporting-action',
-              'test-reporting-node-converter',
+              'test-reporting-nunit-converter',
               'test-actions'
             ];
             const results = await Promise.allSettled(targets.map(target =>
