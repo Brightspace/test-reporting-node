@@ -309,7 +309,6 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 		return this;
 	}
-
 }
 
 class ReportBuilder extends ReportBuilderBase {
