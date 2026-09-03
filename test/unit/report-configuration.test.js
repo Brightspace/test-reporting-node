@@ -141,6 +141,12 @@ describe('report configuration', () => {
 
 				expect(() => new ReportConfiguration(configPath, logger)).to.throw('Unable to read/parse');
 			});
+
+			it('when the default configuration is unparseable', () => {
+				mock.method(fs, 'readFileSync', () => 'not json');
+
+				expect(() => new ReportConfiguration(undefined, logger)).to.throw('Unable to read/parse');
+			});
 		});
 
 		it('empty without config file', () => {
@@ -150,6 +156,12 @@ describe('report configuration', () => {
 
 			expect(config.toJSON()).to.deep.equal({});
 		});
+	});
+
+	it('reports the resolved configuration path', () => {
+		const config = loadConfig({ type: 'integration', tool: 'Test Reporting' });
+
+		expect(config.getPath()).to.equal('d2l-test-reporting.config.json');
 	});
 
 	describe('default logger', () => {
