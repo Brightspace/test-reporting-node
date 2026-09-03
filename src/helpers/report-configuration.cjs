@@ -103,6 +103,18 @@ class ReportConfiguration {
 		return this.#reportConfigurationPath;
 	}
 
+	getDefaultTaxonomy() {
+		const {
+			type,
+			tool
+		} = this.#reportConfiguration;
+
+		return {
+			type: type?.toLowerCase(),
+			tool
+		};
+	}
+
 	getTaxonomy(filePath) {
 		filePath = makeRelativeFilePath(filePath);
 
@@ -124,12 +136,9 @@ class ReportConfiguration {
 			}
 		}
 
-		const {
-			type: defaultType,
-			tool: defaultTool
-		} = this.#reportConfiguration;
+		const { type: defaultType, tool: defaultTool } = this.getDefaultTaxonomy();
 
-		metadata.type = metadata.type ?? defaultType?.toLowerCase();
+		metadata.type = metadata.type ?? defaultType;
 		metadata.tool = metadata.tool ?? defaultTool;
 
 		return metadata;

@@ -638,6 +638,17 @@ describe('report builder', () => {
 		});
 	});
 
+	describe('taxonomy', () => {
+		it('applies defaults to a detail without a location', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
+			const detail = builder.getDetail('test');
+
+			builder.finalize();
+
+			expect(detail.data.taxonomy).to.deep.equal({ type: 'unit', tool: 'Test Reporting' });
+		});
+	});
+
 	describe('ignore', () => {
 		it('false without config', () => {
 			const builder = new ReportBuilder('mocha', noopLogger, { reportWriter: () => { } });
