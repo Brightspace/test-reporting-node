@@ -34,7 +34,7 @@ reference if any values need to be customized.
 module.exports = {
   spec: 'test/*.test.js',
   reporter: 'd2l-test-reporting/reporters/mocha.js',
-  reporterOptions: [
+  'reporter-option': [
     'reportPath=./d2l-test-report.json',
     'reportConfigurationPath=./d2l-test-reporting.config.json',
     'verbose=true'
