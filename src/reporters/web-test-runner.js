@@ -38,6 +38,10 @@ const makeDetailId = (sessionId, file, name) => {
 	return `${sessionId}/${file}/${name}`;
 };
 
+const makeTestId = (browserName, file, name) => {
+	return `${browserName}/${file}/${name}`;
+};
+
 const getBrowser = (browserName, logger) => {
 	const browser = browserName?.trim().toLowerCase();
 
@@ -92,12 +96,17 @@ export function reporter(options = {}) {
 			const { skipped, passed, duration, name } = test;
 			const testName = makeDetailName(prefix, name);
 			const id = makeDetailId(sessionId, testFile, testName);
+			const testId = makeTestId(browserName, testFile, testName);
 			const detail = report
 				.getDetail(id)
 				.setName(testName)
 				.setLocationFile(testFile)
 				.setStarted(started)
 				.setTimeout(testsFinishTimeout);
+
+			if (report.getVersion() === 4) {
+				detail.setTestId(testId);
+			}
 
 			if (browser) {
 				detail.setBrowser(browser);

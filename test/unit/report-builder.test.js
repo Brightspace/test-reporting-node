@@ -110,6 +110,23 @@ describe('report builder', () => {
 			expect(builder.data.version).to.eq(latestReportVersion);
 		});
 
+		it('sets requested v4 version', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, {
+				reportVersion: 4,
+				reportWriter: () => { }
+			});
+
+			expect(builder.data.version).to.eq(4);
+			expect(builder.getVersion()).to.eq(4);
+		});
+
+		it('rejects unsupported version', () => {
+			expect(() => new ReportBuilder('mocha', noopLogger, {
+				reportVersion: 2,
+				reportWriter: () => { }
+			})).to.throw("Unsupported report version '2'");
+		});
+
 		it('produces loadable report', () => {
 			const builder = buildValidReport();
 
@@ -118,6 +135,21 @@ describe('report builder', () => {
 			const report = new Report('./test-report.json', { context: testContext });
 
 			expect(report.getVersion()).to.eq(latestReportVersion);
+		});
+
+		it('validates otherwise identical v4 details with distinct test IDs', () => {
+			const builder = buildValidReport({ reportVersion: 4 });
+			const detail = builder.getDetail('test-1');
+			const duplicate = builder.getDetail('test-2');
+
+			detail.setTestId('test-id-1');
+			Object.assign(duplicate.data, detail.data, { testId: 'test-id-2' });
+			mock.method(fs, 'readFileSync', () => JSON.stringify(builder));
+
+			const report = new Report('./test-report.json', { context: testContext });
+
+			expect(report.getVersion()).to.eq(4);
+			expect(report.toJSON().details).to.have.length(2);
 		});
 
 		it('sets codeowners on details', () => {
@@ -270,6 +302,22 @@ describe('report builder', () => {
 			detail.setName('my test');
 
 			expect(detail.data.name).to.eq('my test');
+		});
+
+		it('rejects test ID for v3', () => {
+			expect(() => detail.setTestId('test-id')).to.throw('testId requires report version 4');
+		});
+
+		it('sets test ID for v4', () => {
+			const builder = new ReportBuilder('mocha', noopLogger, {
+				reportVersion: 4,
+				reportWriter: () => { }
+			});
+			const v4Detail = builder.getDetail('test-1');
+
+			v4Detail.setTestId('test-id');
+
+			expect(v4Detail.data.testId).to.eq('test-id');
 		});
 
 		it('sets started', () => {
