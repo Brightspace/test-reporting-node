@@ -17,6 +17,7 @@
     "./helpers/report.js": "./src/helpers/report.cjs",
     "./helpers/report-configuration.js": "./src/helpers/report-configuration.cjs",
     "./helpers/report-builder.js": "./src/helpers/report-builder.cjs",
+    "./helpers/report-submitter.js": "./src/helpers/report-submitter.cjs",
     "./reporters/jest.js": "./src/reporters/jest.cjs",
     "./reporters/mocha.js": "./src/reporters/mocha.cjs",
     "./reporters/node.js": "./src/reporters/node.js",
@@ -49,6 +50,7 @@
     "test:unit": "node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./src/reporters/node.js --test-reporter-destination=./d2l-test-report.json \"test/unit/*.test.js\""
   },
   "dependencies": {
+    "@aws-sdk/client-timestream-write": "^3.1127.0",
     "@wdio/reporter": "^9",
     "@web/test-runner-core": "^1",
     "ajv": "^8",
