@@ -4,7 +4,7 @@ import { expect, use } from 'chai';
 import chaiSubset from 'chai-subset';
 import { getOperatingSystemType } from '../../src/helpers/system.cjs';
 import { hasContext } from '../../src/helpers/github.cjs';
-import { latestReportVersion } from '../../src/helpers/schema.cjs';
+import { latestReportVersion, latestSupportedReportVersion } from '../../src/helpers/schema.cjs';
 import { Report } from '../../src/helpers/report.cjs';
 import { ReportBuilder } from '../../src/helpers/report-builder.cjs';
 import { testReportLatestPartial as testReportLatestPartialJest } from './data/validation/test-report-jest.js';
@@ -41,9 +41,10 @@ const reportTests = [{
 	expected: testReportLatestPartialMocha
 }, {
 	name: 'node',
-	version: latestReportVersion,
+	version: latestSupportedReportVersion,
 	path: './d2l-test-report-node.json',
-	expected: testReportLatestPartialNodeTest
+	expected: testReportLatestPartialNodeTest,
+	hasTestIds: true
 }, {
 	name: 'playwright',
 	version: latestReportVersion,
@@ -120,6 +121,16 @@ describe('report validation', () => {
 				expect(report).to.containSubset(reportTest.expected);
 
 				const { summary, details } = report;
+
+				if (reportTest.hasTestIds) {
+					for (const detail of details) {
+						expect(detail.testId).to.be.a('string').and.not.be.empty;
+					}
+				} else {
+					for (const detail of details) {
+						expect(detail).to.not.have.property('testId');
+					}
+				}
 
 				expect(summary.operatingSystem).to.eq(getOperatingSystemType());
 				expect(summary.duration.total).to.be.above(0);

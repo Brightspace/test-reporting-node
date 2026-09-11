@@ -50,6 +50,7 @@ class WebdriverIO extends WDIOReporter {
 		this.#options = {
 			reportPath: options.reportPath ?? './d2l-test-report.json',
 			reportConfigurationPath: options.reportConfigurationPath ?? './d2l-test-reporting.config.json',
+			reportVersion: options.reportVersion,
 			verbose: options.verbose ?? false
 		};
 		this.#report = null;
@@ -111,6 +112,10 @@ class WebdriverIO extends WDIOReporter {
 			.setLocationFile(suite.file)
 			.setStarted(getNowISOString());
 
+		if (this.#report.getVersion() === 4) {
+			detail.setTestId(id);
+		}
+
 		if (browser) {
 			detail.setBrowser(browser);
 		}
@@ -134,7 +139,7 @@ class WebdriverIO extends WDIOReporter {
 
 	onRunnerStart(runner) {
 		const { cid, start } = runner;
-		const { reportPath, reportConfigurationPath, verbose } = this.#options;
+		const { reportPath, reportConfigurationPath, reportVersion, verbose } = this.#options;
 		const dir = dirname(reportPath);
 		const ext = extname(reportPath);
 		const base = basename(reportPath, ext);
@@ -144,6 +149,7 @@ class WebdriverIO extends WDIOReporter {
 			this.#report = new ReportBuilder('webdriverio', this.#logger, {
 				reportPath: workerReportPath,
 				reportConfigurationPath,
+				reportVersion,
 				verbose
 			});
 		} catch ({ message }) {
@@ -204,6 +210,10 @@ class WebdriverIO extends WDIOReporter {
 							.setStarted(getNowISOString())
 							.addDuration(0)
 							.setFailed();
+
+						if (this.#report.getVersion() === 4) {
+							detail.setTestId(makeDetailId(frame.file, fullTitle));
+						}
 
 						if (browser) {
 							detail.setBrowser(browser);

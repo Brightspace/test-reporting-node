@@ -54,6 +54,7 @@ class NodeReporter extends Transform {
 
 		const resolvedOptions = {
 			reportConfigurationPath: options.reportConfigurationPath,
+			reportVersion: options.reportVersion,
 			verbose: options.verbose,
 			reportWriter: (reportData) => {
 				this.push(reportData);
@@ -140,6 +141,10 @@ class NodeReporter extends Transform {
 			.setName(fullName)
 			.setLocationFile(file)
 			.setStarted(started);
+
+		if (this.#report.getVersion() === 4) {
+			detail.setTestId(id);
+		}
 
 		if (typeof line === 'number') {
 			detail.setLocationLine(line);

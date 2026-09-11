@@ -98,12 +98,16 @@ class TestReportingMochaReporter extends Spec {
 		const name = makeDetailName(test);
 		const id = makeDetailId(file, name);
 
-		this.#report
+		const detail = this.#report
 			.getDetail(id)
 			.setName(name)
 			.setLocationFile(file)
 			.setStarted(getNowISOString())
 			.setTimeout(_timeout); // using internal property, not ideal
+
+		if (this.#report.getVersion() === 4) {
+			detail.setTestId(id);
+		}
 	}
 
 	#onTestRetry(test) {

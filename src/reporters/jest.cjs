@@ -154,6 +154,10 @@ class JestReporter {
 			.setLocationFile(file)
 			.setStarted(started);
 
+		if (this.#report.getVersion() === 4) {
+			detail.setTestId(id);
+		}
+
 		this.#applyLocation(detail, testCaseResult.location);
 		this.#applyTimeout(detail);
 
@@ -217,6 +221,10 @@ class JestReporter {
 				.setDurationFinal(0)
 				.setDurationTotal(0);
 
+			if (this.#report.getVersion() === 4) {
+				detail.setTestId(id);
+			}
+
 			this.#applyLocation(detail, testCaseResult.location);
 			this.#applyTimeout(detail);
 
@@ -239,6 +247,10 @@ class JestReporter {
 			.setStarted(getNowISOString())
 			.addDuration(0)
 			.setFailed();
+
+		if (this.#report.getVersion() === 4) {
+			detail.setTestId(id);
+		}
 
 		this.#applyTimeout(detail);
 	}

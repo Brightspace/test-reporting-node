@@ -1,7 +1,7 @@
-import { latestReportVersion } from '../../../../src/helpers/schema.cjs';
+import { latestSupportedReportVersion } from '../../../../src/helpers/schema.cjs';
 
 export const testReportLatestPartial = {
-	version: latestReportVersion,
+	version: latestSupportedReportVersion,
 	summary: {
 		status: 'failed',
 		framework: 'node',
