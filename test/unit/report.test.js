@@ -403,6 +403,14 @@ const testReportOldV3ConfigOnly = {
 	...testReportOldV3Full,
 	details: testDetailsOldV3ConfigOnly
 };
+const testReportV4Full = {
+	...testReportLatestFull,
+	version: 4,
+	details: testDetailsLatest.map((detail, index) => ({
+		...detail,
+		testId: `test-id-${index}`
+	}))
+};
 
 describe('report', () => {
 	afterEach(() => mock.reset());
@@ -837,6 +845,47 @@ describe('report', () => {
 					expect(report.getContext()).to.deep.equal(testContextOther);
 				});
 			});
+		});
+	});
+
+	describe('v4', () => {
+		it('allows otherwise identical details with distinct test IDs', () => {
+			const detail = testDetailsLatest[0];
+			const reportData = {
+				...testReportV4Full,
+				details: [{ ...detail, testId: 'test-id-1' }, { ...detail, testId: 'test-id-2' }]
+			};
+
+			mock.method(fs, 'readFileSync', () => JSON.stringify(reportData));
+
+			expect(() => new Report(testReportPath)).to.not.throw();
+		});
+
+		it('rejects duplicate test IDs', () => {
+			const detail = testDetailsLatest[0];
+			const reportData = {
+				...testReportV4Full,
+				details: [
+					{ ...detail, testId: 'duplicate-test-id' },
+					{ ...detail, duration: { final: 238, total: 550 }, testId: 'duplicate-test-id' }
+				]
+			};
+
+			mock.method(fs, 'readFileSync', () => JSON.stringify(reportData));
+
+			expect(() => new Report(testReportPath)).to.throw(/must NOT have duplicate items/);
+		});
+
+		it('rejects duplicate details without test IDs', () => {
+			const detail = testDetailsLatest[0];
+			const reportData = {
+				...testReportV4Full,
+				details: [detail, detail]
+			};
+
+			mock.method(fs, 'readFileSync', () => JSON.stringify(reportData));
+
+			expect(() => new Report(testReportPath)).to.throw(/must NOT have duplicate items/);
 		});
 	});
 
