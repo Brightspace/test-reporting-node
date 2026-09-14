@@ -31,6 +31,26 @@ const getReportVersion = (report) => {
 	}
 };
 
+const validateReportV4Details = (report, dataVar) => {
+	const detailIndices = new Map();
+
+	for (const [index, detail] of report.details.entries()) {
+		const key = detail.testId === undefined ?
+			`detail:${JSON.stringify(detail)}` :
+			`testId:${detail.testId}`;
+		const existingIndex = detailIndices.get(key);
+
+		if (existingIndex !== undefined) {
+			throw new Error(
+				`[${dataVar}].details: must NOT have duplicate items ` +
+				`(items ## ${existingIndex} and ${index} are identical)`
+			);
+		}
+
+		detailIndices.set(key, index);
+	}
+};
+
 const validateReport = (report, dataVar = 'report') => {
 	const reportVersion = getReportVersion(report);
 	let errors;
@@ -57,6 +77,10 @@ const validateReport = (report, dataVar = 'report') => {
 		case 4:
 			if (!validateReportV4Ajv(report)) {
 				errors = validateReportV4Ajv.errors;
+			}
+
+			if (errors === undefined || errors.length === 0) {
+				validateReportV4Details(report, dataVar);
 			}
 
 			break;
