@@ -188,4 +188,4 @@ stored in [AWS Timestream], please see [Storage Schema].
 
 <!-- links -->
 [AWS Timestream]: https://aws.amazon.com/timestream
-[Storage Schema]: https://github.com/Brightspace/test-reporting-action/blob/main/docs/storage-schema.md
+[Storage Schema]: ./storage-schema.md
