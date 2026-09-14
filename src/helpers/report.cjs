@@ -9,10 +9,13 @@ const {
 	validateReportV1Ajv,
 	validateReportV2Ajv,
 	validateReportV3Ajv,
+	validateReportV4Ajv,
 	validateReportV1ContextAjv,
 	validateReportV2ContextAjv,
 	validateReportV3ContextAjv,
-	latestReportVersion
+	validateReportV4ContextAjv,
+	latestReportVersion,
+	latestSupportedReportVersion
 } = schema;
 
 const getReportVersion = (report) => {
@@ -48,6 +51,12 @@ const validateReport = (report, dataVar = 'report') => {
 		case 3:
 			if (!validateReportV3Ajv(report)) {
 				errors = validateReportV3Ajv.errors;
+			}
+
+			break;
+		case 4:
+			if (!validateReportV4Ajv(report)) {
+				errors = validateReportV4Ajv.errors;
 			}
 
 			break;
@@ -94,14 +103,19 @@ const injectReportV2Context = (report, context, override) => {
 	return report;
 };
 
-const injectReportV3Context = (report, context, override) => {
+const injectReportV3Context = (
+	report,
+	context,
+	override,
+	contextValidator = validateReportV3ContextAjv
+) => {
 	const { summary } = report;
 
 	if (!summary) {
 		throw new Error('Report is missing needed property \'summary\'');
 	}
 
-	if (override || !validateReportV3ContextAjv(summary)) {
+	if (override || !contextValidator(summary)) {
 		report.summary = {
 			...summary,
 			...context
@@ -109,6 +123,10 @@ const injectReportV3Context = (report, context, override) => {
 	}
 
 	return report;
+};
+
+const injectReportV4Context = (report, context, override) => {
+	return injectReportV3Context(report, context, override, validateReportV4ContextAjv);
 };
 
 const injectReportContext = (report, context, override) => {
@@ -121,6 +139,8 @@ const injectReportContext = (report, context, override) => {
 			return injectReportV2Context(report, context, override);
 		case 3:
 			return injectReportV3Context(report, context, override);
+		case 4:
+			return injectReportV4Context(report, context, override);
 		default:
 			throw new Error(`Unknown report version '${reportVersion}'`);
 	}
@@ -220,6 +240,10 @@ const injectReportV3LmsInfo = (report, lmsInfo) => {
 	return report;
 };
 
+const injectReportV4LmsInfo = (report, lmsInfo) => {
+	return injectReportV3LmsInfo(report, lmsInfo);
+};
+
 const injectReportLmsInfo = (report, lmsInfo) => {
 	const reportVersion = getReportVersion(report);
 
@@ -230,6 +254,8 @@ const injectReportLmsInfo = (report, lmsInfo) => {
 			return injectReportV2LmsInfo(report, lmsInfo);
 		case 3:
 			return injectReportV3LmsInfo(report, lmsInfo);
+		case 4:
+			return injectReportV4LmsInfo(report, lmsInfo);
 		default:
 			throw new Error(`Unknown report version '${reportVersion}'`);
 	}
@@ -332,7 +358,7 @@ const upgradeReportV1ToV2 = (report) => {
 const upgradeReportV2ToV3 = (report) => {
 	return {
 		...report,
-		version: latestReportVersion,
+		version: 3,
 		details: report.details.map((detail) => {
 			const { tool, experience, type, timeout, ...rest } = detail;
 			const upgraded = { ...rest };
@@ -394,6 +420,7 @@ const upgradeReportToV2 = (report) => {
 			return upgradeReportV1ToV2(report);
 		case 2:
 		case 3:
+		case 4:
 			return report;
 		default:
 			throw new Error(`Unknown report version: ${reportVersion}`);
@@ -410,6 +437,8 @@ const upgradeReport = (report) => {
 			return upgradeReportV2ToV3(report);
 		case 3:
 			return cleanReportV3(report);
+		case 4:
+			return report;
 		default:
 			throw new Error(`Unknown report version: ${reportVersion}`);
 	}
@@ -461,7 +490,7 @@ class Report {
 			report = upgradeReport(report);
 
 			validateReport(report, `report (v${getReportVersion(report)})`);
-		} else if (getReportVersion(report) > latestReportVersion) {
+		} else if (getReportVersion(report) > latestSupportedReportVersion) {
 			throw new Error(`Unsupported report version specified: ${reportVersionOriginal}`);
 		}
 

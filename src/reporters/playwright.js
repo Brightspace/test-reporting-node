@@ -122,6 +122,10 @@ export default class Reporter {
 			.setStarted(started)
 			.setTimeout(Math.round(timeout))
 			.addDuration(Math.round(duration));
+
+		if (this.#report.getVersion() === 4) {
+			detail.setTestId(id);
+		}
 		const isRetry = retry !== 0;
 
 		if (isRetry) {

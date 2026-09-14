@@ -5,7 +5,7 @@ const { randomUUID } = require('node:crypto');
 const { resolve } = require('node:path');
 const { ReportConfiguration } = require('./report-configuration.cjs');
 const { writeFileSync } = require('node:fs');
-const { latestReportVersion, latestSupportedBrowsers } = require('./schema.cjs');
+const { latestReportVersion, latestSupportedBrowsers, latestSupportedReportVersion } = require('./schema.cjs');
 
 const defaultReportPath = './d2l-test-report.json';
 const reportMemberPriority = [
@@ -13,6 +13,7 @@ const reportMemberPriority = [
 	'version',
 	'summary',
 	'details',
+	'testId',
 	'name',
 	'status',
 	'github',
@@ -184,12 +185,14 @@ class ReportSummaryBuilder extends ReportBuilderBase {
 class ReportDetailBuilder extends ReportBuilderBase {
 	#codeowners;
 	#reportConfiguration;
+	#reportVersion;
 
-	constructor(reportConfiguration, codeowners) {
+	constructor(reportConfiguration, codeowners, reportVersion) {
 		super();
 
 		this.#codeowners = codeowners;
 		this.#reportConfiguration = reportConfiguration;
+		this.#reportVersion = reportVersion;
 
 		this._setProperty('retries', 0);
 	}
@@ -202,6 +205,16 @@ class ReportDetailBuilder extends ReportBuilderBase {
 
 	setName(name, options) {
 		this._setProperty('name', name, options);
+
+		return this;
+	}
+
+	setTestId(testId, options) {
+		if (this.#reportVersion < 4) {
+			throw new Error('testId requires report version 4');
+		}
+
+		this._setProperty('testId', testId, options);
 
 		return this;
 	}
@@ -328,9 +341,14 @@ class ReportBuilder extends ReportBuilderBase {
 		const {
 			reportPath,
 			reportConfigurationPath,
+			reportVersion = 3,
 			reportWriter,
 			verbose = false
 		} = options;
+
+		if (reportVersion !== latestReportVersion && reportVersion !== latestSupportedReportVersion) {
+			throw new Error(`Unsupported report version '${reportVersion}'`);
+		}
 
 		this.#logger = logger;
 		this.#verbose = verbose;
@@ -360,7 +378,7 @@ class ReportBuilder extends ReportBuilderBase {
 		}
 
 		this._setProperty('id', randomUUID());
-		this._setProperty('version', latestReportVersion);
+		this._setProperty('version', reportVersion);
 		this._setProperty('summary', new ReportSummaryBuilder(framework, this.#logger));
 		this._setProperty('details', new Map());
 
@@ -385,6 +403,10 @@ class ReportBuilder extends ReportBuilderBase {
 		return this._data.summary;
 	}
 
+	getVersion() {
+		return this._data.version;
+	}
+
 	getDetail(id) {
 		const { details } = this._data;
 
@@ -393,7 +415,8 @@ class ReportBuilder extends ReportBuilderBase {
 				id,
 				new ReportDetailBuilder(
 					this.#reportConfiguration,
-					this.#codeowners
+					this.#codeowners,
+					this._data.version
 				)
 			);
 		}

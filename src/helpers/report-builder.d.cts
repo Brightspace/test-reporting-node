@@ -12,6 +12,7 @@ export interface SetOptions {
 export interface ReportBuilderOptions {
 	reportPath?: string;
 	reportConfigurationPath?: string;
+	reportVersion?: 3 | 4;
 	reportWriter?: (reportData: string) => void;
 	verbose?: boolean;
 }
@@ -30,6 +31,7 @@ export interface ReportSummaryBuilder {
 export interface ReportDetailBuilder {
 	readonly data: Record<string, unknown>;
 	setName(name: string, options?: SetOptions): ReportDetailBuilder;
+	setTestId(testId: string, options?: SetOptions): ReportDetailBuilder;
 	setStarted(started: string, options?: SetOptions): ReportDetailBuilder;
 	setLocationFile(
 		filePath: string,
@@ -67,6 +69,7 @@ export declare class ReportBuilder {
 	finalize(): ReportBuilder;
 	getDetail(id: string): ReportDetailBuilder;
 	getSummary(): ReportSummaryBuilder;
+	getVersion(): 3 | 4;
 	ignoreFilePath(filePath: string): boolean;
 	save(): void;
 }

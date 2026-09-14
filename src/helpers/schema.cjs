@@ -3,6 +3,7 @@ const addFormats = require('ajv-formats');
 const addErrors = require('ajv-errors');
 
 const latestReportSchema = require('../../schemas/report/v3.json');
+const reportV4Schema = require('../../schemas/report/v4.json');
 const ajv = new Ajv({
 	verbose: true,
 	strict: true,
@@ -16,7 +17,8 @@ ajv.addSchema(require('../../schemas/report-configuration/v1.json'));
 ajv.addSchema(require('../../schemas/report-configuration/v2.json'));
 ajv.addSchema(require('../../schemas/report/v1.json'));
 ajv.addSchema(require('../../schemas/report/v2.json'));
-ajv.addSchema(latestReportSchema);
+ajv.addSchema(require('../../schemas/report/v3.json'));
+ajv.addSchema(reportV4Schema);
 ajv.addSchema({
 	$schema: 'https://json-schema.org/draft/2019-09/schema',
 	$id: '/test-reporting/schemas/report/v1/context/loose.json',
@@ -38,15 +40,24 @@ ajv.addSchema({
 	type: 'object',
 	unevaluatedProperties: true
 });
+ajv.addSchema({
+	$schema: 'https://json-schema.org/draft/2019-09/schema',
+	$id: '/test-reporting/schemas/report/v4/context/loose.json',
+	$ref: '/test-reporting/schemas/report/v4/context.json',
+	type: 'object',
+	unevaluatedProperties: true
+});
 
 const validateReportConfigurationV1Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v1.json');
 const validateReportConfigurationV2Ajv = ajv.getSchema('/test-reporting/schemas/report-configuration/v2.json');
 const validateReportV1ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v1/context/loose.json');
 const validateReportV2ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v2/context/loose.json');
 const validateReportV3ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v3/context/loose.json');
+const validateReportV4ContextAjv = ajv.getSchema('/test-reporting/schemas/report/v4/context/loose.json');
 const validateReportV1Ajv = ajv.getSchema('/test-reporting/schemas/report/v1.json');
 const validateReportV2Ajv = ajv.getSchema('/test-reporting/schemas/report/v2.json');
 const validateReportV3Ajv = ajv.getSchema('/test-reporting/schemas/report/v3.json');
+const validateReportV4Ajv = ajv.getSchema('/test-reporting/schemas/report/v4.json');
 
 const decodeInstancePathAjv = (instancePath = '') => {
 	if (!instancePath) {
@@ -72,6 +83,8 @@ const formatErrorAjv = (errors, options = {}) => {
 
 const { properties: latestReportSchemaProperties } = latestReportSchema;
 const { version: { const: latestReportVersion } } = latestReportSchemaProperties;
+const { properties: reportV4SchemaProperties } = reportV4Schema;
+const { version: { const: latestSupportedReportVersion } } = reportV4SchemaProperties;
 const { details: { items: { properties: { browser: { enum: latestSupportedBrowsers } } } } } = latestReportSchemaProperties;
 
 module.exports = {
@@ -81,9 +94,12 @@ module.exports = {
 	validateReportV1ContextAjv,
 	validateReportV2ContextAjv,
 	validateReportV3ContextAjv,
+	validateReportV4ContextAjv,
 	validateReportV1Ajv,
 	validateReportV2Ajv,
 	validateReportV3Ajv,
+	validateReportV4Ajv,
 	latestReportVersion,
+	latestSupportedReportVersion,
 	latestSupportedBrowsers
 };

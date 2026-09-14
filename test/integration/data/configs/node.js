@@ -10,6 +10,7 @@ const files = readdirSync(testDirectory)
 	.map(name => join(testDirectory, name));
 const reporterOptions = {
 	reportConfigurationPath: './test/integration/data/d2l-test-reporting.config.json',
+	reportVersion: 4,
 	verbose: true
 };
 const testStream = run({ files, concurrency: true });

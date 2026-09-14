@@ -28,6 +28,8 @@ const report = new ReportBuilder('your-framework-name', logger);
 * `reportConfigurationPath` (default: `./d2l-test-reporting.config.json`): Path
   to the D2L test reporting configuration file for taxonomy mapping and ignore
   patterns. See [Report Configuration Format] for the schema.
+* `reportVersion` (default: `3`): Report schema version to generate. Version 4
+  is an opt-in schema that supports an optional detail `testId`.
 * `verbose` (default: `false`): Enable verbose logging for debugging purposes.
 
 ## How It Works
@@ -135,6 +137,16 @@ Each test needs a unique ID. Combine file path and test name:
 ```js
 const testId = `${test.file}[${test.fullName}]`;
 // Example: "test/unit/component.test.js[MyComponent > should render]"
+```
+
+For version 4 reports, set a stable logical identity on the detail. This lets
+otherwise identical details remain distinct in the report. `setTestId()` is
+only available when `reportVersion` is `4`.
+
+```js
+if (report.getVersion() === 4) {
+  report.getDetail(testId).setTestId(testId);
+}
 ```
 
 ### Checking Ignored Files
