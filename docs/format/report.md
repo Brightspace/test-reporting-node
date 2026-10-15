@@ -10,6 +10,19 @@ stored in [AWS Timestream], please see [Storage Schema].
 > All JSON below is simply a pseudo representation of the actual schemas which
 > are stored in the [`schemas`](../../schemas) folder.
 
+## LMS build numbers
+
+Report versions 3 and 4 accept both release and CI build numbers. The
+prefix has two digits, a dot, two digits, a dot, and one or two digits.
+Release builds append a dot and exactly five digits, including leading zeros
+(for example, `20.26.9.00001` or `20.26.11.16663`).
+CI builds append lowercase `-ci` and an unpadded integer from 1 to 99999
+(for example, `20.26.9-ci1` or `20.26.11-ci16663`).
+The build number is optional and is preserved unchanged, including the `-ci`
+label, when reports are loaded. Legacy report versions 1 and 2 accept only
+dotted release build numbers, including when LMS metadata is injected before
+upgrading.
+
 ## Current
 
 ```json
@@ -30,7 +43,7 @@ stored in [AWS Timestream], please see [Storage Schema].
       "sha": "<Git SHA hash representing the commit this was generated for>"
     },
     "lms": {
-      "buildNumber": "<LMS build number matching pattern 'XX.XX.XX.XXXXX', optional>",
+      "buildNumber": "<LMS release or CI build number, optional; see LMS build numbers above>",
       "instanceUrl": "<URI of the LMS instance, optional>"
     },
     "framework": "<Non-empty string matching pattern '^(?!\\s).+(?<!\\s)$>'",

@@ -26,9 +26,9 @@
           "properties": {
             "buildNumber": {
               "type": "string",
-              "pattern": "^([0-9]{2}\\.){2}[0-9]{1,2}\\.[0-9]{5}$",
+              "pattern": "^([0-9]{2}\\.){2}[0-9]{1,2}(\\.[0-9]{5}|-ci[1-9][0-9]{0,4})$",
               "errorMessage": {
-                "pattern": "should be a valid LMS build number (XX.XX.XX.XXXXX)"
+                "pattern": "should be a valid LMS build number (release: XX.XX.X.XXXXX or XX.XX.XX.XXXXX; CI: XX.XX.X-ciN or XX.XX.XX-ciN, where N is an unpadded integer from 1 to 99999)"
               }
             },
             "instanceUrl": {
