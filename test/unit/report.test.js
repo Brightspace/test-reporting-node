@@ -429,7 +429,46 @@ describe('report', () => {
 		}, {
 			name: 'v3',
 			report: testReportLatestFull
+		}, {
+			name: 'v4',
+			report: testReportV4Full
 		}];
+		const releaseBuildNumbers = [
+			'20.26.9.12345',
+			'20.26.11.16663',
+			'20.26.9.00000',
+			'20.26.11.00001',
+			'20.26.11.99999'
+		];
+		const ciBuildNumbers = [
+			'20.26.9-ci1',
+			'20.26.11-ci16663',
+			'20.26.11-ci99999'
+		];
+		const invalidBuildNumbers = [
+			'20.26.11-ci0',
+			'20.26.11-ci01',
+			'20.26.11-ci00001',
+			'20.26.11-ci100000',
+			'20.26.11-ci',
+			'20.26.11-ciabc',
+			'20.26.11-ci-1',
+			'20.26.11-ci1.5',
+			'20.26.11-CI16663',
+			'20.26.11.ci16663',
+			'20.26.11ci16663',
+			'20.26.11-ci.16663',
+			'2.26.11-ci16663',
+			'200.26.11-ci16663',
+			'20.2.11-ci16663',
+			'20.260.11-ci16663',
+			'20.26.-ci16663',
+			'20.26.111-ci16663',
+			' 20.26.11-ci16663',
+			'20.26.11-ci16663 ',
+			'20.26.11.1234',
+			'20.26.11.123456'
+		];
 
 		for (const { name, report: reportData } of reports) {
 			it(`adds LMS information to ${name} reports`, () => {
@@ -439,6 +478,53 @@ describe('report', () => {
 
 				expect(report.toJSON().summary.lms).to.deep.equal(lmsInfo);
 			});
+
+			for (const source of ['injected', 'existing']) {
+				describe(`${name} ${source} LMS build numbers`, () => {
+					const originalVersion = reportData.reportVersion ?? reportData.version;
+					const supportsCi = originalVersion >= 3;
+					const validBuildNumbers = supportsCi ? [...releaseBuildNumbers, ...ciBuildNumbers] : releaseBuildNumbers;
+					const rejectedBuildNumbers = supportsCi ? invalidBuildNumbers : [...invalidBuildNumbers, ...ciBuildNumbers];
+					const constructReport = (buildNumber) => {
+						const data = structuredClone(reportData);
+						const options = source === 'injected' ? { lmsInfo: { buildNumber } } : {};
+
+						if (source === 'existing') {
+							if (originalVersion === 1) {
+								data.summary.lmsBuildNumber = buildNumber;
+							} else {
+								data.summary.lms = { buildNumber };
+							}
+						}
+
+						mock.method(fs, 'readFileSync', () => JSON.stringify(data));
+
+						return new Report(testReportPath, options);
+					};
+
+					for (const buildNumber of validBuildNumbers) {
+						it(`preserves ${buildNumber}`, () => {
+							const report = constructReport(buildNumber);
+
+							expect(report.getVersionOriginal()).to.equal(originalVersion);
+							expect(report.getVersion()).to.equal(originalVersion === 4 ? 4 : latestReportVersion);
+							expect(report.toJSON().summary.lms.buildNumber).to.equal(buildNumber);
+						});
+					}
+
+					for (const buildNumber of rejectedBuildNumbers) {
+						it(`rejects ${JSON.stringify(buildNumber)}`, () => {
+							const field = originalVersion === 1 ? 'lmsBuildNumber' : 'lms.buildNumber';
+
+							expect(() => constructReport(buildNumber)).to.throw(
+								`[report (v${originalVersion})].summary.${field}: should be a valid LMS build number`
+							).with.property('message').that.includes(
+								supportsCi ? 'unpadded integer from 1 to 99999' : '(XX.XX.XX.XXXXX)'
+							);
+						});
+					}
+				});
+			}
 		}
 	});
 
