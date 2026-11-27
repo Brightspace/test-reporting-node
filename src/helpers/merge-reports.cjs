@@ -1,5 +1,6 @@
 const fs = require('fs');
 const glob = require('glob');
+const path = require('node:path');
 
 /**
  * Merge multiple test reports into a single consolidated report
@@ -20,7 +21,8 @@ function mergeReports(pattern, outputPath) {
 	const reports = files.map(file => {
 		try {
 			const content = fs.readFileSync(file, 'utf8');
-			return JSON.parse(content);
+			const report = JSON.parse(content);
+			return report === null ? null : { file, report };
 		} catch (error) {
 			console.error(`[Merge Reports] Failed to read ${file}:`, error.message);
 			return null;
@@ -33,10 +35,10 @@ function mergeReports(pattern, outputPath) {
 	}
 
 	const mergedReport = {
-		...reports[0],
+		...reports[0].report,
 		details: [],
 		summary: {
-			...reports[0].summary,
+			...reports[0].report.summary,
 			count: {
 				passed: 0,
 				failed: 0,
@@ -49,9 +51,24 @@ function mergeReports(pattern, outputPath) {
 		}
 	};
 
-	for (const report of reports) {
+	const outputDirectory = path.dirname(path.resolve(outputPath));
+	for (const { file, report } of reports) {
 		if (Array.isArray(report.details)) {
-			mergedReport.details.push(...report.details);
+			const reportDirectory = path.dirname(path.resolve(file));
+			for (const detail of report.details) {
+				const location = detail.location;
+				const locationFile = typeof location === 'string' ? location : location?.file;
+				if (typeof locationFile === 'string' && locationFile && !path.isAbsolute(locationFile)) {
+					const rebased = path.relative(outputDirectory, path.resolve(reportDirectory, locationFile))
+						.split(path.sep).join('/') || '.';
+					if (typeof location === 'string') {
+						detail.location = rebased;
+					} else {
+						location.file = rebased;
+					}
+				}
+				mergedReport.details.push(detail);
+			}
 		}
 
 		if (report.summary?.count) {
